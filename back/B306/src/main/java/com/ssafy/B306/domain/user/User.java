@@ -1,23 +1,24 @@
 package com.ssafy.B306.domain.user;
 
 import com.ssafy.B306.domain.quizbook.QuizBook;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ssafy.B306.domain.user.userDto.UserDto;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
@@ -47,4 +48,17 @@ public class User {
 
     @OneToMany(mappedBy = "quizBookId")
     private List<QuizBook> quizBooks = new ArrayList<>();
+
+
+    public UserDto toUserDto(){
+        return UserDto.builder()
+                .userId(this.getUserId())
+                .userName(this.getUserName())
+                .userEmail(this.getUserEmail())
+                .userPassword(this.getUserPassword())
+                .isAdmin(this.isAdmin())
+                .userProfile(this.getUserProfile())
+                .userJoinDate(this.getUserJoinDate())
+                .build();
+    }
 }
