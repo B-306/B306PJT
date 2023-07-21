@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class B306Application {
 
-	public static void main(String[] args) {
-
+    public static void main(String[] args) {
 		SpringApplication.run(B306Application.class, args);
-	}
+    }
 
 }
