@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.user;
 
+import com.ssafy.B306.domain.security.JwtProvider;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import com.ssafy.B306.domain.user.dto.UserLoginRequestDto;
 import com.ssafy.B306.domain.user.dto.UserRegisterRequestDto;
@@ -9,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class
-UserService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -34,7 +34,7 @@ UserService {
 
     public UserDto signUp(UserRegisterRequestDto userRegisterRequestDto){
 
-        if(userRepository.existsByEmail(userRegisterRequestDto.getUserEmail())){
+        if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
             throw new RuntimeException("이미 가입된 이메일입니다.");
         }
 

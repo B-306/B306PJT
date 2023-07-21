@@ -31,7 +31,7 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(secretByteKey);
     }
 
-    // 토근 발급
+    // 토큰 발급
     public JwtToken createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
