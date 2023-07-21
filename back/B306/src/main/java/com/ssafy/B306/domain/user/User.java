@@ -1,7 +1,7 @@
 package com.ssafy.B306.domain.user;
 
 import com.ssafy.B306.domain.quizbook.QuizBook;
-import com.ssafy.B306.domain.user.userDto.UserDto;
+import com.ssafy.B306.domain.user.dto.UserDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,7 +47,7 @@ public class User {
     private LocalDateTime userDeleteDate;
 
     @OneToMany(mappedBy = "quizBookId")
-    private List<QuizBook> quizBooks = new ArrayList<>();
+    private List<QuizBook> quizBooks;
 
 
     public UserDto toUserDto(){

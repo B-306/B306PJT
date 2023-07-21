@@ -1,10 +1,10 @@
-package com.ssafy.B306.domain.user.userDto;
+package com.ssafy.B306.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class UserLoginResponse {
+public class UserLoginResponseDto {
     private String token;
 }
