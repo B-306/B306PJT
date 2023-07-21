@@ -1,4 +1,4 @@
-package com.ssafy.B306.domain.user.userDto;
+package com.ssafy.B306.domain.user.dto;
 
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.user.User;
@@ -10,7 +10,7 @@ import java.util.*;
 @Getter
 @Setter
 @Builder
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserDto {
     private final Long userId;
     private final String userEmail;
@@ -21,11 +21,10 @@ public class UserDto {
     private LocalDateTime userJoinDate;
     private LocalDateTime userModifyDate;
     private LocalDateTime userDeleteDate;
-    private List<QuizBook> quizBooks = new ArrayList<>();
+    private List<QuizBook> quizBooks;
 
 //    public static UserDto fromEntity(User user) {
-//        return new UserDto.builder().
-//                (user.getUserId(), user.getUserEmail(), user.getUserPassword(), user.getUserName())
+//        return new UserDto.builder()
 //                .isAdmin(user.isAdmin())
 //                .userProfile(user.getUserProfile())
 //                .userJoinDate(user.getUserJoinDate())

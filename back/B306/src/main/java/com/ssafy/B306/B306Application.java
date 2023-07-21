@@ -1,6 +1,5 @@
 package com.ssafy.B306;
 
-import com.ssafy.B306.domain.user.userDto.UserDto;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

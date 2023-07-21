@@ -1,8 +1,6 @@
 package com.ssafy.B306.domain.user;
 
-import com.ssafy.B306.domain.user.userDto.UserDto;
-import com.ssafy.B306.domain.user.userDto.UserLoginRequest;
-import com.ssafy.B306.domain.user.userDto.UserLoginResponse;
+import com.ssafy.B306.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +13,25 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
-        String token = userService.login(userLoginRequest.getUserId, userLoginRequest.getPassword());
-        return new ResponseEntity<>(new UserLoginResponse(token), HttpStatus.OK);
+    public ResponseEntity<UserLoginResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequest) {
+        try{
+            String token = userService.login(userLoginRequest);
+            return new ResponseEntity<>(new UserLoginResponseDto(token), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserLoginResponse> signUp(@RequestBody UserLoginRequest userLoginrequest){
-        UserDto userDto = userService.signUp(userRegisterrequest);
-        return new ResponseEntity<>(new UserRegisterResponse(userDto.getUserId()));
+    public ResponseEntity<UserRegisterResponseDto> signUp(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
+        try{
+            UserDto userDto = userService.signUp(userRegisterRequestDto);
+            return new ResponseEntity<>(new UserRegisterResponseDto(userDto.getUserName()), HttpStatus.OK);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

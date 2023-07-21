@@ -1,11 +1,11 @@
-package com.ssafy.B306.domain.user.userDto;
+package com.ssafy.B306.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserLoginRequest {
-    private Long userId;
+public class UserLoginRequestDto {
+    private String userEmail;
     private String userPassword;
 }

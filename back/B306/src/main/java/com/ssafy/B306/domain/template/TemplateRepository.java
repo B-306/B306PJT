@@ -8,4 +8,6 @@ import javax.persistence.PersistenceContext;
 @Repository
 public interface TemplateRepository extends JpaRepository<Template, Long> {
 
+    Template findByTemplateId(Long templateId);
+
 }
