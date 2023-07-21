@@ -10,7 +10,6 @@ import java.util.*;
 @Getter
 @Setter
 @Builder
-//@RequiredArgsConstructor
 public class UserDto {
     private final Long userId;
     private final String userEmail;
@@ -22,14 +21,4 @@ public class UserDto {
     private LocalDateTime userModifyDate;
     private LocalDateTime userDeleteDate;
     private List<QuizBook> quizBooks;
-
-//    public static UserDto fromEntity(User user) {
-//        return new UserDto.builder()
-//                .isAdmin(user.isAdmin())
-//                .userProfile(user.getUserProfile())
-//                .userJoinDate(user.getUserJoinDate())
-//                .userModifyDate(user.getUserModifyDate())
-//                .userDeleteDate(user.getUserDeleteDate())
-//                .build();
-//    }
 }
