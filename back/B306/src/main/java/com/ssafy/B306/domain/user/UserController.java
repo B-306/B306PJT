@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.user;
 
+import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequest) {
         try{
-            String token = userService.login(userLoginRequest);
+            JwtToken token = userService.login(userLoginRequest);
             return new ResponseEntity<>(new UserLoginResponseDto(token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
