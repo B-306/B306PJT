@@ -9,6 +9,5 @@ import org.springframework.stereotype.Service;
 public class TemplateService {
 
     private final TemplateRepository templateRepository;
-    private final TemplateService templateService;
 
 }
