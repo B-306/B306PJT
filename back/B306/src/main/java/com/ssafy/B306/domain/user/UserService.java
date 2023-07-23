@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.user;
 
+import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtProvider;
 import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.UserDto;
@@ -19,7 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtProvider jwtProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     public JwtToken login(UserLoginRequestDto userLoginRequest){
 //        User findUser = userRepository.findByUserEmail(userLoginRequest.getUserEmail());
@@ -35,10 +36,21 @@ public class UserService {
 //        }
 //        // token 발행 CLASS 반환
 //        return ;
+        String rawPassword = userLoginRequest.getUserPassword();
+        String encodedPassword = bCryptPasswordEncoder.encode(rawPassword);
+
+        // 근데 내가 어차피 권한을 사용 안한다면?
+        // 그냥 여기서 비밀번호랑 DB에 있는 비밀번호랑 비교하면 끝 아닌가?
+//        bCryptPasswordEncoder.matches(rawPassword, "DB에 있는 password");
+
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequest.getUserEmail(), userLoginRequest.getUserPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        Authentication authentication = jwtAuthenticationProvider.authenticate(authenticationToken);
+
         JwtToken token = jwtProvider.createToken(authentication);
 
         return token;

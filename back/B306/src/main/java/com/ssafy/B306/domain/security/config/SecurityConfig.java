@@ -1,7 +1,9 @@
 package com.ssafy.B306.domain.security.config;
 
 import com.ssafy.B306.domain.security.JwtAuthenticationFilter;
+import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,13 +15,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
-
-    public SecurityConfig(JwtProvider jwtProvider){
-        this.jwtProvider = jwtProvider;
-    }
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     // 비밀번호 암호화를 위한 빈 등록
     @Bean
@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/user").permitAll()
                 .and()
+                .authenticationProvider(jwtAuthenticationProvider)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
