@@ -50,7 +50,11 @@ public class UserService {
             throw new RuntimeException("이미 가입된 이메일입니다.");
         }
 
-        User resgistUser = userRepository.save(userRegisterRequestDto.toEntity(userRegisterRequestDto.getUserPassword()));
+        // 비밀번호 암호화
+        String rawPassword = userRegisterRequestDto.getUserPassword();
+        String encodedPassword = bCryptPasswordEncoder.encode(rawPassword);
+
+        User resgistUser = userRepository.save(userRegisterRequestDto.toEntity(encodedPassword));
         return resgistUser.toUserDto();
     }
 
