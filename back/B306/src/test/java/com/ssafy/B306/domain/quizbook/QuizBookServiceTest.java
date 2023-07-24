@@ -47,11 +47,11 @@ public class QuizBookServiceTest {
 
         QuizBookSaveRequestDto quizBookSaveRequestDto = QuizBookSaveRequestDto.builder()
                 .quizBookTitle("title")
-                .quizzes(new ArrayList<>())
+                .quizzes(testList)
                 .build();
 
         // when
-        QuizBook newQuizBook = quizBookService.addNewQuizBook(user, quizBookSaveRequestDto);
+        QuizBook newQuizBook = quizBookService.addNewQuizBook(quizBookSaveRequestDto);
 
         // then
         Assertions.assertNotNull(newQuizBook.getQuizBookId());

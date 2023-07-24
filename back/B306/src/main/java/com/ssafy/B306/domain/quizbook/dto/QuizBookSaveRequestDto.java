@@ -6,7 +6,6 @@ import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -20,15 +19,17 @@ public class QuizBookSaveRequestDto {
 
     private List<Quiz> quizzes = new ArrayList<>();
 
+    private String quizBookUserEmail;
+
     @Builder
-    public QuizBookSaveRequestDto(String quizBookTitle, List<Quiz> quizzes) {
+    public QuizBookSaveRequestDto(String quizBookTitle, List<Quiz> quizzes, String userEmail) {
         this.quizBookTitle = quizBookTitle;
         this.quizzes = quizzes;
+        this.quizBookUserEmail = userEmail;
     }
 
-    public QuizBook toEntity(User writer, QuizBookSaveRequestDto quizBookSaveRequestDto) {
+    public QuizBook toEntity(QuizBookSaveRequestDto quizBookSaveRequestDto) {
         return QuizBook.builder()
-                .quizBookUserId(writer)
                 .quizBookTitle(quizBookSaveRequestDto.getQuizBookTitle())
                 .quizzes(quizBookSaveRequestDto.getQuizzes())
                 .build();
