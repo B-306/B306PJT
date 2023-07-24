@@ -33,6 +33,10 @@ public class JwtProvider {
 
     // 토큰 발급
     public JwtToken createToken(Authentication authentication) {
+        // userId로 받아버리기
+
+        // 역할을 설정하는 것
+        // 필요없을지도?
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -50,7 +54,7 @@ public class JwtProvider {
                 .compact();
 
         return JwtToken.builder()
-                .grantType("Bearer")
+                .grantType("Bearer") // 이거는 그냥 jwt라는 것을 알려주기 위한 이름 같은 것
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -64,14 +68,17 @@ public class JwtProvider {
             throw new RuntimeException("권한 정보가 없는 토큰");
         }
 
+        // 파싱 안되는 부분 고쳐야할 부분
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get("auth").toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
         UserDetails principal = new User(claims.getSubject(), "", authorities);
+//        UserDetails principal = new User(claims.getSubject(), "", null);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+//        return new UsernamePasswordAuthenticationToken("abc", "");
     }
 
     // 토큰 유효성 검사

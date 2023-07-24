@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.security;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -27,11 +28,15 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String token = resolveToken((HttpServletRequest) servletRequest);
 
         // 토큰 유효성 검사
+        // if문 안으로 들어가면 그대로
         if(token != null && jwtProvider.validateToken(token)) {
             Authentication authentication = jwtProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+//            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("이름", "1234"));
         }
 
+        // if문 조건이 아니라면
+        // 다음 필터로 넘김
         filterchain.doFilter(servletRequest, servletResponse);
     }
 
