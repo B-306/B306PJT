@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -28,6 +29,12 @@ public class QuizBookController {
     @ResponseStatus(HttpStatus.OK)
     public List<QuizBook> getQuizBookList(){
         return quizBookService.getQuizBookList();
+    }
+
+    @GetMapping("/get/{quizBookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public QuizBook getQuizBook(@PathVariable Long quizBookId){
+        return quizBookService.getQuizBook(quizBookId);
     }
 
 }

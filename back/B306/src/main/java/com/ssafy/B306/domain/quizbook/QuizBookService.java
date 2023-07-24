@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -27,5 +28,11 @@ public class QuizBookService {
     public List<QuizBook> getQuizBookList() {
         List<QuizBook> quizBookList = quizBookRepository.findAll();
         return quizBookList;
+    }
+
+    @Transactional
+    public QuizBook getQuizBook(Long id) {
+        QuizBook quizBook = quizBookRepository.findById(id).get();
+        return quizBook;
     }
 }
