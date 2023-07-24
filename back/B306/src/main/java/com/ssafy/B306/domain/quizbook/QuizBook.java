@@ -5,6 +5,9 @@ import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLUpdate;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +18,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "quizbook")
+@SQLDelete(sql = "UPDATE quizbook SET quizbook_delete_date = now() WHERE quizbook_id = ?;")
+@SQLUpdate(sql = "UPDATE quizbook SET quizbook_modify_date = now() WHERE quizbook_id = ?;")
 public class QuizBook {
 
     @Id
@@ -50,5 +55,10 @@ public class QuizBook {
         this.quizBookModifyDate = quizBookModifyDate;
         this.quizBookdeleteDate = quizBookdeleteDate;
         this.quizzes = quizzes;
+    }
+
+    public void modifyQuizBook(String quizBookTitle, List<Quiz> quizzes) {
+        if(StringUtils.hasText(quizBookTitle))
+            this.quizBookTitle = quizBookTitle;
     }
 }
