@@ -1,10 +1,11 @@
 package com.ssafy.B306.domain.quizbook;
 
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
-import com.ssafy.B306.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -20,5 +21,11 @@ public class QuizBookService {
             throw new IllegalArgumentException("문제집의 문제가 비어있습니다.");
 
         return quizBookRepository.save(newQuizBook);
+    }
+
+    @Transactional
+    public List<QuizBook> getQuizBookList() {
+        List<QuizBook> quizBookList = quizBookRepository.findAll();
+        return quizBookList;
     }
 }

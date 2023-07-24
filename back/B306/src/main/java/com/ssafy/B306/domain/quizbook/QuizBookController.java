@@ -1,10 +1,11 @@
 package com.ssafy.B306.domain.quizbook;
 
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
-import com.ssafy.B306.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -22,4 +23,11 @@ public class QuizBookController {
 
         quizBookService.addNewQuizBook(quizBookSaveRequestDto);
     }
+
+    @GetMapping("/get")
+    @ResponseStatus(HttpStatus.OK)
+    public List<QuizBook> getQuizBookList(){
+        return quizBookService.getQuizBookList();
+    }
+
 }
