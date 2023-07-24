@@ -174,6 +174,7 @@ const App = () => {
       <Route path="/@:username" element={<MainPage />} />
       <Route path="/" element={<MainPage />} />
       <Route path="/@:username/:mypage" element={<MyPage />} />
+      <Route path="/mypage" element={<MyPage />} />
     </Routes>
   );
 };

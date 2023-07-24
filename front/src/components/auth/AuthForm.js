@@ -45,6 +45,14 @@ const textMap = {
         <h3>{text}</h3>
         <form>
           <StyledInput autoComplete="username" name="username" placeholder="이메일" />
+          {type === 'signup' && (
+                <StyledInput
+                    // autoComplete="newname"
+                    name="name"
+                    placeholder="이름"
+                    type="name"
+                />
+            )}
           <StyledInput 
             autoComplete="new-password" 
             name="password"
@@ -65,9 +73,9 @@ const textMap = {
           </form>
           <Footer>
             {type === 'login' ? (
-                <Link to="/signup">회원가입</Link>
+                <Link to="/signup">아직 회원이 아니신가요?</Link>
             ) : (
-                <Link to="/login">로그인</Link>
+                <Link to="/login">이미 가입하셨나요?</Link>
             )}
           </Footer>
         </AuthFormBlock>
