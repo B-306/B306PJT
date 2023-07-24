@@ -1,7 +1,7 @@
 package com.ssafy.B306.domain.user;
 
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
-import com.ssafy.B306.domain.security.JwtProvider;
+import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import com.ssafy.B306.domain.user.dto.UserLoginRequestDto;
@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     public JwtToken login(UserLoginRequestDto userLoginRequest){
@@ -28,7 +28,7 @@ public class UserService {
 
         Authentication authentication = jwtAuthenticationProvider.authenticate(authenticationToken);
 
-        JwtToken token = jwtProvider.createToken(authentication);
+        JwtToken token = jwtUtil.createToken(authentication);
 
         return token;
     }
