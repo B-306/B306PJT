@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtProvider {
+public class JwtUtil {
     private final Key key;
 
     // 서버 측 secret key
-    public JwtProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtUtil(@Value("${jwt.secret}") String secretKey) {
         byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
         this.key = Keys.hmacShaKeyFor(secretByteKey);
     }
@@ -43,7 +43,7 @@ public class JwtProvider {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName()) // 토큰의 이름 설정
                 .claim("auth", authorities) // 권한 넣기
-                .claim("userPk", authentication.getCredentials())
+                .claim("userPk", authentication.getCredentials()) // pk 값 넣기
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
@@ -78,9 +78,15 @@ public class JwtProvider {
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    // 토큰 유효성 검사
+    // Access 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
+            /*
+            Jws<Claims> 객체를 반화하며 값의 예는 다음과 같다
+            header={alg=HS256},
+            body={sub=user@asd.com, auth=USER, userPk=2, exp=1690200967},
+            signature=oK129enc-u-lIFFnGveLaNGKxLZvplKbR6bvbSAyN7Y
+             */
             Jwts.parser()
                     .setSigningKey(key)
                     .parseClaimsJws(token);
@@ -98,10 +104,15 @@ public class JwtProvider {
         return false;
     }
 
-    private Claims parseClaims(String accessToken) {
+    // token 내용 parsing하는 함수
+    private Claims parseClaims(String token) {
         try {
+            System.out.println(Jwts.parser().setSigningKey(key)
+                    .parseClaimsJws(token)
+                    .getBody());
+
             return Jwts.parser().setSigningKey(key)
-                    .parseClaimsJws(accessToken)
+                    .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
