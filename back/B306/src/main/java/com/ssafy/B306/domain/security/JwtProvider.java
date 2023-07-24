@@ -43,6 +43,7 @@ public class JwtProvider {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName()) // 토큰의 이름 설정
                 .claim("auth", authorities) // 권한 넣기
+                .claim("userPk", authentication.getCredentials())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
