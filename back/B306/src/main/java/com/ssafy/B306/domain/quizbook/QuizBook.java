@@ -2,9 +2,9 @@ package com.ssafy.B306.domain.quizbook;
 
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "quizbook")
 public class QuizBook {
@@ -41,4 +40,15 @@ public class QuizBook {
 
     @OneToMany(mappedBy = "quizId", fetch = FetchType.LAZY)
     private List<Quiz> quizzes = new ArrayList<>();
+
+    @Builder
+    public QuizBook(Long quizBookId, String quizBookTitle, User quizBookUserId, LocalDateTime quizBookCreateDate, LocalDateTime quizBookModifyDate, LocalDateTime quizBookdeleteDate, List<Quiz> quizzes) {
+        this.quizBookId = quizBookId;
+        this.quizBookTitle = quizBookTitle;
+        this.quizBookUserId = quizBookUserId;
+        this.quizBookCreateDate = quizBookCreateDate;
+        this.quizBookModifyDate = quizBookModifyDate;
+        this.quizBookdeleteDate = quizBookdeleteDate;
+        this.quizzes = quizzes;
+    }
 }
