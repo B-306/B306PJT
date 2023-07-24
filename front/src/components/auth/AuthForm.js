@@ -2,6 +2,7 @@ import React from "react";
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import Button from '../common/Button';
+import Input from "../common/Input";
 import palette from "../../lib/styles/palette";
 
 
@@ -13,21 +14,7 @@ const AuthFormBlock = styled.div`
     }
 `;
 
-const StyledInput = styled.input`
-    font-size: 1rem;
-    border: none;
-    border-bottom: 1px solid ${palette.gray[5]};
-    padding-bottom: 0.5rem;
-    outline: none;
-    width: 100%;
-    &:focus {
-        color: $oc-teal-7;
-        border-bottom: 1px solid ${palette.gray[7]};
-    }
-    & + & {
-        margin-top: 1rem;
-    }
-`;
+const StyledInput = styled(Input)``;
 
 const Footer = styled.div`
     margin-top: 2rem;
@@ -57,7 +44,7 @@ const textMap = {
       <AuthFormBlock>
         <h3>{text}</h3>
         <form>
-          <StyledInput autoComplete="username" name="username" placeholder="아이디" />
+          <StyledInput autoComplete="username" name="username" placeholder="이메일" />
           <StyledInput 
             autoComplete="new-password" 
             name="password"
