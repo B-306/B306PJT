@@ -35,4 +35,12 @@ public class QuizBookService {
         QuizBook quizBook = quizBookRepository.findById(id).get();
         return quizBook;
     }
+
+    public void deleteQuizBook(Long quizBookId) {
+        QuizBook quizBook = quizBookRepository.findById(quizBookId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+//        quizBookRepository.delete(quizBook);
+        quizBookRepository.deleteById(quizBook.getQuizBookId());
+    }
 }

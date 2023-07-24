@@ -5,6 +5,7 @@ import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "quizbook")
+@SQLDelete(sql = "UPDATE quizbook SET quizBookdeleteDate = now() WHERE quizbook_id = ?;")
 public class QuizBook {
 
     @Id
