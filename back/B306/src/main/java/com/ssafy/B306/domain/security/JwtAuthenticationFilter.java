@@ -15,11 +15,11 @@ import java.io.IOException;
 // JWT 인증을 위해 생성되는 토큰
 // 요청이 들어오면 헤더에서 토큰 추출하는 역할
 public class JwtAuthenticationFilter extends GenericFilterBean {
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
 
 
-    public JwtAuthenticationFilter(JwtProvider jwtProvider){
-        this.jwtProvider = jwtProvider;
+    public JwtAuthenticationFilter(JwtUtil jwtUtil){
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -28,8 +28,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         // 토큰 유효성 검사
         // if문 안으로 들어가면 그대로
-        if(token != null && jwtProvider.validateToken(token)) {
-            Authentication authentication = jwtProvider.getAuthentication(token);
+        if(token != null && jwtUtil.validateToken(token)) {
+            Authentication authentication = jwtUtil.getAuthentication(token);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
