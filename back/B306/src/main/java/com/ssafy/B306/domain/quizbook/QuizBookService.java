@@ -36,11 +36,21 @@ public class QuizBookService {
         return quizBook;
     }
 
+    @Transactional
     public void deleteQuizBook(Long quizBookId) {
         QuizBook quizBook = quizBookRepository.findById(quizBookId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
-//        quizBookRepository.delete(quizBook);
         quizBookRepository.deleteById(quizBook.getQuizBookId());
+    }
+
+    @Transactional
+    public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto) {
+        // To-do 사용자가 작성한 글이 맞는지 확인하기
+
+        QuizBook quizBook = quizBookRepository.findById(quizBookId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        quizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle(), quizBookSaveRequestDto.getQuizzes());
     }
 }

@@ -45,5 +45,13 @@ public class QuizBookController {
         quizBookService.deleteQuizBook(quizBookId);
     }
 
+    @PatchMapping("/{quizBookId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto){
+        // To-do 사용자 검증을 통해 본인 게시글 맞는지 확인 후 삭제 진행
+
+        quizBookService.modifyQuizbook(quizBookId, quizBookSaveRequestDto);
+    }
+
 
 }
