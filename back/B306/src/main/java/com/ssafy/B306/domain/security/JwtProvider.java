@@ -33,14 +33,18 @@ public class JwtProvider {
 
     // 토큰 발급
     public JwtToken createToken(Authentication authentication) {
+        // userId로 받아버리기
+
+        // 역할을 설정하는 것을 추출하기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim("auth", authorities)
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setSubject(authentication.getName()) // 토큰의 이름 설정
+                .claim("auth", authorities) // 권한 넣기
+                .claim("userPk", authentication.getCredentials())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
@@ -50,7 +54,7 @@ public class JwtProvider {
                 .compact();
 
         return JwtToken.builder()
-                .grantType("Bearer")
+                .grantType("Bearer") // 이거는 그냥 jwt라는 것을 알려주기 위한 이름 같은 것
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

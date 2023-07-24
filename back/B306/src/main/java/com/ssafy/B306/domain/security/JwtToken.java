@@ -1,11 +1,10 @@
 package com.ssafy.B306.domain.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Builder
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class JwtToken {
     private String grantType;
