@@ -3,17 +3,16 @@ package com.ssafy.B306.domain.user;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
@@ -37,9 +36,11 @@ public class User {
     @Column(name = "user_profile")
     private String userProfile;
 
+    @CreationTimestamp
     @Column(name = "user_join_date")
     private LocalDateTime userJoinDate;
 
+    @UpdateTimestamp
     @Column(name = "user_modify_date")
     private LocalDateTime userModifyDate;
 
@@ -49,6 +50,19 @@ public class User {
     @OneToMany(mappedBy = "quizBookId")
     private List<QuizBook> quizBooks;
 
+    @Builder
+    public User(Long userId, String userEmail, String userName, String userPassword, boolean isAdmin, String userProfile, LocalDateTime userJoinDate, LocalDateTime userModifyDate, LocalDateTime userDeleteDate, List<QuizBook> quizBooks) {
+        this.userId = userId;
+        this.userEmail = userEmail;
+        this.userName = userName;
+        this.userPassword = userPassword;
+        this.isAdmin = isAdmin;
+        this.userProfile = userProfile;
+        this.userJoinDate = userJoinDate;
+        this.userModifyDate = userModifyDate;
+        this.userDeleteDate = userDeleteDate;
+        this.quizBooks = quizBooks;
+    }
 
     public UserDto toUserDto(){
         return UserDto.builder()
