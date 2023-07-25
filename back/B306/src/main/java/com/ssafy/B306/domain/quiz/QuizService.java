@@ -2,7 +2,6 @@ package com.ssafy.B306.domain.quiz;
 
 import com.ssafy.B306.domain.quiz.dto.QuizRequestSaveDto;
 import com.ssafy.B306.domain.quizbook.QuizBook;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
