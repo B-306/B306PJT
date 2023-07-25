@@ -2,10 +2,13 @@ package com.ssafy.B306.domain.template;
 
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.template.dto.TemplateDto;
+import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +17,8 @@ import java.time.LocalDateTime;
 @Table(name = "template")
 @NoArgsConstructor
 @Getter
+@SQLDelete(sql = "UPDATE template SET template_delete_date = now() WHERE template_id = ?;")
+@SQLUpdate(sql = "UPDATE template SET template_modify_date = now() WHERE template_id = ?;")
 public class Template {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,5 +70,11 @@ public class Template {
                 .templateDeleteDate(this.getTemplateDeleteDate())
                 .templateModifyDate(this.getTemplateModifyDate())
                 .build();
+    }
+
+    public void modifyTemplate(TemplateSaveDto templateSaveDto) {
+        this.templateName = templateSaveDto.getTemplateName();
+        this.templateType = templateSaveDto.getTemplateType();
+        this.templateImage = templateSaveDto.getTemplateImage();
     }
 }

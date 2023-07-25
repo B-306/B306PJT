@@ -5,10 +5,7 @@ import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/template")
@@ -22,4 +19,17 @@ public class TemplateController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete-template")
+    public ResponseEntity<Void> deleteTemplate(@RequestBody Long templateId) {
+
+        templateService.deleteTemplate(templateId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/update-template")
+    public ResponseEntity<Void> updateTemplate(@RequestBody Long templateId, TemplateSaveDto templateSaveDto) {
+        templateService.modifyTemplate(templateId, templateSaveDto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
