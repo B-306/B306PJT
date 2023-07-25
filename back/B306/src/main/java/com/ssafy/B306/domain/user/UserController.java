@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -33,6 +35,21 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
+    /*
+    이거 구현하려면 refresh token을 DB에 저장을 해야할듯한데
+    1. user table에 저장하는 방식
+    2. refresh token table을 만들어 저장 (user_id, refresh token, delete_date)
+     */
+//    @PostMapping("/refresh")
+//    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+//        try {
+//            JwtToken token = userService.refreshToken(request);
+//            return new ResponseEntity<>(token, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }
