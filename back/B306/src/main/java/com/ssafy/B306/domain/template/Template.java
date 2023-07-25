@@ -12,13 +12,14 @@ import org.hibernate.annotations.SQLUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "template")
 @NoArgsConstructor
 @Getter
 @SQLDelete(sql = "UPDATE template SET template_delete_date = now() WHERE template_id = ?;")
-@SQLUpdate(sql = "UPDATE template SET template_modify_date = now() WHERE template_id = ?;")
+//@SQLUpdate(sql = "UPDATE template SET template_modify_date = now() WHERE template_id = ?;")
 public class Template {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +36,8 @@ public class Template {
     @Column(name = "template_name")
     private String templateName;
 
-    @OneToOne(mappedBy = "quizTemplateId", fetch = FetchType.LAZY)
-    private Quiz quizId;
+    @OneToMany(mappedBy = "quizTemplateId")
+    private List<Quiz> quizId;
 
     @Column(name = "template_create_date")
     private LocalDateTime templateCreateDate;
@@ -48,7 +49,7 @@ public class Template {
     private LocalDateTime templateDeleteDate;
 
     @Builder
-    public Template(Long templateId, String templateImage, char templateType,String templateName, Quiz quizId, LocalDateTime templateCreateDate, LocalDateTime templateModifyDate, LocalDateTime templateDeleteDate) {
+    public Template(Long templateId, String templateImage, char templateType,String templateName, List<Quiz> quizId, LocalDateTime templateCreateDate, LocalDateTime templateModifyDate, LocalDateTime templateDeleteDate) {
         this.templateId = templateId;
         this.templateImage = templateImage;
         this.templateType = templateType;
@@ -59,22 +60,13 @@ public class Template {
         this.templateDeleteDate = templateDeleteDate;
     }
 
-    public TemplateDto toTemplateDto() {
-        return TemplateDto.builder()
-                .templateId(this.getTemplateId())
-                .templateImage(this.getTemplateImage())
-                .templateType(this.getTemplateType())
-                .templateName(this.getTemplateName())
-                .quizId(this.getQuizId())
-                .templateCreateDate(this.getTemplateCreateDate())
-                .templateDeleteDate(this.getTemplateDeleteDate())
-                .templateModifyDate(this.getTemplateModifyDate())
-                .build();
-    }
 
     public void modifyTemplate(TemplateSaveDto templateSaveDto) {
-        this.templateName = templateSaveDto.getTemplateName();
-        this.templateType = templateSaveDto.getTemplateType();
         this.templateImage = templateSaveDto.getTemplateImage();
+        this.templateType = templateSaveDto.getTemplateType();
+        this.templateName = templateSaveDto.getTemplateName();
+        this.templateModifyDate = LocalDateTime.now();
     }
+
+
 }

@@ -19,15 +19,14 @@ public class TemplateController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-template")
-    public ResponseEntity<Void> deleteTemplate(@RequestBody Long templateId) {
-
+    @DeleteMapping("/{templateId}")
+    public ResponseEntity<Void> deleteTemplate(@PathVariable Long templateId) {
         templateService.deleteTemplate(templateId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/update-template")
-    public ResponseEntity<Void> updateTemplate(@RequestBody Long templateId, TemplateSaveDto templateSaveDto) {
+    @PatchMapping("/{templateId}")
+    public ResponseEntity<Void> updateTemplate(@PathVariable Long templateId, @RequestBody TemplateSaveDto templateSaveDto) {
         templateService.modifyTemplate(templateId, templateSaveDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
