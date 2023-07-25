@@ -25,8 +25,6 @@ class TemplateServiceTest {
     @Test
     public void templateAdd() throws Exception {
         //given
-        Quiz quiz = createQuiz("1+1은?", '2');
-        quizRepository.save(quiz);
 
         TemplateSaveDto templateSaveDto = TemplateSaveDto
                 .builder()
@@ -42,6 +40,26 @@ class TemplateServiceTest {
 
         //then
         Assertions.assertNotNull(newTemplate.getTemplateId());
+    }
+
+    @Test
+    public void templateDeleteTest() throws Exception {
+        //given
+
+        //when
+
+        //then
+
+    }
+
+    @Test
+    public void templateUpdateTest() throws Exception {
+        //given
+
+        //when
+
+        //then
+
     }
 
     public Quiz createQuiz(String quizText, char quizAnswer) {
