@@ -1,6 +1,8 @@
 package com.ssafy.B306.domain.template;
 
 import com.ssafy.B306.domain.quiz.Quiz;
+import com.ssafy.B306.domain.template.dto.TemplateDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,10 +14,9 @@ import java.time.LocalDateTime;
 @Table(name = "template")
 @NoArgsConstructor
 @Getter
-@Setter
 public class Template {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_id", nullable = false)
     private Long templateId;
 
@@ -25,6 +26,9 @@ public class Template {
 
     @Column(name = "template_type", nullable = false)
     private char templateType;
+
+    @Column(name = "template_name")
+    private String templateName;
 
     @OneToOne(mappedBy = "quizTemplateId", fetch = FetchType.LAZY)
     private Quiz quizId;
@@ -38,4 +42,28 @@ public class Template {
     @Column(name = "template_delete_date")
     private LocalDateTime templateDeleteDate;
 
+    @Builder
+    public Template(Long templateId, String templateImage, char templateType,String templateName, Quiz quizId, LocalDateTime templateCreateDate, LocalDateTime templateModifyDate, LocalDateTime templateDeleteDate) {
+        this.templateId = templateId;
+        this.templateImage = templateImage;
+        this.templateType = templateType;
+        this.templateName = templateName;
+        this.quizId = quizId;
+        this.templateCreateDate = templateCreateDate;
+        this.templateModifyDate = templateModifyDate;
+        this.templateDeleteDate = templateDeleteDate;
+    }
+
+    public TemplateDto toTemplateDto() {
+        return TemplateDto.builder()
+                .templateId(this.getTemplateId())
+                .templateImage(this.getTemplateImage())
+                .templateType(this.getTemplateType())
+                .templateName(this.getTemplateName())
+                .quizId(this.getQuizId())
+                .templateCreateDate(this.getTemplateCreateDate())
+                .templateDeleteDate(this.getTemplateDeleteDate())
+                .templateModifyDate(this.getTemplateModifyDate())
+                .build();
+    }
 }

@@ -2,6 +2,7 @@ package com.ssafy.B306.domain.quiz;
 
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "quiz")
 public class Quiz {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quiz_id", nullable = false)
     private Long quizId;
 
@@ -42,4 +43,16 @@ public class Quiz {
 
     @Column(name = "quiz_delete_date")
     private LocalDateTime quizDelteDate;
+
+    @Builder
+    public Quiz(Long quizId, Template quizTemplateId, QuizBook quizBookId, String quizText, char quizAnswer, LocalDateTime quizCreateDate, LocalDateTime quizModifyDate, LocalDateTime quizDelteDate) {
+        this.quizId = quizId;
+        this.quizTemplateId = quizTemplateId;
+        this.quizBookId = quizBookId;
+        this.quizText = quizText;
+        this.quizAnswer = quizAnswer;
+        this.quizCreateDate = quizCreateDate;
+        this.quizModifyDate = quizModifyDate;
+        this.quizDelteDate = quizDelteDate;
+    }
 }
