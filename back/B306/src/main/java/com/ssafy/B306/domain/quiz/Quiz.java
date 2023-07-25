@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.quiz;
 
+import com.ssafy.B306.domain.quiz.dto.QuizRequestSaveDto;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
 import lombok.Builder;
@@ -54,5 +55,15 @@ public class Quiz {
         this.quizCreateDate = quizCreateDate;
         this.quizModifyDate = quizModifyDate;
         this.quizDelteDate = quizDelteDate;
+    }
+
+    public QuizRequestSaveDto toDto(Quiz quiz, QuizBook id){
+        QuizRequestSaveDto quizRequestSaveDto = new QuizRequestSaveDto();
+
+        quizRequestSaveDto.setQuizBookId(id);
+        quizRequestSaveDto.setQuizText(quiz.getQuizText());
+        quizRequestSaveDto.setQuizAnswer(quiz.getQuizAnswer());
+
+        return quizRequestSaveDto;
     }
 }
