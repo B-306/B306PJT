@@ -27,7 +27,9 @@ public class QuizService {
     @Transactional
     public void modifyQuiz(List<Quiz> quizList) {
         for(Quiz quiz : quizList){
-            quiz.modifyQuiz(quiz);
+            Quiz q = quizRepository.findById(quiz.getQuizId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+            q.modifyQuiz(quiz);
         }
     }
 }

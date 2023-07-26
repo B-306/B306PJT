@@ -60,13 +60,13 @@ public class QuizBookService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
         // 문제별로 수정
-        if (isQuizesModified(QuizBookSaveRequestDto.getQuizzes()))
-            quizService.modifyQuiz(quizBook.getQuizzes());
-
+        if (isQuizesModified(quizBookSaveRequestDto.getQuizzes())) {
+            quizService.modifyQuiz(quizBookSaveRequestDto.getQuizzes());
+        }
 
         // 문제집 제목 수정
         if(isTitleModified(quizBook.getQuizBookTitle()))
-            quizBook.modifyQuizBook(QuizBookSaveRequestDto.getQuizBookTitle());
+            quizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle());
     }
 
     private boolean isTitleModified(String quizBookTitle) {

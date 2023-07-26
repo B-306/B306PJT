@@ -23,7 +23,8 @@ public class Quiz {
     private Long quizId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id", nullable = false)
+//    @JoinColumn(name = "template_id", nullable = false)
+    @JoinColumn(name = "template_id")
     private Template quizTemplateId;
 
     @ManyToOne(fetch = FetchType.LAZY)
