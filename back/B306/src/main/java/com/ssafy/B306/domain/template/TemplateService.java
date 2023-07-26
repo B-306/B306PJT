@@ -18,8 +18,15 @@ public class TemplateService {
     private final TemplateRepository templateRepository;
 
     // template 낱개 조회
-    public Template getTemplateAddress(TemplateRequestDto templateRequest){
-        return templateRepository.findByTemplateId(templateRequest.getTemplateId()).orElseThrow(() -> new RuntimeException("no template"));
+    public Template getTemplate(Long templateId){
+        Template template = templateRepository.findByTemplateId(templateId)
+                .orElseThrow(() -> new RuntimeException("no template"));
+
+        if(template.getTemplateDeleteDate() != null) {
+            throw new IllegalStateException("이미 삭제된 템플릿입니다.");
+        }
+
+        return template;
     }
 
     // 전체 template 조회
@@ -32,10 +39,10 @@ public class TemplateService {
     // template 생성
     @Transactional
     public Template addTemplate(TemplateSaveDto templateSaveDto) {
-        Template newTemp = templateSaveDto.toEntity(templateSaveDto);
+        Template template = templateSaveDto.toEntity(templateSaveDto);
         //발생할만 한 문제가 뭐가있지?
 
-        return templateRepository.save(newTemp);
+        return templateRepository.save(template);
     }
 
     // template 삭제
@@ -43,6 +50,10 @@ public class TemplateService {
     public void deleteTemplate(Long templateId) {
         Template template = templateRepository.findByTemplateId(templateId)
                 .orElseThrow(() -> new IllegalArgumentException("없는 템플릿 입니다."));
+
+        if(template.getTemplateDeleteDate() != null) {
+            throw new IllegalStateException("이미 삭제된 템플릿입니다.");
+        }
 
         templateRepository.deleteById(template.getTemplateId());
     }
@@ -52,6 +63,11 @@ public class TemplateService {
     public void modifyTemplate(Long templateId, TemplateSaveDto templateSaveDto) {
         Template template = templateRepository.findByTemplateId(templateId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 템플릿은 존재하지 않습니다."));
+
+        if(template.getTemplateDeleteDate() != null) {
+            throw new IllegalStateException("이미 삭제된 템플릿입니다.");
+        }
+
         template.modifyTemplate(templateSaveDto);
     }
 }
