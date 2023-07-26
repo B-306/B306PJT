@@ -51,6 +51,4 @@ public class QuizBookController {
 
         quizBookService.modifyQuizbook(quizBookId, quizBookSaveRequestDto);
     }
-
-
 }
