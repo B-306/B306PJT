@@ -63,5 +63,10 @@ public class UserService {
 
         return jwtUtil.refreshToken(accessToken);
     }
+
+    public String logout(HttpServletRequest request) {
+        // 로그아웃 기능을 뭘로 해야할지 모르겠습니다
+        return null;
+    }
 }
 
