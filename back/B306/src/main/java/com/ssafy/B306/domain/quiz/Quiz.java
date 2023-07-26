@@ -22,8 +22,8 @@ public class Quiz {
     @Column(name = "quiz_id", nullable = false)
     private Long quizId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "template_id", nullable = false)
     private Template quizTemplateId;
 
     @ManyToOne(fetch = FetchType.LAZY)
