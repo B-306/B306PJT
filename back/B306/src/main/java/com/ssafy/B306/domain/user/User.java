@@ -13,7 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+/*
+* 이게 있는 이유가 뭐지?
+* (access = AccessLevel.PROTECTED)
+* */
 @Entity
 @Table(name = "user")
 public class User {
