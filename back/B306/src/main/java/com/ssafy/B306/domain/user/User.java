@@ -1,6 +1,7 @@
 package com.ssafy.B306.domain.user;
 
 import com.ssafy.B306.domain.quizbook.QuizBook;
+import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -48,10 +49,13 @@ public class User {
     private LocalDateTime userDeleteDate;
 
     @OneToMany(mappedBy = "quizBookId")
-    private List<QuizBook> quizBooks;
+    private List<QuizBook> quizBooks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "templateUserId")
+    private List<Template> templates = new ArrayList<>();
 
     @Builder
-    public User(Long userId, String userEmail, String userName, String userPassword, boolean isAdmin, String userProfile, LocalDateTime userJoinDate, LocalDateTime userModifyDate, LocalDateTime userDeleteDate, List<QuizBook> quizBooks) {
+    public User(Long userId, String userEmail, String userName, String userPassword, boolean isAdmin, String userProfile, LocalDateTime userJoinDate, LocalDateTime userModifyDate, LocalDateTime userDeleteDate, List<QuizBook> quizBooks, List<Template> templates) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.userName = userName;
@@ -62,6 +66,7 @@ public class User {
         this.userModifyDate = userModifyDate;
         this.userDeleteDate = userDeleteDate;
         this.quizBooks = quizBooks;
+        this.templates = templates;
     }
 
     public UserDto toUserDto(){

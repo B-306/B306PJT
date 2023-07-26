@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
     private final Key key;
-
-//    @Value("${jwt.accessExpied}")
     private final long accessExpired;
     private final long refreshExpired;
 
@@ -133,21 +131,19 @@ public class JwtUtil {
     }
 
 
-    public JwtToken refreshToken(Claims token) {
-
-        System.out.println("token이 가지고 있는 정보 : " + token);
-
-        String accessToken = Jwts.builder()
+    public JwtToken refreshToken(String accessToken) {
+        Claims token = parseClaims(accessToken);
+        String newToken = Jwts.builder()
                 .setSubject(token.getSubject()) // 토큰의 이름 설정
                 .claim("auth", token.getAudience()) // 권한 넣기
                 .claim("userPk", token.get("userPk")) // pk 값 넣기
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 만료기간 30분 설정
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpired)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
         return JwtToken.builder()
                 .grantType("Bearer")
-                .accessToken(accessToken)
+                .accessToken(newToken)
                 .build();
     }
 }
