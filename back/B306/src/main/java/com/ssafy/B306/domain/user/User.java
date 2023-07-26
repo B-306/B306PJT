@@ -22,6 +22,9 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 public class User {
+    /*
+    userStatus : 회원의 상태를 정하는 컬럼으로 0 : 탈퇴, 1 : 회원, 2 : 관리자 등등
+     */
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)

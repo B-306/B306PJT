@@ -25,9 +25,6 @@ public class UserController {
             header.add("refreshToken", token.getRefreshToken());
 
             return new ResponseEntity<>(new UserLoginResponseDto(token), header, HttpStatus.OK);
-
-
-//            return new ResponseEntity<>(new UserLoginResponseDto(token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -56,6 +53,20 @@ public class UserController {
             // 여기는 access token만 있음
             JwtToken token = userService.refreshToken(request);
             return new ResponseEntity<>(token, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> deleteToken(HttpServletRequest request) {
+        try {
+            HttpHeaders header = new HttpHeaders();
+            header.add("token", userService.logout(request));
+            String responseBody = "SUCCESS";
+
+            return new ResponseEntity<>(responseBody, header, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
