@@ -25,10 +25,18 @@ import java.util.stream.Collectors;
 public class JwtUtil {
     private final Key key;
 
+//    @Value("${jwt.accessExpied}")
+    private final long accessExpired;
+    private final long refreshExpired;
+
     // 서버 측 secret key
-    public JwtUtil(@Value("${jwt.secret}") String secretKey) {
+    public JwtUtil(@Value("${jwt.secret}") String secretKey,
+                   @Value("${jwt.access-expired-seconds}") long accessExpired,
+                   @Value("${jwt.refresh-expired-seconds}") long refreshExpired) {
         byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
         this.key = Keys.hmacShaKeyFor(secretByteKey);
+        this.accessExpired = accessExpired * 1000;
+        this.refreshExpired = refreshExpired * 1000;
     }
 
     // 토큰 발급
@@ -44,12 +52,12 @@ public class JwtUtil {
                 .setSubject(authentication.getName()) // 토큰의 이름 설정
                 .claim("auth", authorities) // 권한 넣기
                 .claim("userPk", authentication.getCredentials()) // pk 값 넣기
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 만료기간 30분 설정
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpired)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpired))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
