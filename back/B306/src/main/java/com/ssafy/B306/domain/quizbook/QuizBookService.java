@@ -3,11 +3,13 @@ package com.ssafy.B306.domain.quizbook;
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quiz.QuizService;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
+import com.ssafy.B306.domain.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class QuizBookService {
     private final QuizBookRepository quizBookRepository;
+    private final JwtUtil jwtUtil;
 
     private final QuizService quizService;
     @Transactional
