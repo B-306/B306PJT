@@ -72,4 +72,5 @@ public class Quiz {
         quizText = quiz.getQuizText();
         quizAnswer = quiz.getQuizAnswer();
     }
+
 }
