@@ -1,5 +1,6 @@
 //user.js (Redux module)
-
+import React, {setCookie, setUser} from "react";
+import axios from "axios";
 //API통신을 통해 서버에 id,pwd를 제공하고 유저 정보와 토큰을 받아 저장
 const loginDB = (id, password) => {
     return function (dispatch, getState, { history }) {

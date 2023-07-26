@@ -5,6 +5,15 @@ import {Link} from 'react-router-dom';
 import Button from '../components/common/Button';
 import Input from "../components/common/Input";
 import styled from 'styled-components';
+import Logout from '../components/auth/Logout';
+import UserInfo from '../components/auth/UserInfo'
+
+const handleButtonClick = (e) => {
+  e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
+  return(
+    Logout()
+  )
+};
 
 function Dropdown() {
 
@@ -12,11 +21,15 @@ function Dropdown() {
     <>
       <div><Link to="/mypage">마이페이지</Link></div>
       {/* <li>마이페이지</li> */}
-      <div><Link to="/login">로그아웃</Link></div>
+      <Button onClick={(e) => handleButtonClick(e)}>로그아웃</Button>
       {/* <li>로그아웃</li> */}
     </>
   );
 }
+
+
+
+
 
 const GameCreateButton = styled(Button)`
   margin-top: 1rem;
@@ -26,14 +39,12 @@ const StyledInput = styled(Input)``;
 
 
 const MainPage = (props) => {
-  const [view, setView] = useState(false); 
-
+  // const jwtToken = localStorage.getItem("jwtToken");
+  const [view, setView] = useState(false);
   return (
     <>
-      <ul onClick={() => {setView(!view)}}>
-        닉네임 {" "}
-        {view && <Dropdown />}
-      </ul>
+      <UserInfo onClick={() => {setView(!view)}}/>
+      {view && <Dropdown />}
       <h1>두뇌 풀 가동 메인 페이지</h1>
       <form>
           <StyledInput autoComplete="code" name="code" placeholder="입장 코드" />
