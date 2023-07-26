@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.quiz;
 
+import com.ssafy.B306.domain.quiz.dto.QuizRequestSaveDto;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
 import lombok.Builder;
@@ -22,7 +23,8 @@ public class Quiz {
     private Long quizId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id", nullable = false)
+//    @JoinColumn(name = "template_id", nullable = false)
+    @JoinColumn(name = "template_id")
     private Template quizTemplateId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,5 +56,20 @@ public class Quiz {
         this.quizCreateDate = quizCreateDate;
         this.quizModifyDate = quizModifyDate;
         this.quizDelteDate = quizDelteDate;
+    }
+
+    public QuizRequestSaveDto toDto(Quiz quiz, QuizBook id){
+        QuizRequestSaveDto quizRequestSaveDto = new QuizRequestSaveDto();
+
+        quizRequestSaveDto.setQuizBookId(id);
+        quizRequestSaveDto.setQuizText(quiz.getQuizText());
+        quizRequestSaveDto.setQuizAnswer(quiz.getQuizAnswer());
+
+        return quizRequestSaveDto;
+    }
+
+    public void modifyQuiz(Quiz quiz) {
+        quizText = quiz.getQuizText();
+        quizAnswer = quiz.getQuizAnswer();
     }
 }
