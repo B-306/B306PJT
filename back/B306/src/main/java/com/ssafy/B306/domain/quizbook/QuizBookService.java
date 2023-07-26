@@ -53,10 +53,12 @@ public class QuizBookService {
     }
 
     @Transactional
-    public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto QuizBookSaveRequestDto) {
-        // To-do 사용자가 작성한 글이 맞는지 확인하기
+    public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
+//        // request안에 header 중에 token 꺼내는 코드
+        String accessToken = request.getHeader("Authorization");
+        Long userPk = (Long) jwtUtil.parseClaims(accessToken).get("userPk");
 
-        QuizBook quizBook = quizBookRepository.findById(quizBookId)
+        QuizBook originalQuizBook = quizBookRepository.findByIdAndUserID(quizBookId, userPk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
         // 문제별로 수정
@@ -65,8 +67,8 @@ public class QuizBookService {
         }
 
         // 문제집 제목 수정
-        if(isTitleModified(quizBook.getQuizBookTitle()))
-            quizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle());
+        if(isTitleModified(quizBookSaveRequestDto.getQuizBookTitle()))
+            originalQuizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle());
     }
 
     private boolean isTitleModified(String quizBookTitle) {
