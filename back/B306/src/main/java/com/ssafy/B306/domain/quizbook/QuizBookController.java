@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -46,9 +47,10 @@ public class QuizBookController {
 
     @PatchMapping("/{quizBookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto){
+    public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
         // To-do 사용자 검증을 통해 본인 게시글 맞는지 확인 후 삭제 진행
 
-        quizBookService.modifyQuizbook(quizBookId, quizBookSaveRequestDto);
+        quizBookService.modifyQuizbook(quizBookId, quizBookSaveRequestDto, request);
     }
+
 }

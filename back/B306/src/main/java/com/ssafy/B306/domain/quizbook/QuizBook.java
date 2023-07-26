@@ -58,4 +58,5 @@ public class QuizBook {
     public void modifyQuizBook(String quizBookTitle) {
         this.quizBookTitle = quizBookTitle;
     }
+
 }
