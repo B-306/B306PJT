@@ -18,11 +18,13 @@ public class QuizBookController {
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addNewQuizBook(@RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto){
-        if(quizBookSaveRequestDto.getQuizBookUserEmail() == null)
-            throw new RuntimeException("로그인 이후 사용 할 수 있는 기능입니다.");
+    public void addNewQuizBook(@RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
+        // 이게 있는 이유는?
+        // token의 만료 여부인가?
+//        if(quizBookSaveRequestDto.getQuizBookUserEmail() == null)
+//            throw new RuntimeException("로그인 이후 사용 할 수 있는 기능입니다.");
 
-        quizBookService.addNewQuizBook(quizBookSaveRequestDto);
+        quizBookService.addNewQuizBook(quizBookSaveRequestDto, request);
     }
 
     @GetMapping("/get")
