@@ -24,5 +24,10 @@ public class QuizService {
         }
     }
 
-
+    @Transactional
+    public void modifyQuiz(List<Quiz> quizList) {
+        for(Quiz quiz : quizList){
+            quiz.modifyQuiz(quiz);
+        }
+    }
 }

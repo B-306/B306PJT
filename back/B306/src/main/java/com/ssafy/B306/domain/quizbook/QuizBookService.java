@@ -1,10 +1,12 @@
 package com.ssafy.B306.domain.quizbook;
 
+import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quiz.QuizService;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -51,12 +53,27 @@ public class QuizBookService {
     }
 
     @Transactional
-    public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto) {
+    public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto QuizBookSaveRequestDto) {
         // To-do 사용자가 작성한 글이 맞는지 확인하기
 
         QuizBook quizBook = quizBookRepository.findById(quizBookId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
-        quizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle(), quizBookSaveRequestDto.getQuizzes());
+        // 문제별로 수정
+        if (isQuizesModified(QuizBookSaveRequestDto.getQuizzes()))
+            quizService.modifyQuiz(quizBook.getQuizzes());
+
+
+        // 문제집 제목 수정
+        if(isTitleModified(quizBook.getQuizBookTitle()))
+            quizBook.modifyQuizBook(QuizBookSaveRequestDto.getQuizBookTitle());
+    }
+
+    private boolean isTitleModified(String quizBookTitle) {
+        return StringUtils.hasText(quizBookTitle);
+    }
+
+    private boolean isQuizesModified(List<Quiz> quizzes) {
+        return quizzes != null;
     }
 }

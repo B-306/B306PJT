@@ -66,4 +66,9 @@ public class Quiz {
 
         return quizRequestSaveDto;
     }
+
+    public void modifyQuiz(Quiz quiz) {
+        quizText = quiz.getQuizText();
+        quizAnswer = quiz.getQuizAnswer();
+    }
 }
