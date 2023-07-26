@@ -59,9 +59,7 @@ public class QuizBookService {
     public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
         // request안에 header 중에 token 꺼내는 코드
         String accessToken = request.getHeader("Authorization");
-        Long quizBookUserId = (Long) jwtUtil.parseClaims(accessToken).get("userPk");
-
-
+        Long quizBookUserId = Long.parseLong(jwtUtil.parseClaims(accessToken).get("userPk").toString());
 
         QuizBook originalQuizBook = quizBookRepository.findByQuizBookIdAndQuizBookUserId(quizBookId, quizBookUserId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
