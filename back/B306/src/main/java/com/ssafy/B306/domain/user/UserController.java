@@ -3,7 +3,6 @@ package com.ssafy.B306.domain.user;
 import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +19,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto userLoginRequest) {
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, String> resultMap = new HashMap<>();
         try{
-            JwtToken token = userService.login(userLoginRequest);
-            HttpHeaders header = new HttpHeaders();
-            header.add("accessToken", token.getAccessToken());
-            header.add("refreshToken", token.getRefreshToken());
-
-            resultMap.put("userName", null);
-
-            return new ResponseEntity<>(resultMap, header, HttpStatus.OK);
+            resultMap = userService.login(userLoginRequest);
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -58,20 +51,6 @@ public class UserController {
             // 여기는 access token만 있음
             JwtToken token = userService.refreshToken(request);
             return new ResponseEntity<>(token, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/logout")
-    public ResponseEntity<?> deleteToken(HttpServletRequest request) {
-        try {
-            HttpHeaders header = new HttpHeaders();
-            header.add("token", userService.logout(request));
-            String responseBody = "SUCCESS";
-
-            return new ResponseEntity<>(responseBody, header, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
