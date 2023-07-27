@@ -148,11 +148,13 @@ public class JwtUtil {
                 .build();
     }
 
-    public String extractToken(HttpServletRequest request, String target) {
+    public Long extractUserPkFromToken(HttpServletRequest request, String target) {
         try {
             String token = request.getHeader("accessToken");
-            String parseClaims(token).get(target).toString();
-
+            return Long.parseLong(parseClaims(token).get(target).toString());
+        } catch (Exception e) {
+            log.info("null일껄~");
+            return null;
         }
     }
 }
