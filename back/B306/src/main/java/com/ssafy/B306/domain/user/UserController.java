@@ -74,8 +74,16 @@ public class UserController {
     }
 
     @PostMapping("/email")
-    public ResponseEntity<Void> authMail(@RequestBody EmailRequest request){
-        userService.authMail(request);
+    public ResponseEntity<Void> authMail(@RequestBody EmailRequestDto emailRequestDto){
+        userService.authMail(emailRequestDto);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/email/auth")
+    public ResponseEntity<String> validAuthMailCode(@RequestBody EmailAuthRequestDto emailAuthRequestDto){
+
+        if(userService.validAuthMailCode(emailAuthRequestDto))
+            return ResponseEntity.ok("인증되었습니다.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증코드를 확인해주세요.");
     }
 }
