@@ -2,6 +2,7 @@ package com.ssafy.B306.domain.quizbook.dto;
 
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quizbook.QuizBook;
+import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,19 +21,24 @@ public class QuizBookSaveRequestDto {
 
     private List<Quiz> quizzes = new ArrayList<>();
 
-    private String quizBookUserEmail;
+//    private String quizBookUserEmail;
+    private User userPk;
 
     @Builder
-    public QuizBookSaveRequestDto(String quizBookTitle, List<Quiz> quizzes, String userEmail) {
+    public QuizBookSaveRequestDto(String quizBookTitle, List<Quiz> quizzes, User userPk) {
         this.quizBookTitle = quizBookTitle;
         this.quizzes = quizzes;
-        this.quizBookUserEmail = userEmail;
+        this.userPk = userPk;
     }
 
+    /*
+    userId가 null인 이유 -> userId를 안넣어서
+     */
     public QuizBook toEntity(QuizBookSaveRequestDto quizBookSaveRequestDto) {
         return QuizBook.builder()
                 .quizBookTitle(quizBookSaveRequestDto.getQuizBookTitle())
                 .quizzes(quizBookSaveRequestDto.getQuizzes())
+                .quizBookUserId(quizBookSaveRequestDto.getUserPk())
                 .build();
     }
 

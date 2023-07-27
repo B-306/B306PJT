@@ -3,6 +3,7 @@ package com.ssafy.B306.domain.template;
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.template.dto.TemplateDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
+import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,10 @@ public class Template {
     @OneToMany(mappedBy = "quizTemplateId")
     private List<Quiz> quizId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User templateUserId;
+
     @Column(name = "template_create_date")
     private LocalDateTime templateCreateDate;
 
@@ -49,12 +54,13 @@ public class Template {
     private LocalDateTime templateDeleteDate;
 
     @Builder
-    public Template(Long templateId, String templateImage, char templateType,String templateName, List<Quiz> quizId, LocalDateTime templateCreateDate, LocalDateTime templateModifyDate, LocalDateTime templateDeleteDate) {
+    public Template(Long templateId, String templateImage, char templateType,String templateName, List<Quiz> quizId, User templateUserId, LocalDateTime templateCreateDate, LocalDateTime templateModifyDate, LocalDateTime templateDeleteDate) {
         this.templateId = templateId;
         this.templateImage = templateImage;
         this.templateType = templateType;
         this.templateName = templateName;
         this.quizId = quizId;
+        this.templateUserId = templateUserId;
         this.templateCreateDate = templateCreateDate;
         this.templateModifyDate = templateModifyDate;
         this.templateDeleteDate = templateDeleteDate;

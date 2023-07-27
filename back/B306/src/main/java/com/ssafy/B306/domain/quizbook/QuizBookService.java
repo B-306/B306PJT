@@ -4,6 +4,7 @@ import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quiz.QuizService;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
 import com.ssafy.B306.domain.security.JwtUtil;
+import com.ssafy.B306.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,13 @@ import java.util.List;
 public class QuizBookService {
     private final QuizBookRepository quizBookRepository;
     private final JwtUtil jwtUtil;
-
     private final QuizService quizService;
+
     @Transactional
-    public QuizBook addNewQuizBook(QuizBookSaveRequestDto quizBookSaveRequestDto){
+    public QuizBook addNewQuizBook(QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
+
+        Long userPk = Long.parseLong(jwtUtil.parseClaims(request.getHeader("accessToken")).get("userPk").toString());
+        quizBookSaveRequestDto.setUserPk(User.builder().userId(userPk).build());
         QuizBook newQuizBook = quizBookSaveRequestDto.toEntity(quizBookSaveRequestDto);
 
         quizBookRepository.save(newQuizBook);
@@ -57,7 +61,11 @@ public class QuizBookService {
 
     @Transactional
     public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
-        QuizBook originalQuizBook = quizBookRepository.findById(quizBookId)
+        // request안에 header 중에 token 꺼내는 코드
+        String accessToken = request.getHeader("accessToken");
+        Long quizBookUserId = Long.parseLong(jwtUtil.parseClaims(accessToken).get("userPk").toString());
+
+        QuizBook originalQuizBook = quizBookRepository.findByQuizBookIdAndQuizBookUserId(quizBookId, User.builder().userId(quizBookUserId).build())
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
         // 문제별로 수정
