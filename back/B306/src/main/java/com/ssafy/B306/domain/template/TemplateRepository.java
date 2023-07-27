@@ -11,9 +11,5 @@ import java.util.Optional;
 public interface TemplateRepository extends JpaRepository<Template, Long>{
     Optional<Template> findByTemplateId(Long templateId);
 
-
     Optional<Template> findByTemplateIdAndTemplateUserId(Long templateId, User templateUserId);
-
-
-
 }

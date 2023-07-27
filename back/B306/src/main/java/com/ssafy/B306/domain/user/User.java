@@ -3,8 +3,10 @@ package com.ssafy.B306.domain.user;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.user.dto.UserDto;
+import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -14,13 +16,9 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-/*
-* 이게 있는 이유가 뭐지?
-* (access = AccessLevel.PROTECTED)
-* */
 @Entity
 @Table(name = "user")
+@SQLDelete(sql = "UPDATE user SET user_delete_date = now() WHERE user_id = ?;")
 public class User {
     /*
     userStatus : 회원의 상태를 정하는 컬럼으로 0 : 탈퇴, 1 : 회원, 2 : 관리자 등등
@@ -49,7 +47,6 @@ public class User {
     @Column(name = "user_join_date")
     private LocalDateTime userJoinDate;
 
-    @UpdateTimestamp
     @Column(name = "user_modify_date")
     private LocalDateTime userModifyDate;
 
@@ -87,5 +84,12 @@ public class User {
                 .userProfile(this.getUserProfile())
                 .userJoinDate(this.getUserJoinDate())
                 .build();
+    }
+
+    public void modifyUser(UserModifyRequestDto userModifyDto) {
+        userName = userModifyDto.getUserName();
+        userPassword = userModifyDto.getUserPassword();
+        userProfile = userModifyDto.getUserProfile();
+        userModifyDate = LocalDateTime.now();
     }
 }

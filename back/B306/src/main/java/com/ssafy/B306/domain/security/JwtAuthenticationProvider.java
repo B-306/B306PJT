@@ -34,7 +34,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         // DB에 있는 유저 가져오기 => 근데 DTO로 받아야하나?
         // 그냥 값만 가져오면 Entity
         // 수정한 값을 변경하먄 DTO
-        User findUser = userRepository.findByUserEmail(authentication.getName()).orElseThrow(()-> new RuntimeException("유저 없어"));
+        User findUser = userRepository.findByUserEmail(authentication.getName())
+                                        .orElseThrow(()-> new RuntimeException("유저 없어"));
 
         /*
         로그인이 안될 경우
@@ -48,7 +49,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 || findUser.getUserDeleteDate() != null) {// 삭제한 날짜가 있다면 => 탈퇴한 회원이거나
             throw new RuntimeException("아이디 또는 비밀번호를 확인하세요");
         }
-
 
         // 권한 부여(역할 부여)
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

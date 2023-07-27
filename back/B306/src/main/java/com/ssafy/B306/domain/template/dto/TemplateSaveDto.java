@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 public class TemplateSaveDto {
+
     @NotNull(message = "템플릿 이미지를 등록해주세요")
     private String templateImage;
     @NotNull(message = "템플릿의 문제유형을 선택해주세요")
