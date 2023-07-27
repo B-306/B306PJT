@@ -4,7 +4,7 @@ const Logout = () => {
     window.location.href = '/login';
     return(
         
-    localStorage.removeItem("jwtToken")
+    localStorage.clear()
     )
 }
     

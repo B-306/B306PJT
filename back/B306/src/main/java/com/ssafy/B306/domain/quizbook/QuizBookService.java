@@ -1,10 +1,16 @@
 package com.ssafy.B306.domain.quizbook;
 
+import com.ssafy.B306.domain.quiz.Quiz;
+import com.ssafy.B306.domain.quiz.QuizService;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
+import com.ssafy.B306.domain.security.JwtUtil;
+import com.ssafy.B306.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -13,14 +19,20 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class QuizBookService {
     private final QuizBookRepository quizBookRepository;
+    private final JwtUtil jwtUtil;
+    private final QuizService quizService;
+
     @Transactional
-    public QuizBook addNewQuizBook(QuizBookSaveRequestDto quizBookSaveRequestDto){
+    public QuizBook addNewQuizBook(QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
+
+        Long userID = getUserIdFromToken(request);
+        quizBookSaveRequestDto.setUserPk(User.builder().userId(userID).build());
         QuizBook newQuizBook = quizBookSaveRequestDto.toEntity(quizBookSaveRequestDto);
 
-        if(quizBookSaveRequestDto.getQuizzes() == null)
-            throw new IllegalArgumentException("문제집의 문제가 비어있습니다.");
+        quizBookRepository.save(newQuizBook);
+        quizService.addNewQuiz(quizBookSaveRequestDto.getQuizzes(), newQuizBook);
 
-        return quizBookRepository.save(newQuizBook);
+        return newQuizBook;
     }
 
     @Transactional
@@ -36,20 +48,43 @@ public class QuizBookService {
     }
 
     @Transactional
-    public void deleteQuizBook(Long quizBookId) {
-        QuizBook quizBook = quizBookRepository.findById(quizBookId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+    public void deleteQuizBook(Long quizBookId, HttpServletRequest request) {
+        Long quizBookUserId = getUserIdFromToken(request);
+        QuizBook myQuizBook = getQuizBookIfMine(quizBookId, quizBookUserId);
 
-        quizBookRepository.deleteById(quizBook.getQuizBookId());
+        quizBookRepository.deleteById(myQuizBook.getQuizBookId());
     }
 
     @Transactional
-    public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto) {
-        // To-do 사용자가 작성한 글이 맞는지 확인하기
+    public void modifyQuizBook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
+        Long quizBookUserId = getUserIdFromToken(request);
+        QuizBook originalQuizBook = getQuizBookIfMine(quizBookId, quizBookUserId);
 
-        QuizBook quizBook = quizBookRepository.findById(quizBookId)
+        // 문제별로 수정
+        if (isQuizzesModified(quizBookSaveRequestDto.getQuizzes())) {
+            quizService.modifyQuiz(quizBookSaveRequestDto.getQuizzes());
+        }
+
+        // 문제집 제목 수정
+        if(isTitleModified(quizBookSaveRequestDto.getQuizBookTitle()))
+            originalQuizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle());
+    }
+
+    private boolean isTitleModified(String quizBookTitle) {
+        return StringUtils.hasText(quizBookTitle);
+    }
+
+    private boolean isQuizzesModified(List<Quiz> quizzes) {
+        return quizzes != null;
+    }
+
+    private QuizBook getQuizBookIfMine(Long quizBookId, Long quizBookUserId) {
+        return quizBookRepository.findByQuizBookIdAndQuizBookUserId(quizBookId, User.builder().userId(quizBookUserId).build())
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+    }
 
-        quizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle(), quizBookSaveRequestDto.getQuizzes());
+    private Long getUserIdFromToken(HttpServletRequest request) {
+        String accessToken = request.getHeader("accessToken");
+        return Long.parseLong(jwtUtil.parseClaims(accessToken).get("userPk").toString());
     }
 }

@@ -1,9 +1,12 @@
 package com.ssafy.B306.domain.user;
 
 import com.ssafy.B306.domain.quizbook.QuizBook;
+import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.user.dto.UserDto;
+import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -12,10 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
+@SQLDelete(sql = "UPDATE user SET user_delete_date = now() WHERE user_id = ?;")
 public class User {
+    /*
+    userStatus : 회원의 상태를 정하는 컬럼으로 0 : 탈퇴, 1 : 회원, 2 : 관리자 등등
+     */
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
@@ -40,7 +47,6 @@ public class User {
     @Column(name = "user_join_date")
     private LocalDateTime userJoinDate;
 
-    @UpdateTimestamp
     @Column(name = "user_modify_date")
     private LocalDateTime userModifyDate;
 
@@ -48,10 +54,13 @@ public class User {
     private LocalDateTime userDeleteDate;
 
     @OneToMany(mappedBy = "quizBookId")
-    private List<QuizBook> quizBooks;
+    private List<QuizBook> quizBooks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "templateUserId")
+    private List<Template> templates = new ArrayList<>();
 
     @Builder
-    public User(Long userId, String userEmail, String userName, String userPassword, boolean isAdmin, String userProfile, LocalDateTime userJoinDate, LocalDateTime userModifyDate, LocalDateTime userDeleteDate, List<QuizBook> quizBooks) {
+    public User(Long userId, String userEmail, String userName, String userPassword, boolean isAdmin, String userProfile, LocalDateTime userJoinDate, LocalDateTime userModifyDate, LocalDateTime userDeleteDate, List<QuizBook> quizBooks, List<Template> templates) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.userName = userName;
@@ -62,6 +71,7 @@ public class User {
         this.userModifyDate = userModifyDate;
         this.userDeleteDate = userDeleteDate;
         this.quizBooks = quizBooks;
+        this.templates = templates;
     }
 
     public UserDto toUserDto(){
@@ -74,5 +84,12 @@ public class User {
                 .userProfile(this.getUserProfile())
                 .userJoinDate(this.getUserJoinDate())
                 .build();
+    }
+
+    public void modifyUser(UserModifyRequestDto userModifyDto) {
+        userName = userModifyDto.getUserName();
+        userPassword = userModifyDto.getUserPassword();
+        userProfile = userModifyDto.getUserProfile();
+        userModifyDate = LocalDateTime.now();
     }
 }

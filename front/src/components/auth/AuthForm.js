@@ -85,17 +85,22 @@ const textMap = {
             userEmail : email,
             userPassword : password,
           });
-  
-          const jwtToken = response.data.token;
-          // 예시: localStorage에 JWT 저장
-          localStorage.setItem("jwtToken", jwtToken);
+          console.dir(response.data);
+          // 로그인 성공 시 accessToken을 localStorage에 저장
+          localStorage.setItem("accessToken", response.data.accessToken);
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+          localStorage.setItem("userName", response.data.userName);
+          localStorage.setItem("userEmail", email);
 
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
+          // 07.27 오전 10:41분 작성 이름 확
+          console.log(name);
   
           // 로그인이 성공하면 메인 페이지로 이동하거나 다른 동작 수행
           // 예시: 페이지 리디렉션
           window.location.href = '/'; // 메인 페이지로 리디렉션
+          // console.log("저장된 토큰:", localStorage.getItem("jwtToken"));
         }
       } catch (error) {
         console.error('실패:', error);

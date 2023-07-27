@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -17,11 +18,8 @@ public class QuizBookController {
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addNewQuizBook(@RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto){
-        if(quizBookSaveRequestDto.getQuizBookUserEmail() == null)
-            throw new RuntimeException("로그인 이후 사용 할 수 있는 기능입니다.");
-
-        quizBookService.addNewQuizBook(quizBookSaveRequestDto);
+    public void addNewQuizBook(@RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
+        quizBookService.addNewQuizBook(quizBookSaveRequestDto, request);
     }
 
     @GetMapping("/get")
@@ -38,19 +36,14 @@ public class QuizBookController {
 
     @DeleteMapping("/{quizBookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteQuizBook(@PathVariable Long quizBookId){
-        // To-do 사용자 검증을 통해 본인 게시글 맞는지 확인 후 삭제 진행
-
-        quizBookService.deleteQuizBook(quizBookId);
+    public void deleteQuizBook(@PathVariable Long quizBookId, HttpServletRequest request){
+        quizBookService.deleteQuizBook(quizBookId, request);
     }
 
     @PatchMapping("/{quizBookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto){
-        // To-do 사용자 검증을 통해 본인 게시글 맞는지 확인 후 삭제 진행
-
-        quizBookService.modifyQuizbook(quizBookId, quizBookSaveRequestDto);
+    public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
+        quizBookService.modifyQuizBook(quizBookId, quizBookSaveRequestDto, request);
     }
-
 
 }

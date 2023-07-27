@@ -15,6 +15,7 @@ const handleButtonClick = (e) => {
   )
 };
 
+
 function Dropdown() {
 
   return (
@@ -30,7 +31,6 @@ function Dropdown() {
 
 
 
-
 const GameCreateButton = styled(Button)`
   margin-top: 1rem;
 `;
@@ -39,16 +39,27 @@ const StyledInput = styled(Input)``;
 
 
 const MainPage = (props) => {
-  // const jwtToken = localStorage.getItem("jwtToken");
+  const jwtToken = localStorage.getItem("accessToken");
+  const userName = localStorage.getItem("userName")
+  // console.dir(jwtToken)
+  if (!jwtToken) {
+    window.location.href = '/login';
+  }
+  // console.log('jwtToken 있음')
   const [view, setView] = useState(false);
   return (
     <>
-      <UserInfo onClick={() => {setView(!view)}}/>
+      <span
+        style={{ textDecoration: 'underline', cursor: 'pointer' }}
+        onClick={() => setView(!view)}
+      >
+        {userName}
+      </span>
       {view && <Dropdown />}
       <h1>두뇌 풀 가동 메인 페이지</h1>
       <form>
           <StyledInput autoComplete="code" name="code" placeholder="입장 코드" />
-          <GameCreateButton>방 만들기</GameCreateButton>
+          <GameCreateButton><Link to="/gamecreate">방 만들기</Link></GameCreateButton>
       </form>
     </>
     

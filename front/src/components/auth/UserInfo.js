@@ -1,32 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 
-function UserInfo() {
-  const [userInfo, setUserInfo] = useState(null);
+const UserInfo = () => {
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    // 로그인된 상태에서 토큰 가져오기 (로컬 스토리지에서 가져온다고 가정)
-    const token = localStorage.getItem('jwtToken');
+    // 로컬 스토리지에서 액세스 토큰 가져오기
+    const accessToken = localStorage.getItem('accessToken');
 
-
-    // 토큰이 존재할 경우에만 디코드
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        const name = decodedToken.name;
-        setUserInfo(name); // 유저 이름을 상태에 저장
-      } catch (error) {
-        console.error('Invalid token:', error);
-      }
-    }
+    // 액세스 토큰을 헤더에 포함하여 서버로 요청 보내기
+    axios.get('/user/name', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+    .then(response => {
+      // 요청이 성공하면 서버에서 받은 이름을 상태에 저장
+      console.log(response.data)
+      setUserName(response.data);
+    })
+    .catch(error => {
+      console.error('서버 요청 실패:', error);
+    });
   }, []);
 
   return (
     <div>
-      {userInfo && <p>유저 이름: {userInfo}</p>}
+      <h2>{userName}</h2>
     </div>
   );
-}
+};
 
 export default UserInfo;

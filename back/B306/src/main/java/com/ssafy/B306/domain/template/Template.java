@@ -3,6 +3,7 @@ package com.ssafy.B306.domain.template;
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.template.dto.TemplateDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
+import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,19 +13,19 @@ import org.hibernate.annotations.SQLUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "template")
 @NoArgsConstructor
 @Getter
 @SQLDelete(sql = "UPDATE template SET template_delete_date = now() WHERE template_id = ?;")
-@SQLUpdate(sql = "UPDATE template SET template_modify_date = now() WHERE template_id = ?;")
+//@SQLUpdate(sql = "UPDATE template SET template_modify_date = now() WHERE template_id = ?;")
 public class Template {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_id", nullable = false)
     private Long templateId;
-
 
     @Column(name = "template_image", nullable = false)
     private String templateImage;
@@ -35,8 +36,12 @@ public class Template {
     @Column(name = "template_name")
     private String templateName;
 
-    @OneToOne(mappedBy = "quizTemplateId", fetch = FetchType.LAZY)
-    private Quiz quizId;
+    @OneToMany(mappedBy = "quizTemplateId")
+    private List<Quiz> quizId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User templateUserId;
 
     @Column(name = "template_create_date")
     private LocalDateTime templateCreateDate;
@@ -48,33 +53,25 @@ public class Template {
     private LocalDateTime templateDeleteDate;
 
     @Builder
-    public Template(Long templateId, String templateImage, char templateType,String templateName, Quiz quizId, LocalDateTime templateCreateDate, LocalDateTime templateModifyDate, LocalDateTime templateDeleteDate) {
+    public Template(Long templateId, String templateImage, char templateType,String templateName, List<Quiz> quizId, User templateUserId, LocalDateTime templateCreateDate, LocalDateTime templateModifyDate, LocalDateTime templateDeleteDate) {
         this.templateId = templateId;
         this.templateImage = templateImage;
         this.templateType = templateType;
         this.templateName = templateName;
         this.quizId = quizId;
+        this.templateUserId = templateUserId;
         this.templateCreateDate = templateCreateDate;
         this.templateModifyDate = templateModifyDate;
         this.templateDeleteDate = templateDeleteDate;
     }
 
-    public TemplateDto toTemplateDto() {
-        return TemplateDto.builder()
-                .templateId(this.getTemplateId())
-                .templateImage(this.getTemplateImage())
-                .templateType(this.getTemplateType())
-                .templateName(this.getTemplateName())
-                .quizId(this.getQuizId())
-                .templateCreateDate(this.getTemplateCreateDate())
-                .templateDeleteDate(this.getTemplateDeleteDate())
-                .templateModifyDate(this.getTemplateModifyDate())
-                .build();
-    }
 
     public void modifyTemplate(TemplateSaveDto templateSaveDto) {
-        this.templateName = templateSaveDto.getTemplateName();
-        this.templateType = templateSaveDto.getTemplateType();
         this.templateImage = templateSaveDto.getTemplateImage();
+        this.templateType = templateSaveDto.getTemplateType();
+        this.templateName = templateSaveDto.getTemplateName();
+        this.templateModifyDate = LocalDateTime.now();
     }
+
+
 }

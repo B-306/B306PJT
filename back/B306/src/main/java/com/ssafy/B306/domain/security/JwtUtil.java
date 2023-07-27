@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Arrays;
@@ -24,11 +25,17 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
     private final Key key;
+    private final long accessExpired;
+    private final long refreshExpired;
 
     // 서버 측 secret key
-    public JwtUtil(@Value("${jwt.secret}") String secretKey) {
+    public JwtUtil(@Value("${jwt.secret}") String secretKey,
+                   @Value("${jwt.access-expired-seconds}") long accessExpired,
+                   @Value("${jwt.refresh-expired-seconds}") long refreshExpired) {
         byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
         this.key = Keys.hmacShaKeyFor(secretByteKey);
+        this.accessExpired = accessExpired * 1000;
+        this.refreshExpired = refreshExpired * 1000;
     }
 
     // 토큰 발급
@@ -44,12 +51,13 @@ public class JwtUtil {
                 .setSubject(authentication.getName()) // 토큰의 이름 설정
                 .claim("auth", authorities) // 권한 넣기
                 .claim("userPk", authentication.getCredentials()) // pk 값 넣기
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 만료기간 30분 설정
+                .claim("userEmail", authentication.getName()) // email 값 넣기
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpired)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpired))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
@@ -68,6 +76,7 @@ public class JwtUtil {
             throw new RuntimeException("권한 정보가 없는 토큰");
         }
 
+        // 권한 정보 가져옴 ex) USER, ADMIN
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get("auth").toString().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -105,12 +114,8 @@ public class JwtUtil {
     }
 
     // token 내용 parsing하는 함수
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         try {
-            System.out.println(Jwts.parser().setSigningKey(key)
-                    .parseClaimsJws(token)
-                    .getBody());
-
             return Jwts.parser().setSigningKey(key)
                     .parseClaimsJws(token)
                     .getBody();
@@ -119,5 +124,36 @@ public class JwtUtil {
         }
     }
 
+    public boolean isExpired(String token) {
+        // new Date() : 지금
+        // 즉, 만료 시간이 지금보다 전인가?를 판단하고 결과를 반환
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token)
+                .getBody().getExpiration().before(new Date());
+    }
 
+    public JwtToken refreshToken(String accessToken) {
+        Claims token = parseClaims(accessToken);
+        String newToken = Jwts.builder()
+                .setSubject(token.getSubject()) // 토큰의 이름 설정
+                .claim("auth", token.getAudience()) // 권한 넣기
+                .claim("userPk", token.get("userPk")) // pk 값 넣기
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpired)) // 만료기간 30분 설정
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+
+        return JwtToken.builder()
+                .grantType("Bearer")
+                .accessToken(newToken)
+                .build();
+    }
+
+    public Long extractUserPkFromToken(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("accessToken");
+            return Long.parseLong(parseClaims(token).get("userPk").toString());
+        } catch (Exception e) {
+            log.info("null일껄~");
+            return null;
+        }
+    }
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="be275731-cc48-4024-8309-bbe3ef7f4dfa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/B306/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/B306/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/Quiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/Quiz.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/QuizController.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/QuizController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/QuizRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/QuizRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/QuizService.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/QuizService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/dto/QuizRequestSaveDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quiz/dto/QuizRequestSaveDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBookController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBookRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBookRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/QuizBookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/dto/QuizBookSaveRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/quizbook/dto/QuizBookSaveRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/security/JwtAuthenticationProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/security/JwtAuthenticationProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/Template.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/Template.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/TemplateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/TemplateController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/TemplateRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/TemplateRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/TemplateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/TemplateService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/dto/TemplateDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/dto/TemplateDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/dto/TemplateRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/dto/TemplateRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/dto/TemplateSaveDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/template/dto/TemplateSaveDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/main/java/com/ssafy/B306/domain/user/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/test/java/com/ssafy/B306/domain/quizbook/QuizBookServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/test/java/com/ssafy/B306/domain/quizbook/QuizBookServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/B306/src/test/java/com/ssafy/B306/domain/template/TemplateServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/B306/src/test/java/com/ssafy/B306/domain/template/TemplateServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/components/auth/AuthForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/components/auth/AuthForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/components/auth/UserInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/components/auth/UserInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/page/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/page/MainPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/page/MyPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/page/MyPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../front/yarn.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="2T95PHpe7gxAOCWGpEwlxY9Acwp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/SSAFY/Desktop/B306PJT/B306PJT/back/B306",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="be275731-cc48-4024-8309-bbe3ef7f4dfa" name="Changes" comment="" />
+      <created>1690442430329</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1690442430329</updated>
+      <workItem from="1690442431435" duration="11000" />
+    </task>
+    <servers />
+  </component>
+</project>
