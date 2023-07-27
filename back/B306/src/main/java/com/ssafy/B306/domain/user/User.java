@@ -3,6 +3,7 @@ package com.ssafy.B306.domain.user;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.user.dto.UserDto;
+import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,11 +15,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-/*
-* 이게 있는 이유가 뭐지?
-* (access = AccessLevel.PROTECTED)
-* */
 @Entity
 @Table(name = "user")
 public class User {
@@ -49,7 +45,6 @@ public class User {
     @Column(name = "user_join_date")
     private LocalDateTime userJoinDate;
 
-    @UpdateTimestamp
     @Column(name = "user_modify_date")
     private LocalDateTime userModifyDate;
 
@@ -87,5 +82,12 @@ public class User {
                 .userProfile(this.getUserProfile())
                 .userJoinDate(this.getUserJoinDate())
                 .build();
+    }
+
+    public void modifyUser(UserModifyRequestDto userModifyDto) {
+        userName = userModifyDto.getUserName();
+        userPassword = userModifyDto.getUserPassword();
+        userProfile = userModifyDto.getUserProfile();
+        userModifyDate = LocalDateTime.now();
     }
 }
