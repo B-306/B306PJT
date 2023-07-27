@@ -93,4 +93,10 @@ public class UserController {
     public void deleteUser(HttpServletRequest request) {
         userService.deleteUser(request);
     }
+
+    @PostMapping("/email")
+    public ResponseEntity<Void> authMail(@RequestBody EmailRequest request){
+        userService.authMail(request);
+        return ResponseEntity.ok().build();
+    }
 }

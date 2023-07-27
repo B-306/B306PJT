@@ -3,19 +3,21 @@ package com.ssafy.B306.domain.user;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.security.JwtToken;
-import com.ssafy.B306.domain.user.dto.UserDto;
-import com.ssafy.B306.domain.user.dto.UserLoginRequestDto;
-import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
-import com.ssafy.B306.domain.user.dto.UserRegisterRequestDto;
+import com.ssafy.B306.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,8 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final JavaMailSender javaMailSender;
+    private final RedisUtil redisUtil;
 
     public JwtToken login(UserLoginRequestDto userLoginRequest){
 
@@ -107,6 +111,35 @@ public class UserService {
     public void deleteUser(HttpServletRequest request) {
         Long userPk = jwtUtil.extractUserPkFromToken(request);
         userRepository.deleteById(userPk);
+    }
+
+    @Transactional
+    public void authMail(EmailRequest request) {
+        Random random = new Random();
+        String authKey = String.valueOf(random.nextInt(888888)+111111);
+
+        sendAuthEmail(request.getEmail(), authKey);
+    }
+
+    private void sendAuthEmail(String email, String authKey) {
+        String subject = "제목";
+        String text = "회원 가입을 위한 인증번호는 "+ authKey + "입니다.<br/>";
+
+        try{
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(text, true);
+            javaMailSender.send(mimeMessage);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+
+        // 유효시간
+        redisUtil.setDataExpire(authKey, email, 60 * 50L);
     }
 }
 
