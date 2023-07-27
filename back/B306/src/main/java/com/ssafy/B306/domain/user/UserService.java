@@ -5,8 +5,8 @@ import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import com.ssafy.B306.domain.user.dto.UserLoginRequestDto;
+import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
 import com.ssafy.B306.domain.user.dto.UserRegisterRequestDto;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -67,6 +67,11 @@ public class UserService {
     public String logout(HttpServletRequest request) {
         // 로그아웃 기능을 뭘로 해야할지 모르겠습니다
         return null;
+    }
+
+    public void modify(UserModifyRequestDto userModifyDto, HttpServletRequest request) {
+        Long userPk = jwtUtil.extractToken(request, "userPk");
+
     }
 }
 

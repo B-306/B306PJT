@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ public class JwtUtil {
                 .setSubject(authentication.getName()) // 토큰의 이름 설정
                 .claim("auth", authorities) // 권한 넣기
                 .claim("userPk", authentication.getCredentials()) // pk 값 넣기
+                .claim("userEmail", authentication.getName()) // email 값 넣기
                 .setExpiration(new Date(System.currentTimeMillis() + accessExpired)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
@@ -130,7 +132,6 @@ public class JwtUtil {
                 .getBody().getExpiration().before(new Date());
     }
 
-
     public JwtToken refreshToken(String accessToken) {
         Claims token = parseClaims(accessToken);
         String newToken = Jwts.builder()
@@ -145,5 +146,13 @@ public class JwtUtil {
                 .grantType("Bearer")
                 .accessToken(newToken)
                 .build();
+    }
+
+    public String extractToken(HttpServletRequest request, String target) {
+        try {
+            String token = request.getHeader("accessToken");
+            String parseClaims(token).get(target).toString();
+
+        }
     }
 }

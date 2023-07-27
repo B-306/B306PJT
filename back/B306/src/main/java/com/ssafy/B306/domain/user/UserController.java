@@ -72,4 +72,15 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PatchMapping("/modify")
+    public ResponseEntity<?> modifyUser(@RequestBody UserModifyRequestDto userModifyRequestDto, HttpServletRequest request) {
+        try {
+            userService.modify(userModifyRequestDto, request);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
