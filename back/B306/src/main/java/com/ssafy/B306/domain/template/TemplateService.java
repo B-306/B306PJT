@@ -22,6 +22,7 @@ public class TemplateService {
 
     // template 낱개 조회
     public Template getTemplate(Long templateId){
+        
         Template template = templateRepository.findByTemplateId(templateId)
                 .orElseThrow(() -> new RuntimeException("no template"));
 
@@ -34,6 +35,7 @@ public class TemplateService {
 
     // 전체 template 조회
     public List<Template> getAllTemplate() {
+
         List<Template> temList = new ArrayList<>();
         temList = templateRepository.findAll();
         return temList;
@@ -53,8 +55,6 @@ public class TemplateService {
     // template 삭제
     @Transactional
     public void deleteTemplate(Long templateId, HttpServletRequest request) {
-//        Template template = templateRepository.findByTemplateId(templateId)
-//                .orElseThrow(() -> new IllegalArgumentException("없는 템플릿 입니다."));
 
         Long templateUserId = Long.parseLong(jwtUtil.parseClaims(request.getHeader("accessToken")).get("userPk").toString());
 

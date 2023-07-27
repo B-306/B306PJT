@@ -27,7 +27,6 @@ public class Template {
     @Column(name = "template_id", nullable = false)
     private Long templateId;
 
-
     @Column(name = "template_image", nullable = false)
     private String templateImage;
 
