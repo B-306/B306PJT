@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -30,7 +32,7 @@ public class UserService {
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
 
-    public JwtToken login(UserLoginRequestDto userLoginRequest){
+    public Map<String, String> login(UserLoginRequestDto userLoginRequest){
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequest.getUserEmail(), userLoginRequest.getUserPassword());
@@ -39,23 +41,21 @@ public class UserService {
 
         JwtToken token = jwtUtil.createToken(authentication);
 
-        return token;
+        // DB에 있는 User 정보에서 userName 가져오기
+        User findUser = userRepository.findByUserEmail(userLoginRequest.getUserEmail())
+                .orElseThrow(()-> new RuntimeException("유저 없엉ㅜㅜ"));
+        Map<String, String> result = new HashMap<>();
+        result.put("accessToken", token.getAccessToken());
+        result.put("refreshToken", token.getRefreshToken());
+        result.put("userName", findUser.getUserName());
+
+        return result;
     }
 
     @Transactional
     public UserDto signUp(UserRegisterRequestDto userRegisterRequestDto){
 
-//        User findUserEmails = userRepository.findByUserEmail(userRegisterRequestDto.getUserEmail())
-//                .orElseThrow(() -> new RuntimeException("몰라 무슨 오류일까"));
-
-//        List<User> findUserEmails = userRepository.findByUserEmail(userRegisterRequestDto.getUserEmail())
-//                .orElseThrow(() -> new RuntimeException("몰라 무슨 오류일까"));
-//        for (User u : findUserEmails) {
-//            if (u.getUserDeleteDate() == null) throw new RuntimeException("이미 가입된 이메일입니다.");
-//        }
-
-
-        // 여기까지 함
+        // userEmail 중복 검증
         if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
             throw new RuntimeException("이미 가입된 이메일입니다.");
         }
@@ -82,19 +82,12 @@ public class UserService {
         return jwtUtil.refreshToken(accessToken);
     }
 
-    public String logout(HttpServletRequest request) {
-        // 로그아웃 기능을 뭘로 해야할지 모르겠습니다
-        return null;
-    }
-
     @Transactional
     public void modify(UserModifyRequestDto userModifyDto, HttpServletRequest request) {
 
         Long userPk = jwtUtil.extractUserPkFromToken(request);
 
         if (userPk == null) return;
-
-
 
         User findUser = userRepository.findByUserId(userPk)
                 .orElseThrow(()-> new RuntimeException("유저 없는데?"));
@@ -105,7 +98,6 @@ public class UserService {
                 .userPassword(bCryptPasswordEncoder.encode(userModifyDto.getUserPassword()))
                 .userName(userModifyDto.getUserName())
                 .build());
-
     }
 
     public void deleteUser(HttpServletRequest request) {
@@ -136,7 +128,6 @@ public class UserService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
 
         // 유효시간
         redisUtil.setDataExpire(authKey, email, 60 * 50L);
