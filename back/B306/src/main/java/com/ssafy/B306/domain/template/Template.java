@@ -27,7 +27,6 @@ public class Template {
     @Column(name = "template_id", nullable = false)
     private Long templateId;
 
-
     @Column(name = "template_image", nullable = false)
     private String templateImage;
 
@@ -41,7 +40,7 @@ public class Template {
     private List<Quiz> quizId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User templateUserId;
 
     @Column(name = "template_create_date")

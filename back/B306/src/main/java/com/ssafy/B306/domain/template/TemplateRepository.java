@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.template;
 
+import com.ssafy.B306.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,9 +11,5 @@ import java.util.Optional;
 public interface TemplateRepository extends JpaRepository<Template, Long>{
     Optional<Template> findByTemplateId(Long templateId);
 
-
-    List<Template> findAll();
-
-
-
+    Optional<Template> findByTemplateIdAndTemplateUserId(Long templateId, User templateUserId);
 }
