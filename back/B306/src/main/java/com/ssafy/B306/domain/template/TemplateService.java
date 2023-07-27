@@ -22,7 +22,7 @@ public class TemplateService {
 
     // template 낱개 조회
     public Template getTemplate(Long templateId){
-        
+
         Template template = templateRepository.findByTemplateId(templateId)
                 .orElseThrow(() -> new RuntimeException("no template"));
 
