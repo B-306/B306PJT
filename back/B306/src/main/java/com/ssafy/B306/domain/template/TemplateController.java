@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TemplateController {
     private final TemplateService templateService;
+
 
     @GetMapping("/get")
     public ResponseEntity<List<Template>> getTemplateList() {
@@ -28,20 +30,21 @@ public class TemplateController {
     }
 
     @PostMapping("/add-template")
-    public ResponseEntity<Void> addTemplate(@RequestBody TemplateSaveDto templateSaveDto) {
-        templateService.addTemplate(templateSaveDto);
+    public ResponseEntity<Void> addTemplate(@RequestBody TemplateSaveDto templateSaveDto, HttpServletRequest request) {
+        templateService.addTemplate(templateSaveDto, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{templateId}")
-    public ResponseEntity<Void> deleteTemplate(@PathVariable Long templateId) {
-        templateService.deleteTemplate(templateId);
+    public ResponseEntity<Void> deleteTemplate(@PathVariable Long templateId, HttpServletRequest request) {
+        templateService.deleteTemplate(templateId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/{templateId}")
-    public ResponseEntity<Void> updateTemplate(@PathVariable Long templateId, @RequestBody TemplateSaveDto templateSaveDto) {
-        templateService.modifyTemplate(templateId, templateSaveDto);
+    public ResponseEntity<Void> modifyTemplate(@PathVariable Long templateId, @RequestBody TemplateSaveDto templateSaveDto, HttpServletRequest request) {
+
+        templateService.modifyTemplate(templateId, templateSaveDto, request);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
