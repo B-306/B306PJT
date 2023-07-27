@@ -54,6 +54,9 @@ dependencies {
 	// @NotNull 이슈 해결을 위한 의존성
 	implementation 'org.hibernate:hibernate-validator:7.0.5.Final'
 
+	// 이메일 인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 
