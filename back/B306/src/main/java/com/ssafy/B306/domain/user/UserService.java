@@ -5,13 +5,14 @@ import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import com.ssafy.B306.domain.user.dto.UserLoginRequestDto;
+import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
 import com.ssafy.B306.domain.user.dto.UserRegisterRequestDto;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +37,7 @@ public class UserService {
         return token;
     }
 
+    @Transactional
     public UserDto signUp(UserRegisterRequestDto userRegisterRequestDto){
 
         if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
@@ -67,6 +69,27 @@ public class UserService {
     public String logout(HttpServletRequest request) {
         // 로그아웃 기능을 뭘로 해야할지 모르겠습니다
         return null;
+    }
+
+    @Transactional
+    public void modify(UserModifyRequestDto userModifyDto, HttpServletRequest request) {
+
+        Long userPk = jwtUtil.extractUserPkFromToken(request, "userPk");
+
+        if (userPk == null) return;
+
+
+
+        User findUser = userRepository.findByUserId(userPk)
+                .orElseThrow(()-> new RuntimeException("유저 없는데?"));
+
+        findUser.modifyUser(
+                UserModifyRequestDto.builder()
+                .userProfile(userModifyDto.getUserProfile())
+                .userPassword(bCryptPasswordEncoder.encode(userModifyDto.getUserPassword()))
+                .userName(userModifyDto.getUserName())
+                .build());
+
     }
 }
 

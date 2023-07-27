@@ -37,8 +37,9 @@ public class TemplateController {
 
         templateService.addTemplate(templateSaveDto, request);
 
-         new ResponseEntity<>(HttpStatus.OK);
+         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @DeleteMapping("/{templateId}")
     public ResponseEntity<Void> deleteTemplate(@PathVariable Long templateId, HttpServletRequest request) {
