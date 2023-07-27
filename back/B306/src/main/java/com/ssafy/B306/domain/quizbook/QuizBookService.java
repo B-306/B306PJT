@@ -25,14 +25,12 @@ public class QuizBookService {
     @Transactional
     public QuizBook addNewQuizBook(QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
 
-        Long userPk = Long.parseLong(jwtUtil.parseClaims(request.getHeader("accessToken")).get("userPk").toString());
-        quizBookSaveRequestDto.setUserPk(User.builder().userId(userPk).build());
+        Long userID = getUserIdFromToken(request);
+        quizBookSaveRequestDto.setUserPk(User.builder().userId(userID).build());
         QuizBook newQuizBook = quizBookSaveRequestDto.toEntity(quizBookSaveRequestDto);
 
         quizBookRepository.save(newQuizBook);
         quizService.addNewQuiz(quizBookSaveRequestDto.getQuizzes(), newQuizBook);
-
-        // To-do 문제별로 템플릿 연결하기
 
         return newQuizBook;
     }
@@ -50,26 +48,20 @@ public class QuizBookService {
     }
 
     @Transactional
-    public void deleteQuizBook(Long quizBookId) {
-        // To-do 사용자가 작성한 글이 맞는지 확인하기
+    public void deleteQuizBook(Long quizBookId, HttpServletRequest request) {
+        Long quizBookUserId = getUserIdFromToken(request);
+        QuizBook myQuizBook = getQuizBookIfMine(quizBookId, quizBookUserId);
 
-        QuizBook quizBook = quizBookRepository.findById(quizBookId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
-
-        quizBookRepository.deleteById(quizBook.getQuizBookId());
+        quizBookRepository.deleteById(myQuizBook.getQuizBookId());
     }
 
     @Transactional
-    public void modifyQuizbook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
-        // request안에 header 중에 token 꺼내는 코드
-        String accessToken = request.getHeader("accessToken");
-        Long quizBookUserId = Long.parseLong(jwtUtil.parseClaims(accessToken).get("userPk").toString());
-
-        QuizBook originalQuizBook = quizBookRepository.findByQuizBookIdAndQuizBookUserId(quizBookId, User.builder().userId(quizBookUserId).build())
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+    public void modifyQuizBook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
+        Long quizBookUserId = getUserIdFromToken(request);
+        QuizBook originalQuizBook = getQuizBookIfMine(quizBookId, quizBookUserId);
 
         // 문제별로 수정
-        if (isQuizesModified(quizBookSaveRequestDto.getQuizzes())) {
+        if (isQuizzesModified(quizBookSaveRequestDto.getQuizzes())) {
             quizService.modifyQuiz(quizBookSaveRequestDto.getQuizzes());
         }
 
@@ -82,7 +74,17 @@ public class QuizBookService {
         return StringUtils.hasText(quizBookTitle);
     }
 
-    private boolean isQuizesModified(List<Quiz> quizzes) {
+    private boolean isQuizzesModified(List<Quiz> quizzes) {
         return quizzes != null;
+    }
+
+    private QuizBook getQuizBookIfMine(Long quizBookId, Long quizBookUserId) {
+        return quizBookRepository.findByQuizBookIdAndQuizBookUserId(quizBookId, User.builder().userId(quizBookUserId).build())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+    }
+
+    private Long getUserIdFromToken(HttpServletRequest request) {
+        String accessToken = request.getHeader("accessToken");
+        return Long.parseLong(jwtUtil.parseClaims(accessToken).get("userPk").toString());
     }
 }

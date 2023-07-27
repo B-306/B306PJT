@@ -19,11 +19,6 @@ public class QuizBookController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public void addNewQuizBook(@RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
-        // 이게 있는 이유는?
-        // token의 만료 여부인가?
-//        if(quizBookSaveRequestDto.getQuizBookUserEmail() == null)
-//            throw new RuntimeException("로그인 이후 사용 할 수 있는 기능입니다.");
-
         quizBookService.addNewQuizBook(quizBookSaveRequestDto, request);
     }
 
@@ -41,18 +36,14 @@ public class QuizBookController {
 
     @DeleteMapping("/{quizBookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteQuizBook(@PathVariable Long quizBookId){
-        // To-do 사용자 검증을 통해 본인 게시글 맞는지 확인 후 삭제 진행
-
-        quizBookService.deleteQuizBook(quizBookId);
+    public void deleteQuizBook(@PathVariable Long quizBookId, HttpServletRequest request){
+        quizBookService.deleteQuizBook(quizBookId, request);
     }
 
     @PatchMapping("/{quizBookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
-        // To-do 사용자 검증을 통해 본인 게시글 맞는지 확인 후 삭제 진행
-
-        quizBookService.modifyQuizbook(quizBookId, quizBookSaveRequestDto, request);
+        quizBookService.modifyQuizBook(quizBookId, quizBookSaveRequestDto, request);
     }
 
 }
