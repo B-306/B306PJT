@@ -114,7 +114,6 @@ public class JwtUtil {
     }
 
     // token 내용 parsing하는 함수
-    // 이거 private였는데 public해도 상관없겠지?
     public Claims parseClaims(String token) {
         try {
             return Jwts.parser().setSigningKey(key)
@@ -148,10 +147,10 @@ public class JwtUtil {
                 .build();
     }
 
-    public Long extractUserPkFromToken(HttpServletRequest request, String target) {
+    public Long extractUserPkFromToken(HttpServletRequest request) {
         try {
             String token = request.getHeader("accessToken");
-            return Long.parseLong(parseClaims(token).get(target).toString());
+            return Long.parseLong(parseClaims(token).get("userPk").toString());
         } catch (Exception e) {
             log.info("null일껄~");
             return null;

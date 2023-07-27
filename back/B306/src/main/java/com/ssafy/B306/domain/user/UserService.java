@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,17 @@ public class UserService {
     @Transactional
     public UserDto signUp(UserRegisterRequestDto userRegisterRequestDto){
 
+//        User findUserEmails = userRepository.findByUserEmail(userRegisterRequestDto.getUserEmail())
+//                .orElseThrow(() -> new RuntimeException("몰라 무슨 오류일까"));
+
+//        List<User> findUserEmails = userRepository.findByUserEmail(userRegisterRequestDto.getUserEmail())
+//                .orElseThrow(() -> new RuntimeException("몰라 무슨 오류일까"));
+//        for (User u : findUserEmails) {
+//            if (u.getUserDeleteDate() == null) throw new RuntimeException("이미 가입된 이메일입니다.");
+//        }
+
+
+        // 여기까지 함
         if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
             throw new RuntimeException("이미 가입된 이메일입니다.");
         }
@@ -74,7 +86,7 @@ public class UserService {
     @Transactional
     public void modify(UserModifyRequestDto userModifyDto, HttpServletRequest request) {
 
-        Long userPk = jwtUtil.extractUserPkFromToken(request, "userPk");
+        Long userPk = jwtUtil.extractUserPkFromToken(request);
 
         if (userPk == null) return;
 
@@ -90,6 +102,11 @@ public class UserService {
                 .userName(userModifyDto.getUserName())
                 .build());
 
+    }
+
+    public void deleteUser(HttpServletRequest request) {
+        Long userPk = jwtUtil.extractUserPkFromToken(request);
+        userRepository.deleteById(userPk);
     }
 }
 
