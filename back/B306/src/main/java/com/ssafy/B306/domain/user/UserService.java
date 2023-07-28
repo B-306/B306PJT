@@ -134,9 +134,8 @@ public class UserService {
     }
 
     public boolean validAuthMailCode(EmailAuthRequestDto emailAuthRequestDto) {
-        String codeFindByEmail = redisUtil.getData(emailAuthRequestDto.getEmail());
-
-        return codeFindByEmail.equals(emailAuthRequestDto.getAuthCode());
+        String emailFindByCode = redisUtil.getData(emailAuthRequestDto.getAuthCode());
+        return emailFindByCode.equals(emailAuthRequestDto.getEmail());
     }
 }
 
