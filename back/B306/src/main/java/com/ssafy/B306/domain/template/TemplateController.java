@@ -1,6 +1,7 @@
 package com.ssafy.B306.domain.template;
 
 
+import com.ssafy.B306.domain.template.dto.TemplateDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,11 +26,11 @@ public class TemplateController {
     }
 
     @GetMapping("/get/{templateId}")
-    public ResponseEntity<List<Template>> getTemplate(@PathVariable Long templateId) {
+    public ResponseEntity<Template> getTemplate(@PathVariable Long templateId) {
 
         Template template = templateService.getTemplate(templateId);
 
-        return new ResponseEntity<>(templateService.getAllTemplate(), HttpStatus.OK);
+        return new ResponseEntity<>(templateService.getTemplate(template.getTemplateId()), HttpStatus.OK);
     }
 
     @PostMapping("/add-template")
