@@ -21,7 +21,6 @@ public class QuizBookSaveRequestDto {
 
     private List<Quiz> quizzes = new ArrayList<>();
 
-//    private String quizBookUserEmail;
     private User userPk;
 
     @Builder
@@ -37,9 +36,7 @@ public class QuizBookSaveRequestDto {
     public QuizBook toEntity(QuizBookSaveRequestDto quizBookSaveRequestDto) {
         return QuizBook.builder()
                 .quizBookTitle(quizBookSaveRequestDto.getQuizBookTitle())
-                .quizzes(quizBookSaveRequestDto.getQuizzes())
                 .quizBookUserId(quizBookSaveRequestDto.getUserPk())
                 .build();
     }
-
 }

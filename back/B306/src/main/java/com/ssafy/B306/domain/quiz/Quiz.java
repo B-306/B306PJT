@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.quiz;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ssafy.B306.domain.quiz.dto.QuizRequestSaveDto;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "quiz")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Quiz {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,6 @@ public class Quiz {
     private Long quizId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "template_id", nullable = false)
     @JoinColumn(name = "template_id")
     private Template quizTemplateId;
 
@@ -60,7 +61,6 @@ public class Quiz {
 
     public QuizRequestSaveDto toDto(Quiz quiz, QuizBook id){
         QuizRequestSaveDto quizRequestSaveDto = new QuizRequestSaveDto();
-
         quizRequestSaveDto.setQuizBookId(id);
         quizRequestSaveDto.setQuizText(quiz.getQuizText());
         quizRequestSaveDto.setQuizAnswer(quiz.getQuizAnswer());

@@ -1,6 +1,6 @@
 package com.ssafy.B306.domain.quizbook;
 
-import com.ssafy.B306.domain.quiz.Quiz;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,15 +9,13 @@ import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "quizbook")
 @SQLDelete(sql = "UPDATE quizbook SET quizbook_delete_date = now() WHERE quizbook_id = ?;")
-//@SQLUpdate(sql = "UPDATE quizbook SET quizbook_modify_date = now() WHERE quizbook_id = ?;")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class QuizBook {
 
     @Id
@@ -41,18 +39,14 @@ public class QuizBook {
     @Column(name = "quizbook_delete_date")
     private LocalDateTime quizBookdeleteDate;
 
-    @OneToMany(mappedBy = "quizId", fetch = FetchType.LAZY)
-    private List<Quiz> quizzes = new ArrayList<>();
-
     @Builder
-    public QuizBook(Long quizBookId, String quizBookTitle, User quizBookUserId, LocalDateTime quizBookCreateDate, LocalDateTime quizBookModifyDate, LocalDateTime quizBookdeleteDate, List<Quiz> quizzes) {
+    public QuizBook(Long quizBookId, String quizBookTitle, User quizBookUserId, LocalDateTime quizBookCreateDate, LocalDateTime quizBookModifyDate, LocalDateTime quizBookdeleteDate) {
         this.quizBookId = quizBookId;
         this.quizBookTitle = quizBookTitle;
         this.quizBookUserId = quizBookUserId;
         this.quizBookCreateDate = quizBookCreateDate;
         this.quizBookModifyDate = quizBookModifyDate;
         this.quizBookdeleteDate = quizBookdeleteDate;
-        this.quizzes = quizzes;
     }
 
     public void modifyQuizBook(String quizBookTitle) {
