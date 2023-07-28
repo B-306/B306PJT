@@ -48,6 +48,7 @@ public class UserService {
         result.put("accessToken", token.getAccessToken());
         result.put("refreshToken", token.getRefreshToken());
         result.put("userName", findUser.getUserName());
+        result.put("userProfile", findUser.getUserProfile());
 
         return result;
     }
