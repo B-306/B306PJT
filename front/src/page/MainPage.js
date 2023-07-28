@@ -17,10 +17,10 @@ const handleButtonClick = (e) => {
 
 
 function Dropdown() {
-
+  const userEmail = localStorage.getItem("userEmail")
   return (
     <>
-      <div><Link to="/mypage">마이페이지</Link></div>
+      <div><Link to={`/${userEmail}/mypage`}>마이페이지</Link></div>
       {/* <li>마이페이지</li> */}
       <Button onClick={(e) => handleButtonClick(e)}>로그아웃</Button>
       {/* <li>로그아웃</li> */}
@@ -41,6 +41,7 @@ const StyledInput = styled(Input)``;
 const MainPage = (props) => {
   const jwtToken = localStorage.getItem("accessToken");
   const userName = localStorage.getItem("userName")
+  const userEmail = localStorage.getItem("userEmail")
   // console.dir(jwtToken)
   if (!jwtToken) {
     window.location.href = '/login';
@@ -59,7 +60,7 @@ const MainPage = (props) => {
       <h1>두뇌 풀 가동 메인 페이지</h1>
       <form>
           <StyledInput autoComplete="code" name="code" placeholder="입장 코드" />
-          <GameCreateButton><Link to="/gamecreate">방 만들기</Link></GameCreateButton>
+          <GameCreateButton><Link to={`/${userEmail}/gamecreate`}>방 만들기</Link></GameCreateButton>
       </form>
     </>
     

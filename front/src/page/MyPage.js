@@ -8,6 +8,7 @@ import Button from "../components/common/Button";
 import axios from 'axios';
 import UserInfo from '../components/auth/UserInfo'
 import PhotoUpload from '../components/auth/PhotoUpload'
+import AuthForm from '../components/auth/AuthForm';
 
 
 const ButtonWithMargin = styled(Button)`
@@ -65,15 +66,15 @@ function Change() {
       {/* 일치하지 않을 경우 경고 표시 */}
       {!passwordMatch && <div>비밀번호가 일치하지 않습니다.</div>}
       {/* 이미지 파일 선택 input은 이전과 동일하게 유지 */}
-      <Button>
+      {/* <Button> */}
         {/* <StyledInput
           type='file'
           placeholder="사진 변경"
           accept='image/*'
           // onChange={handleFileChange}
         /> */}
-        <PhotoUpload />
-      </Button>
+        {/* <PhotoUpload /> */}
+      {/* </Button> */}
       <ButtonWithMargin onClick={() => {
         handleUpdateUserInfo(name, password, profileUrl);
       }}>
@@ -88,7 +89,9 @@ const handleUpdateUserInfo = async (name, password, profileUrl) => {
   // const updatedName = "새로운 이름";
   // const updatedPassword = "";
 
-  console.log(name, password, profileUrl)
+  console.log(name, password, profileUrl);
+  const token = localStorage.getItem("accessToken");
+  console.log(token);
 
   try {
     // 회원정보 수정 요청 보내기
@@ -98,7 +101,7 @@ const handleUpdateUserInfo = async (name, password, profileUrl) => {
       userProfile: profileUrl,
     }, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
+        'accessToken': `${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
       },
     });
 
@@ -124,6 +127,7 @@ const MyPage = (props) => {
         <React.Fragment>
           <Grid>
               <Grid is_flex>
+                <PhotoUpload />
               <Image shape="circle" src= {props.src}/>
               </Grid>
               <Grid padding='16px'>
@@ -141,9 +145,7 @@ const MyPage = (props) => {
               </ul>
               <div>
                 {/* {view && <PhotoUpload />} */}
-                {view && <Change onClick={() => {
-                  setView(!view)}}/>
-                }
+                {view && <AuthForm type={'modify'}></AuthForm>}
                 {/* {view && (
                   <ButtonWithMargin onClick={() => {
                     handleUpdateUserInfo();

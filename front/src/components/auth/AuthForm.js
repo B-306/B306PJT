@@ -5,6 +5,7 @@ import Button from '../common/Button';
 import Input from "../common/Input";
 import palette from "../../lib/styles/palette";
 import axios from "axios";
+import Logout from "./Logout";
 
 
 const AuthFormBlock = styled.div`
@@ -36,6 +37,7 @@ const ButtonWithMarginTop = styled(Button)`
 const textMap = {
     signup: '회원가입',
     login: '로그인',
+    modify: '회원정보 수정',
   };
 
   
@@ -52,9 +54,15 @@ const textMap = {
   
       try {
         if (type === 'signup') {
+          if (!name) {
+            console.error('이름을 입력하지 않았습니다.');
+            alert('이름을 입력해 주세요.');
+            return; // 일치하지 않으면 함수 종료
+          }
           // 회원가입 시 비밀번호와 비밀번호 확인이 일치하는지 확인
           if (password !== passwordConfirm) {
             console.error('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+            alert('비밀번호 일치 확인해주세요');
             return; // 일치하지 않으면 함수 종료
           }
           const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,3}$/;
@@ -101,6 +109,42 @@ const textMap = {
           // 예시: 페이지 리디렉션
           window.location.href = '/'; // 메인 페이지로 리디렉션
           // console.log("저장된 토큰:", localStorage.getItem("jwtToken"));
+        } else if (type === 'modify') {
+          // 비밀번호와 비밀번호 확인이 일치하는지 확인
+          if (password !== passwordConfirm) {
+            console.error('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+            alert('비밀번호 일치 확인해주세요');
+            return; // 일치하지 않으면 함수 종료
+          }
+          const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+          if (!passwordRegex.test(password)) {
+            alert('유효한 비밀번호(영문, 숫자, 특수기호 조합으로 8자리 이상)를 입력해주세요.');
+            return;
+          }
+          // 회원가입 요청 보내기
+          try {
+            // 회원정보 수정 요청 보내기
+            const response = await axios.patch('/user/modify', {
+              userName: name,
+              userPassword: password,
+              userProfile: null,
+            }, {
+              headers: {
+                'accessToken': `${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
+              },
+            });
+        
+            // 회원정보 수정이 성공하면 메인 페이지로 이동하거나 다른 동작 수행
+            // 예시: 페이지 리디렉션
+            console.log(response.data);
+            console.log("회원정보 수정 성공!");
+            // window.location.href = '/'; // 메인 페이지로 리디렉션
+            Logout();
+            alert('회원정보 수정이 완료되었습니다.<br>다시 로그인해 주세요.');
+          } catch (error) {
+            console.error('회원정보 수정 실패:', error);
+            // 회원정보 수정 실패 처리를 원하는 경우 적절한 방법으로 처리
+          }
         }
       } catch (error) {
         console.error('실패:', error);
@@ -121,34 +165,32 @@ const textMap = {
       e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
       console.log('handleButtonClick 실행 \n')
       // type에 따라서 다른 동작 수행
-      if (type === 'login') {
-        handleSubmit(); // 로그인 요청 보내기
-      } else if (type === 'signup') {
-        handleSubmit(); // 회원가입 요청 보내기
-      }
+      handleSubmit();
     };
 
     return (
       <AuthFormBlock>
         <h3>{text}</h3>
         <form onSubmit={handleSubmit}>
-          <StyledInput 
-            autoComplete="username"
-            name="username" 
-            placeholder="이메일"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-           />
-          {type === 'signup' && (
-                <StyledInput
-                    // autoComplete="newname"
-                    name="name"
-                    placeholder="이름"
-                    type="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-            )}
+          {type !== 'modify' && (
+            <StyledInput 
+              autoComplete="username"
+              name="username" 
+              placeholder="이메일"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          )}
+          {type !== 'login' && (
+            <StyledInput
+              // autoComplete="newname"
+              name="name"
+              placeholder="이름"
+              type="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          )}
           <StyledInput 
             autoComplete="new-password" 
             name="password"
@@ -157,7 +199,7 @@ const textMap = {
             value={password}
             onChange={(e) => setPassword(e.target.value)} 
             />
-            {type === 'signup' && (
+            {type !== 'login' && (
                 <StyledInput
                     autoComplete="new-password"
                     name="passwordConfirm"
@@ -174,10 +216,10 @@ const textMap = {
           </form>
           <Footer>
             {type === 'login' ? (
-                <Link to="/signup">아직 회원이 아니신가요?</Link>
-            ) : (
-                <Link to="/login">이미 가입하셨나요?</Link>
-            )}
+              <Link to="/signup">아직 회원이 아니신가요?</Link>
+            ) : type === 'signup' ? (
+              <Link to="/login">이미 가입하셨나요?</Link>
+            ) : null}
           </Footer>
         </AuthFormBlock>
       );

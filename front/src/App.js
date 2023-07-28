@@ -13,12 +13,12 @@ const App = () => {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      <Route path="/@:username" element={<MainPage />} />
+      <Route path="/@:useremail" element={<MainPage />} />
       <Route path="/" element={<MainPage />} />
-      <Route path="/@:username/:mypage" element={<MyPage />} />
-      <Route path="/mypage" element={<MyPage />} />
-      <Route path="/gamecreate" element={<GameCreate />} />
-      <Route path="/@:username/:gamecreate" element={<GameCreate />} />
+      <Route path="/:useremail/mypage" element={<MyPage />} />
+      {/* <Route path="/mypage" element={<MyPage />} /> */}
+      {/* <Route path="/gamecreate" element={<GameCreate />} /> */}
+      <Route path="/:useremail/gamecreate" element={<GameCreate />} />
     </Routes>
   );
 };
