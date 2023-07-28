@@ -25,8 +25,11 @@ public class QuizBookService {
     @Transactional
     public QuizBook addNewQuizBook(QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
 
-        Long userID = getUserIdFromToken(request);
-        quizBookSaveRequestDto.setUserPk(User.builder().userId(userID).build());
+        quizBookSaveRequestDto.setUserPk(
+                User.builder()
+                        .userId(jwtUtil.extractUserPkFromToken(request))
+                        .build());
+
         QuizBook newQuizBook = quizBookSaveRequestDto.toEntity(quizBookSaveRequestDto);
 
         quizBookRepository.save(newQuizBook);
@@ -38,27 +41,30 @@ public class QuizBookService {
     @Transactional
     public List<QuizBook> getQuizBookList() {
         List<QuizBook> quizBookList = quizBookRepository.findAll();
+
         return quizBookList;
     }
 
     @Transactional
-    public QuizBook getQuizBook(Long id) {
-        QuizBook quizBook = quizBookRepository.findById(id).get();
+    public QuizBook getQuizBook(QuizBook quizBookId) {
+        QuizBook quizBook = quizBookRepository.findById(quizBookId.getQuizBookId()).get();
+        List<Quiz> quizList = quizService.getQuizList(quizBookId);
         return quizBook;
     }
 
     @Transactional
     public void deleteQuizBook(Long quizBookId, HttpServletRequest request) {
-        Long quizBookUserId = getUserIdFromToken(request);
-        QuizBook myQuizBook = getQuizBookIfMine(quizBookId, quizBookUserId);
+
+        QuizBook myQuizBook = getQuizBookIfMine(quizBookId,
+                jwtUtil.extractUserPkFromToken(request));
 
         quizBookRepository.deleteById(myQuizBook.getQuizBookId());
     }
 
     @Transactional
     public void modifyQuizBook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
-        Long quizBookUserId = getUserIdFromToken(request);
-        QuizBook originalQuizBook = getQuizBookIfMine(quizBookId, quizBookUserId);
+        Long userID = jwtUtil.extractUserPkFromToken(request);
+        QuizBook originalQuizBook = getQuizBookIfMine(quizBookId, userID);
 
         // 문제별로 수정
         if (isQuizzesModified(quizBookSaveRequestDto.getQuizzes())) {
@@ -83,8 +89,4 @@ public class QuizBookService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
     }
 
-    private Long getUserIdFromToken(HttpServletRequest request) {
-        String accessToken = request.getHeader("accessToken");
-        return Long.parseLong(jwtUtil.parseClaims(accessToken).get("userPk").toString());
-    }
 }

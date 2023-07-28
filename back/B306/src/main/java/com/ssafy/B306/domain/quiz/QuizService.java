@@ -28,9 +28,13 @@ public class QuizService {
     public void modifyQuiz(List<Quiz> quizList) {
         for(Quiz quiz : quizList){
             Quiz q = quizRepository.findById(quiz.getQuizId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("해당 문제집이 없습니다."));
             q.modifyQuiz(quiz);
         }
     }
 
+    @Transactional
+    public List<Quiz> getQuizList(QuizBook quizBook) {
+        return quizRepository.findByQuizBookId(quizBook).orElseThrow(()-> new RuntimeException("해당 문제집이 없습니다."));
+    }
 }
