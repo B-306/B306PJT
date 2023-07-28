@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -139,5 +138,12 @@ public class UserService {
 
         return codeFindByEmail.equals(emailAuthRequestDto.getAuthCode());
     }
+
+    // request를 받으면 user를 반환하는 함수
+    public User findUserByRequest(HttpServletRequest request){
+        Long userPk = jwtUtil.extractUserPkFromToken(request);
+        return userRepository.findByUserId(userPk).orElseThrow(()-> new RuntimeException("유저 없음"));
+    }
+
 }
 
