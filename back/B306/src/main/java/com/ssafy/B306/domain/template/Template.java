@@ -73,5 +73,9 @@ public class Template {
         this.templateModifyDate = LocalDateTime.now();
     }
 
+    public void uploadImageTempalte(String saveName) {
+        this.templateImage = saveName;
+    }
+
 
 }
