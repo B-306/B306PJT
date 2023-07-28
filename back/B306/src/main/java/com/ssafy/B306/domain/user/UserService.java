@@ -106,7 +106,7 @@ public class UserService {
     }
 
     @Transactional
-    public void authMail(EmailRequest request) {
+    public void authMail(EmailRequestDto request) {
         Random random = new Random();
         String authKey = String.valueOf(random.nextInt(888888)+111111);
 
@@ -131,6 +131,12 @@ public class UserService {
 
         // 유효시간
         redisUtil.setDataExpire(authKey, email, 60 * 50L);
+    }
+
+    public boolean validAuthMailCode(EmailAuthRequestDto emailAuthRequestDto) {
+        String codeFindByEmail = redisUtil.getData(emailAuthRequestDto.getEmail());
+
+        return codeFindByEmail.equals(emailAuthRequestDto.getAuthCode());
     }
 }
 
