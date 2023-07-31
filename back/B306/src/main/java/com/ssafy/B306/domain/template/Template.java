@@ -1,6 +1,7 @@
 package com.ssafy.B306.domain.template;
 
 import com.ssafy.B306.domain.quiz.Quiz;
+import com.ssafy.B306.domain.template.dto.TemplateResponseDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
@@ -18,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @SQLDelete(sql = "UPDATE template SET template_delete_date = now() WHERE template_id = ?;")
-//@SQLUpdate(sql = "UPDATE template SET template_modify_date = now() WHERE template_id = ?;")
 public class Template {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Template {
     @Column(name = "template_name")
     private String templateName;
 
-    @OneToMany(mappedBy = "quizTemplateId")
+    @OneToMany
     private List<Quiz> quizId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -74,6 +74,16 @@ public class Template {
     public void modifyTemplateImage(String savePath) {
         this.templateImage = savePath;
         this.templateModifyDate = LocalDateTime.now();
+    }
+
+    public static TemplateResponseDto makeTemplateDto(Template template){
+        TemplateResponseDto templateResponseDto = new TemplateResponseDto();
+        templateResponseDto.setTemplateId(template.templateId);
+        templateResponseDto.setTemplateImage(template.getTemplateImage());
+        templateResponseDto.setTemplateType(template.getTemplateType());
+        templateResponseDto.setTemplateName(template.getTemplateName());
+        templateResponseDto.setTemplateUserId(template.getTemplateUserId());
+        return templateResponseDto;
     }
 
 }

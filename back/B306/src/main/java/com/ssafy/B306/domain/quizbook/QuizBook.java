@@ -58,7 +58,7 @@ public class QuizBook {
         quizBookResponseDto.setQuizBookId(quizBook.quizBookId);
         quizBookResponseDto.setQuizBookTitle(quizBook.getQuizBookTitle());
         quizBookResponseDto.setQuizBookUserId(quizBook.getQuizBookUserId());
-
+        quizBookResponseDto.setQuizList(quizList);
         return quizBookResponseDto;
     }
 
