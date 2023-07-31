@@ -1,12 +1,14 @@
 package com.ssafy.B306.domain.template;
 
 
+import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
 import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import com.ssafy.B306.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.List;
 public class TemplateService {
 
     private final TemplateRepository templateRepository;
+    private final ImageUploadService imageUploadService;
     private final JwtUtil jwtUtil;
 
     // template 낱개 조회
@@ -45,7 +48,7 @@ public class TemplateService {
     @Transactional
     public Template addTemplate(TemplateSaveDto templateSaveDto, HttpServletRequest request) {
 
-        Long userPk = Long.parseLong(jwtUtil.parseClaims(request.getHeader("accessToken")).get("userPk").toString());
+        Long userPk = jwtUtil.extractUserPkFromToken(request);
         templateSaveDto.setUserPk(User.builder().userId(userPk).build());
         Template template = templateSaveDto.toEntity(templateSaveDto);
 
@@ -56,7 +59,7 @@ public class TemplateService {
     @Transactional
     public void deleteTemplate(Long templateId, HttpServletRequest request) {
 
-        Long templateUserId = Long.parseLong(jwtUtil.parseClaims(request.getHeader("accessToken")).get("userPk").toString());
+        Long templateUserId = jwtUtil.extractUserPkFromToken(request);
 
         Template template = templateRepository.findByTemplateIdAndTemplateUserId(templateId, User.builder().userId(templateUserId).build())
                 .orElseThrow(() -> new IllegalArgumentException("해당 템플릿이 없습니다."));
@@ -72,18 +75,34 @@ public class TemplateService {
     @Transactional
     public void modifyTemplate(Long templateId, TemplateSaveDto templateSaveDto, HttpServletRequest request) {
 
-        Long templateUserId = Long.parseLong(jwtUtil.parseClaims(request.getHeader("accessToken")).get("userPk").toString());
+        Long templateUserId = jwtUtil.extractUserPkFromToken(request);
 
         Template originalTemplate = templateRepository.findByTemplateIdAndTemplateUserId(templateId, User.builder().userId(templateUserId).build())
-                .orElseThrow(() -> new IllegalArgumentException("해당 템플릿이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않거나 변경 권한이 없는 템플릿입니다."));
 
         if(originalTemplate.getTemplateDeleteDate() != null) {
             throw new IllegalStateException("이미 삭제된 템플릿입니다.");
         }
 
+        templateSaveDto.setTemplateImage(originalTemplate.getTemplateImage());
         originalTemplate.modifyTemplate(templateSaveDto);
 
     }
+
+    @Transactional
+    public void modifyTemplateImage(Long templateId, MultipartFile file, HttpServletRequest request) {
+
+        Long templateUserId = jwtUtil.extractUserPkFromToken(request);
+
+        Template originalTemplate = templateRepository.findByTemplateIdAndTemplateUserId(templateId, User.builder().userId(templateUserId).build())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않거나 변경 권한이 없는 템플릿입니다."));
+
+        String savePath = imageUploadService.makeImagePath(file, "template");
+
+        originalTemplate.modifyTemplateImage(savePath);
+    }
+
+
 
 
 }
