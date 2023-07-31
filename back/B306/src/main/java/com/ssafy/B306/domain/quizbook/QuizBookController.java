@@ -30,7 +30,7 @@ public class QuizBookController {
 
     @GetMapping("/get/{quizBookId}")
     @ResponseStatus(HttpStatus.OK)
-    public QuizBook getQuizBook(@PathVariable Long quizBookId){
+    public QuizBook getQuizBook(@PathVariable QuizBook quizBookId){
         return quizBookService.getQuizBook(quizBookId);
     }
 

@@ -4,7 +4,7 @@ name: Sync this repository to another repository
 
 on:
   push:
-    branches: ["**"]
+    branches: ["**"] # 모든 브랜치 적용
   pull_request:
     branches: ["**"]
 

@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -48,6 +47,7 @@ public class UserService {
         result.put("accessToken", token.getAccessToken());
         result.put("refreshToken", token.getRefreshToken());
         result.put("userName", findUser.getUserName());
+        result.put("userProfile", findUser.getUserProfile());
 
         return result;
     }
@@ -137,5 +137,12 @@ public class UserService {
         String emailFindByCode = redisUtil.getData(emailAuthRequestDto.getAuthCode());
         return emailFindByCode.equals(emailAuthRequestDto.getEmail());
     }
+
+    // request를 받으면 user를 반환하는 함수
+    public User findUserByRequest(HttpServletRequest request){
+        Long userPk = jwtUtil.extractUserPkFromToken(request);
+        return userRepository.findByUserId(userPk).orElseThrow(()-> new RuntimeException("유저 없음"));
+    }
+
 }
 
