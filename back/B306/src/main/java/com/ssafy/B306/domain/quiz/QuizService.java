@@ -33,7 +33,6 @@ public class QuizService {
         }
     }
 
-    @Transactional
     public List<Quiz> getQuizList(QuizBook quizBook) {
         return quizRepository.findByQuizBookId(quizBook).orElseThrow(()-> new RuntimeException("해당 문제집이 없습니다."));
     }
