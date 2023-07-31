@@ -1,0 +1,56 @@
+{
+  "name": "hello-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^1.4.0",
+    "base-64": "^1.0.0",
+    "dotenv": "^16.3.1",
+    "http-proxy-middleware": "^2.0.6",
+    "immer": "^10.0.2",
+    "jwt-decode": "^3.1.2",
+    "nodemailer": "^6.9.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.1",
+    "react-router-dom": "^6.14.2",
+    "react-scripts": "5.0.1",
+    "redux": "^4.2.1",
+    "redux-actions": "^3.0.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
+    "stream-browserify": "^3.0.0",
+    "styled-components": "^6.0.4",
+    "web-vitals": "^2.1.0"
+  },
+  "proxy": "http://localhost:8080",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3"
+  }
+}
