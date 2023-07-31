@@ -2,6 +2,7 @@ package com.ssafy.B306.domain.quiz;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ssafy.B306.domain.quiz.dto.QuizRequestSaveDto;
+import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
 import lombok.Builder;
@@ -66,6 +67,17 @@ public class Quiz {
         quizRequestSaveDto.setQuizAnswer(quiz.getQuizAnswer());
 
         return quizRequestSaveDto;
+    }
+
+    public QuizResponseDto toDto(Quiz quiz){
+        QuizResponseDto quizResponseDto = new QuizResponseDto();
+        quizResponseDto.setQuizId(quiz.getQuizId());
+        quizResponseDto.setQuizTemplateId(quiz.getQuizTemplateId());
+        quizResponseDto.setQuizBookId(quiz.getQuizBookId());
+        quizResponseDto.setQuizText(quiz.getQuizText());
+        quizResponseDto.setQuizAnswer(quiz.getQuizAnswer());
+
+        return quizResponseDto;
     }
 
     public void modifyQuiz(Quiz quiz) {

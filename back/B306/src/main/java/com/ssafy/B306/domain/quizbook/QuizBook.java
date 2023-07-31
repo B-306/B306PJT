@@ -1,6 +1,9 @@
 package com.ssafy.B306.domain.quizbook;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
+import com.ssafy.B306.domain.quizbook.dto.QuizBookListResponseDto;
+import com.ssafy.B306.domain.quizbook.dto.QuizBookResponseDto;
 import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,6 +51,24 @@ public class QuizBook {
         this.quizBookCreateDate = quizBookCreateDate;
         this.quizBookModifyDate = quizBookModifyDate;
         this.quizBookdeleteDate = quizBookdeleteDate;
+    }
+
+    public static QuizBookResponseDto toDto(QuizBook quizBook, List<QuizResponseDto> quizList){
+        QuizBookResponseDto quizBookResponseDto = new QuizBookResponseDto();
+        quizBookResponseDto.setQuizBookId(quizBook.quizBookId);
+        quizBookResponseDto.setQuizBookTitle(quizBook.getQuizBookTitle());
+        quizBookResponseDto.setQuizBookUserId(quizBook.getQuizBookUserId());
+
+        return quizBookResponseDto;
+    }
+
+    public static QuizBookListResponseDto toListDto(QuizBook quizBook){
+        QuizBookListResponseDto quizBookListResponseDto = new QuizBookListResponseDto();
+        quizBookListResponseDto.setQuizBookId(quizBook.getQuizBookId());
+        quizBookListResponseDto.setQuizBookUserId(quizBook.getQuizBookUserId());
+        quizBookListResponseDto.setQuizBookTitle(quizBookListResponseDto.getQuizBookTitle());
+
+        return quizBookListResponseDto;
     }
 
     public void modifyQuizBook(String quizBookTitle) {
