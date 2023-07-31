@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.user.dto.UserDto;
@@ -19,6 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @SQLDelete(sql = "UPDATE user SET user_delete_date = now() WHERE user_id = ?;")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class User {
     /*
     userStatus : 회원의 상태를 정하는 컬럼으로 0 : 탈퇴, 1 : 회원, 2 : 관리자 등등
@@ -53,14 +55,8 @@ public class User {
     @Column(name = "user_delete_date")
     private LocalDateTime userDeleteDate;
 
-    @OneToMany(mappedBy = "quizBookId")
-    private List<QuizBook> quizBooks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "templateUserId")
-    private List<Template> templates = new ArrayList<>();
-
     @Builder
-    public User(Long userId, String userEmail, String userName, String userPassword, boolean isAdmin, String userProfile, LocalDateTime userJoinDate, LocalDateTime userModifyDate, LocalDateTime userDeleteDate, List<QuizBook> quizBooks, List<Template> templates) {
+    public User(Long userId, String userEmail, String userName, String userPassword, boolean isAdmin, String userProfile, LocalDateTime userJoinDate, LocalDateTime userModifyDate, LocalDateTime userDeleteDate) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.userName = userName;
@@ -70,8 +66,6 @@ public class User {
         this.userJoinDate = userJoinDate;
         this.userModifyDate = userModifyDate;
         this.userDeleteDate = userDeleteDate;
-        this.quizBooks = quizBooks;
-        this.templates = templates;
     }
 
     public UserDto toUserDto(){
