@@ -1,12 +1,13 @@
 package com.ssafy.B306.domain.template;
 
 
-import com.ssafy.B306.domain.template.dto.TemplateDto;
+import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public class TemplateController {
 
     private final TemplateService templateService;
-
+    private final ImageUploadService imageUploadService;
 
     @GetMapping("/get")
     public ResponseEntity<List<Template>> getTemplateList() {
@@ -34,8 +35,9 @@ public class TemplateController {
     }
 
     @PostMapping("/add-template")
-    public ResponseEntity<Void> addTemplate(@RequestBody TemplateSaveDto templateSaveDto, HttpServletRequest request) {
-
+    public ResponseEntity<Void> addTemplate(@RequestBody TemplateSaveDto templateSaveDto, MultipartFile file, HttpServletRequest request) {
+        String image = imageUploadService.makeImagePath(file, "template");
+        templateSaveDto.setTemplateImage(image);
         templateService.addTemplate(templateSaveDto, request);
 
          return new ResponseEntity<>(HttpStatus.OK);
