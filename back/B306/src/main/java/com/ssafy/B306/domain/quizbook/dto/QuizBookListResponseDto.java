@@ -3,26 +3,23 @@ package com.ssafy.B306.domain.quizbook.dto;
 import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 
-@Getter
 @Setter
-@NoArgsConstructor
-public class QuizBookResponseDto {
-
+@Getter
+@RequiredArgsConstructor
+public class QuizBookListResponseDto {
     private Long quizBookId;
     private String quizBookTitle;
     private User quizBookUserId;
-    private List<QuizBookResponseDto> quizList;
+
 
     @Builder
-    public QuizBookResponseDto(Long quizBookId, String quizBookTitle, User quizBookUserId, List<QuizBookResponseDto> quizList) {
+    public QuizBookListResponseDto(Long quizBookId, String quizBookTitle, User quizBookUserId) {
         this.quizBookId = quizBookId;
         this.quizBookTitle = quizBookTitle;
         this.quizBookUserId = quizBookUserId;
-        this.quizList = quizList;
     }
 }
