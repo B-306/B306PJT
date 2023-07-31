@@ -18,9 +18,9 @@ public class TemplateSaveDto {
     private String templateImage;
     @NotNull(message = "템플릿의 문제유형을 선택해주세요")
     private char templateType;
-
+    @NotNull
     private String templateName;
-
+    @NotNull
     private User userPk;
 
 
