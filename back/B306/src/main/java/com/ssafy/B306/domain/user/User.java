@@ -86,4 +86,8 @@ public class User {
         userProfile = userModifyDto.getUserProfile();
         userModifyDate = LocalDateTime.now();
     }
+
+    public void modifyUserImage(String savePath) {
+        userProfile = savePath;
+    }
 }

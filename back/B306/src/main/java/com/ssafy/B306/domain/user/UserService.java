@@ -1,5 +1,6 @@
 package com.ssafy.B306.domain.user;
 
+import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.security.JwtToken;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -30,6 +32,8 @@ public class UserService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
+    private final ImageUploadService imageUploadService;
+
 
     public Map<String, String> login(UserLoginRequestDto userLoginRequest){
 
@@ -106,6 +110,20 @@ public class UserService {
     }
 
     @Transactional
+    public void modifyUserImage(MultipartFile file, HttpServletRequest request) {
+
+        Long userPk = jwtUtil.extractUserPkFromToken(request);
+        if (userPk == null) return;
+
+        User findUser = userRepository.findByUserId(userPk)
+                .orElseThrow(()-> new RuntimeException("유저 없는데?"));
+
+        String savePath = imageUploadService.makeImagePath(file, "profile");
+
+        findUser.modifyUserImage(savePath);
+    }
+
+    @Transactional
     public void authMail(EmailRequestDto request) {
         Random random = new Random();
         String authKey = String.valueOf(random.nextInt(888888)+111111);
@@ -134,9 +152,8 @@ public class UserService {
     }
 
     public boolean validAuthMailCode(EmailAuthRequestDto emailAuthRequestDto) {
-        String codeFindByEmail = redisUtil.getData(emailAuthRequestDto.getEmail());
-
-        return codeFindByEmail.equals(emailAuthRequestDto.getAuthCode());
+        String emailFindByCode = redisUtil.getData(emailAuthRequestDto.getAuthCode());
+        return emailFindByCode.equals(emailAuthRequestDto.getEmail());
     }
 
     // request를 받으면 user를 반환하는 함수

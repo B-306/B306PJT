@@ -1,15 +1,13 @@
 package com.ssafy.B306.domain.template;
 
 import com.ssafy.B306.domain.quiz.Quiz;
-import com.ssafy.B306.domain.template.dto.TemplateDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLUpdate;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -67,15 +65,15 @@ public class Template {
 
 
     public void modifyTemplate(TemplateSaveDto templateSaveDto) {
-        this.templateImage = templateSaveDto.getTemplateImage();
         this.templateType = templateSaveDto.getTemplateType();
         this.templateName = templateSaveDto.getTemplateName();
         this.templateModifyDate = LocalDateTime.now();
     }
 
-    public void uploadImageTempalte(String saveName) {
-        this.templateImage = saveName;
-    }
 
+    public void modifyTemplateImage(String savePath) {
+        this.templateImage = savePath;
+        this.templateModifyDate = LocalDateTime.now();
+    }
 
 }
