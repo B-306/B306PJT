@@ -6,7 +6,8 @@ import Input from "../common/Input";
 import palette from "../../lib/styles/palette";
 import axios from "axios";
 import Logout from "./Logout";
-
+import { useDispatch } from 'react-redux';
+import { setTokens, setUserData } from '../../redux/modules/authSlice';
 
 const AuthFormBlock = styled.div`
     h3 {
@@ -47,6 +48,8 @@ const textMap = {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+    
+    const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
       // e.preventDefault();
@@ -54,6 +57,7 @@ const textMap = {
   
       try {
         if (type === 'signup') {
+          try {
           if (!name) {
             console.error('이름을 입력하지 않았습니다.');
             alert('이름을 입력해 주세요.');
@@ -87,7 +91,13 @@ const textMap = {
           console.log(response.data)
           console.log('회원가입 성공')
           window.location.href = '/login'; // 로그인 페이지로 리디렉션
-        } else if (type === 'login') {
+          
+        } catch (error) {
+          console.error('실패:', error);
+          alert('이미 가입된 이메일입니다.')
+          // 회원가입 실패 처리를 원하는 경우 적절한 방법으로 처리
+        }} else if (type === 'login') {
+          try {
           // 로그인 요청 보내기
           const response = await axios.post('/user/login', {
             userEmail : email,
@@ -96,10 +106,12 @@ const textMap = {
           console.dir(response.data);
           // 로그인 성공 시 accessToken을 localStorage에 저장
           localStorage.setItem("accessToken", response.data.accessToken);
-          localStorage.setItem("refreshToken", response.data.refreshToken);
-          localStorage.setItem("userName", response.data.userName);
-          localStorage.setItem("userEmail", email);
-
+          // localStorage.setItem("refreshToken", response.data.refreshToken);
+          // localStorage.setItem("userName", response.data.userName);
+          // localStorage.setItem("userEmail", email);
+          dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
+          dispatch(setUserData({ userName: response.data.userName, userEmail: email }));
+          
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
           // 07.27 오전 10:41분 작성 이름 확
@@ -109,7 +121,11 @@ const textMap = {
           // 예시: 페이지 리디렉션
           window.location.href = '/'; // 메인 페이지로 리디렉션
           // console.log("저장된 토큰:", localStorage.getItem("jwtToken"));
-        } else if (type === 'modify') {
+        } catch (error) {
+          console.error('실패:', error);
+          alert('이메일과 비밀번호를 확인해 주세요.')
+          // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+        }} else if (type === 'modify') {
           // 비밀번호와 비밀번호 확인이 일치하는지 확인
           if (password !== passwordConfirm) {
             console.error('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
@@ -140,7 +156,7 @@ const textMap = {
             console.log("회원정보 수정 성공!");
             // window.location.href = '/'; // 메인 페이지로 리디렉션
             Logout();
-            alert('회원정보 수정이 완료되었습니다.<br>다시 로그인해 주세요.');
+            alert('회원정보 수정이 완료되었습니다. 다시 로그인해 주세요.');
           } catch (error) {
             console.error('회원정보 수정 실패:', error);
             // 회원정보 수정 실패 처리를 원하는 경우 적절한 방법으로 처리
@@ -148,18 +164,11 @@ const textMap = {
         }
       } catch (error) {
         console.error('실패:', error);
+        alert('예상치 못한 오류가 발생하였습니다.')
         // 회원가입 실패 처리를 원하는 경우 적절한 방법으로 처리
       }
     };
 
-    // const handleButtonClick = () => {
-    //   // type에 따라서 다른 동작 수행
-    //   if (type === 'login') {
-    //     handleSubmit(); // 로그인 요청 보내기
-    //   } else if (type === 'signup') {
-    //     handleSubmit(); // 회원가입 요청 보내기
-    //   }
-    // };
 
     const handleButtonClick = (e) => {
       e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
