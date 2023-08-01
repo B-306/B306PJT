@@ -14,7 +14,9 @@ const App = () => {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      <Route path="/game" element={<VideoRoomComponent />} />
+      <Route path="/game/:roomId" element={<VideoRoomComponent />} />
+      {/* <Route path="/game/1" element={<VideoRoomComponent />} />
+      <Route path="/game/2" element={<VideoRoomComponent />} /> */}
       <Route path="/@:useremail" element={<MainPage />} />
       <Route path="/" element={<MainPage />} />
       <Route path="/:useremail/mypage" element={<MyPage />} />

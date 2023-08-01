@@ -9,7 +9,7 @@ import axios from 'axios';
 import UserInfo from '../components/auth/UserInfo'
 import PhotoUpload from '../components/auth/PhotoUpload'
 import AuthForm from '../components/auth/AuthForm';
-
+import GetDecodedState from '../components/common/CodedState';
 
 const ButtonWithMargin = styled(Button)`
   margin-top: 1rem;
@@ -116,9 +116,32 @@ const handleUpdateUserInfo = async (name, password, profileUrl) => {
   }
 };
 
+const deleteAccount = async (e) => {
+    e.preventDefault();
+    console.log(`${localStorage.getItem("accessToken")}`)
+    if (window.confirm('확인을 누르면 회원 정보가 삭제됩니다.')) {
+      await axios.delete('/user/delete', {
+        headers: {
+          'accessToken': `${localStorage.getItem("accessToken")}`, // 토큰을 헤더에 포함하여 전송
+        },
+      })
+        .then(() => {
+          localStorage.clear();
+          alert('그동안 이용해주셔서 감사합니다.');
+          window.location.href = '/login';
+        })
+        .catch((err) => alert(err.response.data.message));
+    } else {
+      return;
+    };
+}
 
 const MyPage = (props) => {
   const [view, setView] = useState(false);
+
+  const decodedState = GetDecodedState();
+  const { accessToken, refreshToken, userName, userEmail } = decodedState;
+  
 
     return (
       <>
@@ -134,7 +157,8 @@ const MyPage = (props) => {
               
               </Grid>
               <div>
-                {!view && <h1>{localStorage.getItem("userName")} | {localStorage.getItem("userEmail")}</h1>}
+                {!view && <h1>{userName} | {userEmail}</h1>}
+                {/* {!view && <h1>{localStorage.getItem("userName")} | {localStorage.getItem("userEmail")}</h1>}   */}
               </div>
               
               <ul onClick={() => {setView(!view)}}>
@@ -157,7 +181,7 @@ const MyPage = (props) => {
               </div>
           </Grid>
         </React.Fragment>
-        <button type="button" onClick={null}>회원 탈퇴</button>
+        <button type="button" onClick={deleteAccount}>회원 탈퇴</button>
       </>
       
     );

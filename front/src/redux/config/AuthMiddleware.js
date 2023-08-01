@@ -1,12 +1,18 @@
 // authMiddleware.js
 import { setTokens, setUserData, clearAuthData } from "../modules/authSlice";
+import { decodeState } from '../../components/common/CodedState'
 
 export const checkLoginStatus = () => async (dispatch, getState) => {
   const state = getState();
   const accessToken = state.auth.accessToken;
   const refreshToken= state.auth.refreshToken;
-  // const userEmail = state.auth.userEmail;
+  const userEmail = state.auth.userEmail;
   const userName = state.auth.userName;
+  console.log('-----------------------------');
+  console.log(accessToken);
+  console.log(refreshToken);
+  console.log(userName);
+  console.log(userEmail);
   // console.dir(state.auth);
   if (!accessToken) {
     // 로그인 상태가 아니므로 리덕스 스토어 상태를 초기화합니다.
@@ -20,8 +26,8 @@ export const checkLoginStatus = () => async (dispatch, getState) => {
       // 토큰이 유효한 경우 유저 데이터를 리덕스 스토어에 저장합니다.
       // dispatch(setUserData({ userEmail }));
       // console.log('초기화 안함')
-      dispatch(setTokens({ accessToken: accessToken, refreshToken: refreshToken }));
-      dispatch(setUserData({ userName: userName })); // , userEmail: userEmail
+      dispatch(setTokens({ accessToken: decodeState(accessToken), refreshToken: decodeState(refreshToken) }));
+      dispatch(setUserData({ userName: decodeState(userName), userEmail: decodeState(userEmail) }));
     } catch (error) {
       // 토큰이 유효하지 않은 경우 로그인 상태를 초기화합니다.
       console.log('2번 초기화')

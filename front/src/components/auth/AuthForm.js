@@ -8,6 +8,7 @@ import axios from "axios";
 import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
+import { encodeState } from "../common/CodedState";
 
 const AuthFormBlock = styled.div`
     h3 {
