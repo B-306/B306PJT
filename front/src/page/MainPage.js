@@ -1,12 +1,16 @@
+// mainPage.js
 // import AuthTemplate from '../components/auth/AuthTemplate';
 // import AuthForm from '../components/auth/AuthForm';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import {Link} from 'react-router-dom';
 import Button from '../components/common/Button';
 import Input from "../components/common/Input";
 import styled from 'styled-components';
 import Logout from '../components/auth/Logout';
-import UserInfo from '../components/auth/UserInfo'
+// import UserInfo from '../components/auth/UserInfo'
+import { checkLoginStatus } from '../redux/config/AuthMiddleware'
+import { setTokens, setUserData } from '../redux/modules/authSlice';
 
 const handleButtonClick = (e) => {
   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
@@ -39,10 +43,20 @@ const StyledInput = styled(Input)``;
 
 
 const MainPage = (props) => {
+  // const jwtToken = useSelector((state) => state.auth.accessToken);
+  const userName = useSelector((state) => state.auth.userName);
+  console.log(userName)
+  const userEmail = useSelector((state) => state.auth.userEmail);
   const jwtToken = localStorage.getItem("accessToken");
-  const userName = localStorage.getItem("userName")
-  const userEmail = localStorage.getItem("userEmail")
+  // const userName = localStorage.getItem("userName")
+  // const userEmail = localStorage.getItem("userEmail")
   // console.dir(jwtToken)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkLoginStatus()); // checkLoginStatus 액션을 디스패치합니다.
+  }, [dispatch]);
+
   if (!jwtToken) {
     window.location.href = '/login';
   }
@@ -54,9 +68,10 @@ const MainPage = (props) => {
         style={{ textDecoration: 'underline', cursor: 'pointer' }}
         onClick={() => setView(!view)}
       >
+        {/* {setUserData.userName} */}
         {userName}
       </span>
-      {view && <Dropdown />}
+      {!view && <Dropdown />}
       <h1>두뇌 풀 가동 메인 페이지</h1>
       <form>
           <StyledInput autoComplete="code" name="code" placeholder="입장 코드" />
