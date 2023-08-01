@@ -2,6 +2,9 @@ package com.ssafy.B306.domain.quizbook;
 
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quiz.QuizService;
+import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
+import com.ssafy.B306.domain.quizbook.dto.QuizBookListResponseDto;
+import com.ssafy.B306.domain.quizbook.dto.QuizBookResponseDto;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
 import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.user.User;
@@ -11,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,18 +42,30 @@ public class QuizBookService {
         return newQuizBook;
     }
 
-    @Transactional
-    public List<QuizBook> getQuizBookList() {
+    public List<QuizBookListResponseDto> getQuizBookList() {
         List<QuizBook> quizBookList = quizBookRepository.findAll();
+        List<QuizBookListResponseDto> quizListResponseDtoList = new ArrayList<>();
 
-        return quizBookList;
+        System.out.println("-----출력------------");
+        for(QuizBook quizBook : quizBookList){
+            QuizBookListResponseDto qlrd = quizBook.toListDto(quizBook);
+            System.out.println(qlrd.getQuizBookTitle());
+
+            quizListResponseDtoList.add(qlrd);
+        }
+
+        return quizListResponseDtoList;
     }
 
-    @Transactional
-    public QuizBook getQuizBook(QuizBook quizBookId) {
+    public QuizBookResponseDto getQuizBook(QuizBook quizBookId) {
         QuizBook quizBook = quizBookRepository.findById(quizBookId.getQuizBookId()).get();
-        List<Quiz> quizList = quizService.getQuizList(quizBookId);
-        return quizBook;
+
+        List<QuizResponseDto> quizList = quizService.getQuizList(quizBookId);
+
+        QuizBookResponseDto quizBookResponseDto = new QuizBookResponseDto();
+        quizBookResponseDto = quizBook.toDto(quizBook, quizList);
+
+        return quizBookResponseDto;
     }
 
     @Transactional

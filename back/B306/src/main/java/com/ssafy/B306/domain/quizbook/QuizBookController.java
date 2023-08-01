@@ -1,5 +1,7 @@
 package com.ssafy.B306.domain.quizbook;
 
+import com.ssafy.B306.domain.quizbook.dto.QuizBookListResponseDto;
+import com.ssafy.B306.domain.quizbook.dto.QuizBookResponseDto;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,13 +26,13 @@ public class QuizBookController {
 
     @GetMapping("/get")
     @ResponseStatus(HttpStatus.OK)
-    public List<QuizBook> getQuizBookList(){
+    public List<QuizBookListResponseDto> getQuizBookList(){
         return quizBookService.getQuizBookList();
     }
 
     @GetMapping("/get/{quizBookId}")
     @ResponseStatus(HttpStatus.OK)
-    public QuizBook getQuizBook(@PathVariable QuizBook quizBookId){
+    public QuizBookResponseDto getQuizBook(@PathVariable QuizBook quizBookId){
         return quizBookService.getQuizBook(quizBookId);
     }
 
