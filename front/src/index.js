@@ -24,6 +24,7 @@ import { Provider } from 'react-redux'; // 1. Provider를 import합니다.
 import store from './redux/config/store'; // Redux 스토어를 import합니다.
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor } from './redux/config/store';
+import GlobalStyles from './globalStyles';
 
 // 1. ReactDOM.render 대신 createRoot로 변경
 const rootElement = document.getElementById('root');
@@ -33,6 +34,7 @@ root.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <BrowserRouter>
+        <GlobalStyles />
         <App />
       </BrowserRouter>
     </PersistGate>
