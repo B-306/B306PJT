@@ -46,4 +46,8 @@ public class QuizService {
 
         return quizResponseDtoList;
     }
+
+    public void deleteQuizList(Long quizBookId) {
+        quizRepository.deleteById(quizBookId);
+    }
 }

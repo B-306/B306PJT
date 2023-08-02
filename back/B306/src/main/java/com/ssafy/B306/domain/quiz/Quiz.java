@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "quiz")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+@SQLDelete(sql = "UPDATE quiz SET quiz_delete_date = now() WHERE quiz_id = ?;")
 public class Quiz {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +42,7 @@ public class Quiz {
     @Column(name = "quiz_answer", nullable = false)
     private char quizAnswer;
 
+    @CreationTimestamp
     @Column(name = "quiz_create_date")
     private LocalDateTime quizCreateDate;
 
@@ -73,7 +77,6 @@ public class Quiz {
         QuizResponseDto quizResponseDto = new QuizResponseDto();
         quizResponseDto.setQuizId(quiz.getQuizId());
         quizResponseDto.setQuizTemplateId(quiz.getQuizTemplateId());
-        quizResponseDto.setQuizBookId(quiz.getQuizBookId());
         quizResponseDto.setQuizText(quiz.getQuizText());
         quizResponseDto.setQuizAnswer(quiz.getQuizAnswer());
 
