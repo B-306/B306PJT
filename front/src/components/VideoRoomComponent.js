@@ -15,7 +15,9 @@ const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'htt
 
 
 class VideoRoomComponent extends Component {
+
     constructor(props) {
+        
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();

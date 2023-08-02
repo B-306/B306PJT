@@ -86,6 +86,8 @@ class OpenViduLayout {
       // Try taking up the whole height and width
       tHeight = Math.floor(HEIGHT / rowsAux);
       tWidth = Math.floor(WIDTH / colsAux);
+      // tHeight = Math.floor(200);
+      // tWidth = Math.floor(200);
 
       tRatio = tHeight / tWidth;
       if (tRatio > maxR) {

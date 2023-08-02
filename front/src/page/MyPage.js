@@ -118,19 +118,26 @@ const handleUpdateUserInfo = async (name, password, profileUrl) => {
 
 const deleteAccount = async (e) => {
     e.preventDefault();
-    console.log(`${localStorage.getItem("accessToken")}`)
+    // const decodedState = GetDecodedState();
+    // const { accessToken, refreshToken, userName, userEmail } = decodedState;
+
+    // console.log(`${localStorage.getItem("accessToken")}`)
     if (window.confirm('확인을 누르면 회원 정보가 삭제됩니다.')) {
-      await axios.delete('/user/delete', {
-        headers: {
-          'accessToken': `${localStorage.getItem("accessToken")}`, // 토큰을 헤더에 포함하여 전송
-        },
-      })
-        .then(() => {
-          localStorage.clear();
-          alert('그동안 이용해주셔서 감사합니다.');
-          window.location.href = '/login';
-        })
-        .catch((err) => alert(err.response.data.message));
+      // console.log(`${localStorage.getItem("accessToken")}`)
+      try {
+        await axios.patch('/user/delete', null, {
+          headers: {
+            'accessToken': localStorage.getItem("accessToken"), // 토큰을 헤더에 포함하여 전송
+            // 'accessToken': accessToken
+          },
+        });
+        localStorage.clear();
+      alert('그동안 이용해주셔서 감사합니다.');
+      window.location.href = '/login';
+    } catch(err) {
+      console.error(err)
+      alert(err.response.data.message);
+    } 
     } else {
       return;
     };
