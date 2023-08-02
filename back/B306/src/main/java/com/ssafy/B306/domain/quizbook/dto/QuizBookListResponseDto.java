@@ -1,6 +1,5 @@
 package com.ssafy.B306.domain.quizbook.dto;
 
-import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
