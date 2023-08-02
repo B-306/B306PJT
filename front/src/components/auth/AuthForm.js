@@ -8,6 +8,7 @@ import axios from "axios";
 import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
+import { encodeState } from "../common/CodedState";
 
 const AuthFormBlock = styled.div`
     h3 {
@@ -57,6 +58,7 @@ const textMap = {
   
       try {
         if (type === 'signup') {
+          try {
           if (!name) {
             console.error('이름을 입력하지 않았습니다.');
             alert('이름을 입력해 주세요.');
@@ -91,7 +93,12 @@ const textMap = {
           console.log('회원가입 성공')
           window.location.href = '/login'; // 로그인 페이지로 리디렉션
           
-        } else if (type === 'login') {
+        } catch (error) {
+          console.error('실패:', error);
+          alert('이미 가입된 이메일입니다.')
+          // 회원가입 실패 처리를 원하는 경우 적절한 방법으로 처리
+        }} else if (type === 'login') {
+          try {
           // 로그인 요청 보내기
           const response = await axios.post('/user/login', {
             userEmail : email,
@@ -115,7 +122,11 @@ const textMap = {
           // 예시: 페이지 리디렉션
           window.location.href = '/'; // 메인 페이지로 리디렉션
           // console.log("저장된 토큰:", localStorage.getItem("jwtToken"));
-        } else if (type === 'modify') {
+        } catch (error) {
+          console.error('실패:', error);
+          alert('이메일과 비밀번호를 확인해 주세요.')
+          // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+        }} else if (type === 'modify') {
           // 비밀번호와 비밀번호 확인이 일치하는지 확인
           if (password !== passwordConfirm) {
             console.error('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
@@ -154,7 +165,7 @@ const textMap = {
         }
       } catch (error) {
         console.error('실패:', error);
-        // alert('이미 가입된 이메일입니다.')
+        alert('예상치 못한 오류가 발생하였습니다.')
         // 회원가입 실패 처리를 원하는 경우 적절한 방법으로 처리
       }
     };

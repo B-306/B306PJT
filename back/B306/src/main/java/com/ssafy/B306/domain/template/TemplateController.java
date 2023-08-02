@@ -2,6 +2,7 @@ package com.ssafy.B306.domain.template;
 
 
 import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
+import com.ssafy.B306.domain.template.dto.TemplateResponseDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,17 +22,17 @@ public class TemplateController {
     private final ImageUploadService imageUploadService;
 
     @GetMapping("/get")
-    public ResponseEntity<List<Template>> getTemplateList() {
+    public ResponseEntity<List<TemplateResponseDto>> getTemplateList() {
 
-        return new ResponseEntity<>(templateService.getAllTemplate(), HttpStatus.OK);
+        return new ResponseEntity<>(templateService.getTemplateList(), HttpStatus.OK);
     }
 
     @GetMapping("/get/{templateId}")
-    public ResponseEntity<Template> getTemplate(@PathVariable Long templateId) {
+    public ResponseEntity<TemplateResponseDto> getTemplate(@PathVariable Long templateId) {
 
-        Template template = templateService.getTemplate(templateId);
+        TemplateResponseDto template = templateService.getTemplate(templateId);
 
-        return new ResponseEntity<>(templateService.getTemplate(template.getTemplateId()), HttpStatus.OK);
+        return new ResponseEntity<>(template, HttpStatus.OK);
     }
 
     @PostMapping("/add-template")
