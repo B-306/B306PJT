@@ -1,6 +1,4 @@
 // mainPage.js
-// import AuthTemplate from '../components/auth/AuthTemplate';
-// import AuthForm from '../components/auth/AuthForm';
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {Link} from 'react-router-dom';
@@ -43,11 +41,11 @@ const StyledInput = styled(Input)``;
 
 
 const MainPage = (props) => {
-  // const jwtToken = useSelector((state) => state.auth.accessToken);
+  const jwtToken = useSelector((state) => state.auth.accessToken);
   const userName = useSelector((state) => state.auth.userName);
   console.log(userName)
   const userEmail = useSelector((state) => state.auth.userEmail);
-  const jwtToken = localStorage.getItem("accessToken");
+  // const jwtToken = localStorage.getItem("accessToken");
   // const userName = localStorage.getItem("userName")
   // const userEmail = localStorage.getItem("userEmail")
   // console.dir(jwtToken)
