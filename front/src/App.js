@@ -7,12 +7,15 @@ import GameCreate from './page/GameCreate';
 // import MyPage from './user/MyPage';
 // import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import VideoRoomComponent from './components/VideoRoomComponent';
 
 const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/game/:number" element={<VideoRoomComponent />} />
+      {/* <Route path="/game/1" element={<VideoRoomComponent />} /> */}
       <Route path="/@:useremail" element={<MainPage />} />
       <Route path="/" element={<MainPage />} />
       <Route path="/:useremail/mypage" element={<MyPage />} />
