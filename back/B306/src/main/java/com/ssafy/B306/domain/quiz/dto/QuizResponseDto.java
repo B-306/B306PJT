@@ -15,15 +15,13 @@ public class QuizResponseDto {
 
     private Long quizId;
     private Template quizTemplateId;
-    private QuizBook quizBookId;
     private String quizText;
     private char quizAnswer;
 
     @Builder
-    public QuizResponseDto(Long quizId, Template quizTemplateId, QuizBook quizBookId, String quizText, char quizAnswer) {
+    public QuizResponseDto(Long quizId, Template quizTemplateId, String quizText, char quizAnswer) {
         this.quizId = quizId;
         this.quizTemplateId = quizTemplateId;
-        this.quizBookId = quizBookId;
         this.quizText = quizText;
         this.quizAnswer = quizAnswer;
     }

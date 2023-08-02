@@ -46,11 +46,8 @@ public class QuizBookService {
         List<QuizBook> quizBookList = quizBookRepository.findAll();
         List<QuizBookListResponseDto> quizListResponseDtoList = new ArrayList<>();
 
-        System.out.println("-----출력------------");
         for(QuizBook quizBook : quizBookList){
             QuizBookListResponseDto qlrd = quizBook.toListDto(quizBook);
-            System.out.println(qlrd.getQuizBookTitle());
-
             quizListResponseDtoList.add(qlrd);
         }
 
@@ -74,6 +71,8 @@ public class QuizBookService {
         QuizBook myQuizBook = getQuizBookIfMine(quizBookId,
                 jwtUtil.extractUserPkFromToken(request));
 
+        // ToDo 퀴즈 단건 삭제가 아닌 한꺼번에 삭제 구현 필요
+        quizService.deleteQuizList(quizBookId);
         quizBookRepository.deleteById(myQuizBook.getQuizBookId());
     }
 

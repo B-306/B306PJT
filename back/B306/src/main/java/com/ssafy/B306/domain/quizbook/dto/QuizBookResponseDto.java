@@ -16,14 +16,12 @@ public class QuizBookResponseDto {
 
     private Long quizBookId;
     private String quizBookTitle;
-    private User quizBookUserId;
     private List<QuizResponseDto> quizList;
 
     @Builder
-    public QuizBookResponseDto(Long quizBookId, String quizBookTitle, User quizBookUserId, List<QuizResponseDto> quizList) {
+    public QuizBookResponseDto(Long quizBookId, String quizBookTitle, List<QuizResponseDto> quizList) {
         this.quizBookId = quizBookId;
         this.quizBookTitle = quizBookTitle;
-        this.quizBookUserId = quizBookUserId;
         this.quizList = quizList;
     }
 }
