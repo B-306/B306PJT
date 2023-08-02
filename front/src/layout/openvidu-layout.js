@@ -256,7 +256,7 @@ class OpenViduLayout {
  filterDisplayNone(element) {
     return element.style.display !== 'none';
   }
-
+  
   updateLayout() {
     if (this.layoutContainer.style.display === 'none') {
       return;
@@ -266,7 +266,7 @@ class OpenViduLayout {
       id = 'OT_' + this.cheapUUID();
       this.layoutContainer.id = id;
     }
-
+  
     const HEIGHT =
       this.getHeight(this.layoutContainer) -
       this.getCSSNumber(this.layoutContainer, 'borderTop') -
@@ -275,14 +275,14 @@ class OpenViduLayout {
       this.getWidth(this.layoutContainer) -
       this.getCSSNumber(this.layoutContainer, 'borderLeft') -
       this.getCSSNumber(this.layoutContainer, 'borderRight');
-
+  
     const availableRatio = HEIGHT / WIDTH;
-
+  
     let offsetLeft = 0;
     let offsetTop = 0;
     let bigOffsetTop = 0;
     let bigOffsetLeft = 0;
-
+  
     const bigOnes = Array.prototype.filter.call(
       this.layoutContainer.querySelectorAll('#' + id + '>.' + this.opts.bigClass),
       this.filterDisplayNone,
@@ -291,13 +291,13 @@ class OpenViduLayout {
       this.layoutContainer.querySelectorAll('#' + id + '>*:not(.' + this.opts.bigClass + ')'),
       this.filterDisplayNone,
     );
-
+  
     if (bigOnes.length > 0 && smallOnes.length > 0) {
       let bigWidth, bigHeight;
-
+  
       if (availableRatio > this.getVideoRatio(bigOnes[0])) {
         // We are tall, going to take up the whole width and arrange small
-        // guys at the bottom
+        // guys at the top
         bigWidth = WIDTH;
         bigHeight = Math.floor(HEIGHT * this.opts.bigPercentage);
         offsetTop = bigHeight;
@@ -311,66 +311,44 @@ class OpenViduLayout {
         bigOffsetLeft = WIDTH - offsetLeft;
       }
       if (this.opts.bigFirst) {
+        // Arrange big video in the center
         this.arrange(
           bigOnes,
           bigWidth,
           bigHeight,
-          0,
-          0,
+          (WIDTH - bigWidth) / 2,
+          (HEIGHT - bigHeight) / 2,
           this.opts.bigFixedRatio,
           this.opts.bigMinRatio,
           this.opts.bigMaxRatio,
           this.opts.animate,
         );
+        // Arrange small videos at the top
         this.arrange(
           smallOnes,
           WIDTH - offsetLeft,
-          HEIGHT - offsetTop,
-          offsetLeft,
           offsetTop,
-          this.opts.fixedRatio,
-          this.opts.minRatio,
-          this.opts.maxRatio,
-          this.opts.animate,
-        );
-      } else {
-        this.arrange(
-          smallOnes,
-          WIDTH - offsetLeft,
-          HEIGHT - offsetTop,
-          0,
+          offsetLeft,
           0,
           this.opts.fixedRatio,
           this.opts.minRatio,
           this.opts.maxRatio,
-          this.opts.animate,
-        );
-        this.arrange(
-          bigOnes,
-          bigWidth,
-          bigHeight,
-          bigOffsetLeft,
-          bigOffsetTop,
-          this.opts.bigFixedRatio,
-          this.opts.bigMinRatio,
-          this.opts.bigMaxRatio,
           this.opts.animate,
         );
       }
     } else if (bigOnes.length > 0 && smallOnes.length === 0) {
-      this
-        // We only have one bigOne just center it
-        .arrange(
-          bigOnes,
-          WIDTH,
-          HEIGHT,
-          0,
-          0,
-          this.opts.bigFixedRatio,
-          this.opts.bigMinRatio,
-          this.opts.bigMaxRatio,
-          this.opts.animate,
-        );
+      // We only have one bigOne just center it
+      this.arrange(
+        bigOnes,
+        WIDTH,
+        HEIGHT,
+        0,
+        0,
+        this.opts.bigFixedRatio,
+        this.opts.bigMinRatio,
+        this.opts.bigMaxRatio,
+        this.opts.animate,
+      );
     } else {
       this.arrange(
         smallOnes,
@@ -385,6 +363,7 @@ class OpenViduLayout {
       );
     }
   }
+  
 
   initLayoutContainer(container, opts) {
     this.opts = {
