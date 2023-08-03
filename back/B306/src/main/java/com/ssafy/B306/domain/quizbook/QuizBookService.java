@@ -4,6 +4,7 @@ import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quiz.QuizService;
 import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookListResponseDto;
+import com.ssafy.B306.domain.quizbook.dto.QuizBookModifyRequestDto;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookResponseDto;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
 import com.ssafy.B306.domain.security.JwtUtil;
@@ -77,18 +78,18 @@ public class QuizBookService {
     }
 
     @Transactional
-    public void modifyQuizBook(Long quizBookId, QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request) {
+    public void modifyQuizBook(Long quizBookId, QuizBookModifyRequestDto quizBookModifyRequestDto, HttpServletRequest request) {
         Long userID = jwtUtil.extractUserPkFromToken(request);
         QuizBook originalQuizBook = getQuizBookIfMine(quizBookId, userID);
 
         // 문제별로 수정
-        if (isQuizzesModified(quizBookSaveRequestDto.getQuizzes())) {
-            quizService.modifyQuiz(quizBookSaveRequestDto.getQuizzes());
+        if (isQuizzesModified(quizBookModifyRequestDto.getQuizzes())) {
+            quizService.modifyQuiz(quizBookModifyRequestDto.getQuizzes());
         }
 
         // 문제집 제목 수정
-        if(isTitleModified(quizBookSaveRequestDto.getQuizBookTitle()))
-            originalQuizBook.modifyQuizBook(quizBookSaveRequestDto.getQuizBookTitle());
+        if(isTitleModified(quizBookModifyRequestDto.getQuizBookTitle()))
+            originalQuizBook.modifyQuizBook(quizBookModifyRequestDto.getQuizBookTitle());
     }
 
     private boolean isTitleModified(String quizBookTitle) {

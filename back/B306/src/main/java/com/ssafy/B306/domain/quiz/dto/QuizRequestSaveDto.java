@@ -2,6 +2,7 @@ package com.ssafy.B306.domain.quiz.dto;
 
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quizbook.QuizBook;
+import com.ssafy.B306.domain.template.Template;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,15 @@ public class QuizRequestSaveDto {
     @NotNull
     private char quizAnswer;
 
+    private Long templateId;
+
     private QuizBook quizBookId;
 
     @Builder
-    public QuizRequestSaveDto(String quizText, char quizAnswer, QuizBook quizBookId) {
+    public QuizRequestSaveDto(String quizText, char quizAnswer, Long tempalteId, QuizBook quizBookId) {
         this.quizText = quizText;
         this.quizAnswer = quizAnswer;
+        this.templateId = tempalteId;
         this.quizBookId = quizBookId;
     }
 
@@ -35,4 +39,5 @@ public class QuizRequestSaveDto {
                 .quizAnswer(quizRequestSaveDto.getQuizAnswer())
                 .build();
     }
+
 }
