@@ -4,6 +4,7 @@ import axios from 'axios';
 function PhotoUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     // 로컬 스토리지에서 이미지 URL을 불러와서 상태로 설정
@@ -21,6 +22,7 @@ function PhotoUpload() {
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewUrl(reader.result);
+      setImageUrl(reader.result);
     };
     reader.readAsDataURL(file);
   };
@@ -43,7 +45,7 @@ function PhotoUpload() {
       // const imageUrl = response.data.imageUrl;
       // response.data가 formdata {}로 빈 값이 출력 
       // setPreviewUrl(imageUrl);
-      console.log("나는 너의~~~~~~~~~~~~~~~~~~" + formData.get('accessToken'));
+      // console.log("나는 너의~~~~~~~~~~~~~~~~~~" + formData.get('accessToken'));
 
       alert('사진 업로드가 완료되었습니다.');
     } catch (error) {
@@ -62,6 +64,8 @@ function PhotoUpload() {
 
       {/* 업로드 버튼 */}
       <button onClick={handleSubmit}>업로드</button>
+
+      {imageUrl && <img src={imageUrl} alt='Uploaded' />}
     </div>
   );
 }
