@@ -1,6 +1,7 @@
 package com.ssafy.B306.domain.quizbook;
 
 import com.ssafy.B306.domain.quizbook.dto.QuizBookListResponseDto;
+import com.ssafy.B306.domain.quizbook.dto.QuizBookModifyRequestDto;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookResponseDto;
 import com.ssafy.B306.domain.quizbook.dto.QuizBookSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class QuizBookController {
 
     @PatchMapping("/{quizBookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookSaveRequestDto quizBookSaveRequestDto, HttpServletRequest request){
-        quizBookService.modifyQuizBook(quizBookId, quizBookSaveRequestDto, request);
+    public void modifyQuizBook(@PathVariable Long quizBookId, @RequestBody QuizBookModifyRequestDto quizBookModifyRequestDto, HttpServletRequest request){
+        quizBookService.modifyQuizBook(quizBookId, quizBookModifyRequestDto, request);
     }
 
 }

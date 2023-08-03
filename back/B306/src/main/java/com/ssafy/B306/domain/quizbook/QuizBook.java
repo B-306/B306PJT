@@ -8,6 +8,7 @@ import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class QuizBook {
     @JoinColumn(name = "user_id")
     private User quizBookUserId;
 
+    @CreationTimestamp
     @Column(name = "quizbook_create_date")
     private LocalDateTime quizBookCreateDate;
 
@@ -57,7 +59,6 @@ public class QuizBook {
         QuizBookResponseDto quizBookResponseDto = new QuizBookResponseDto();
         quizBookResponseDto.setQuizBookId(quizBook.quizBookId);
         quizBookResponseDto.setQuizBookTitle(quizBook.getQuizBookTitle());
-        quizBookResponseDto.setQuizBookUserId(quizBook.getQuizBookUserId());
         quizBookResponseDto.setQuizList(quizList);
         return quizBookResponseDto;
     }
@@ -65,8 +66,9 @@ public class QuizBook {
     public static QuizBookListResponseDto toListDto(QuizBook quizBook){
         QuizBookListResponseDto quizBookListResponseDto = new QuizBookListResponseDto();
         quizBookListResponseDto.setQuizBookId(quizBook.getQuizBookId());
-        quizBookListResponseDto.setQuizBookUserId(quizBook.getQuizBookUserId());
-        quizBookListResponseDto.setQuizBookTitle(quizBookListResponseDto.getQuizBookTitle());
+        quizBookListResponseDto.setQuizBookTitle(quizBook.getQuizBookTitle());
+        quizBookListResponseDto.setQuizBookUserEmail(quizBook.getQuizBookUserId().getUserEmail());
+        quizBookListResponseDto.setQuizBookUserName(quizBook.getQuizBookUserId().getUserName());
 
         return quizBookListResponseDto;
     }
