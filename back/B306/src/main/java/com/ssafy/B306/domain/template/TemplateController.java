@@ -36,7 +36,12 @@ public class TemplateController {
     }
 
     @PostMapping("/add-template")
-    public ResponseEntity<Void> addTemplate(@RequestBody TemplateSaveDto templateSaveDto, MultipartFile file, HttpServletRequest request) {
+    public ResponseEntity<Void> addTemplate(MultipartFile file, TemplateSaveDto templateSaveDto, HttpServletRequest request) {
+
+        if(!file.getContentType().startsWith("image")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         String image = imageUploadService.makeImagePath(file, "template");
         templateSaveDto.setTemplateImage(image);
         templateService.addTemplate(templateSaveDto, request);

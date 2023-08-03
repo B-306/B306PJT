@@ -60,7 +60,7 @@ public class Quiz {
         this.quizDelteDate = quizDelteDate;
     }
 
-    public QuizRequestSaveDto toDto(Quiz quiz, QuizBook id){
+    public QuizRequestSaveDto toRequestDto(Quiz quiz, QuizBook id){
         QuizRequestSaveDto quizRequestSaveDto = new QuizRequestSaveDto();
         quizRequestSaveDto.setQuizBookId(id);
         quizRequestSaveDto.setQuizText(quiz.getQuizText());
@@ -80,7 +80,7 @@ public class Quiz {
         return quizResponseDto;
     }
 
-    public void modifyQuiz(Quiz quiz) {
+    public void modifyQuiz(QuizRequestSaveDto quiz) {
         quizText = quiz.getQuizText();
         quizAnswer = quiz.getQuizAnswer();
     }
