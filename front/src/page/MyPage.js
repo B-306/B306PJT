@@ -16,7 +16,25 @@ const ButtonWithMargin = styled(Button)`
   margin-bottom: 1rem;
 `;
 
+const MypageH1 = styled.h1`
+  text-align: center;
+  color: white;
+  font-family: 'JSArirang'
+`;
+
 const StyledInput = styled(Input)``;
+
+const CenteredContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  // backdrop-filter: blur(10px);
+  // min-height: 100vh;
+  // overflow: hidden; /* 스크롤바 없애기 */
+`;
+
 
 
 function Change() {
@@ -152,25 +170,26 @@ const MyPage = (props) => {
 
     return (
       <>
-        <Link to="/">두뇌 풀 가동</Link>
-        <h1>마이 페이지</h1>
+      <Link to="/">Go to 두뇌 풀 가동 Main</Link>
+      <CenteredContainer>
+        <MypageH1>마이 페이지</MypageH1>
         <React.Fragment>
-          <Grid>
-              <Grid is_flex>
+          {/* <Grid> */}
+              {/* <Grid is_flex> */}
                 <PhotoUpload />
               <Image shape="circle" src= {props.src}/>
-              </Grid>
-              <Grid padding='16px'>
+              {/* </Grid> */}
+              {/* <Grid padding='16px'> */}
               
-              </Grid>
+              {/* </Grid> */}
               <div>
-                {!view && <h1>{userName} | {userEmail}</h1>}
+                {!view && <MypageH1>{userName} | {userEmail}</MypageH1>}
                 {/* {!view && <h1>{localStorage.getItem("userName")} | {localStorage.getItem("userEmail")}</h1>}   */}
               </div>
               
               <ul onClick={() => {setView(!view)}}>
               <div>
-              {!view && <h1>수정하기 {" "}</h1>}
+              {!view && <MypageH1>수정하기 {" "}</MypageH1>}
               </div>
               
               </ul>
@@ -186,11 +205,11 @@ const MyPage = (props) => {
                   </ButtonWithMargin>
                 )} */}
               </div>
-          </Grid>
+          {/* </Grid> */}
         </React.Fragment>
         <button type="button" onClick={deleteAccount}>회원 탈퇴</button>
+      </CenteredContainer>
       </>
-      
     );
   };
   

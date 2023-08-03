@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 public class ImageUploadService {
 
-    private String basePath = "src/main/resources/image/";
+    private String basePath = "src/main/resources/image";
 
     public String makeImagePath(MultipartFile file, String type) {
 

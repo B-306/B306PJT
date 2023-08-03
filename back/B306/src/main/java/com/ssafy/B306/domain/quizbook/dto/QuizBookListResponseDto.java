@@ -1,6 +1,5 @@
 package com.ssafy.B306.domain.quizbook.dto;
 
-import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +12,14 @@ import lombok.Setter;
 public class QuizBookListResponseDto {
     private Long quizBookId;
     private String quizBookTitle;
-    private User quizBookUserId;
-
+    private String quizBookUserEmail;
+    private String quizBookUserName;
 
     @Builder
-    public QuizBookListResponseDto(Long quizBookId, String quizBookTitle, User quizBookUserId) {
+    public QuizBookListResponseDto(Long quizBookId, String quizBookTitle, String quizBookUserEmail, String quizBookUserName) {
         this.quizBookId = quizBookId;
         this.quizBookTitle = quizBookTitle;
-        this.quizBookUserId = quizBookUserId;
+        this.quizBookUserEmail = quizBookUserEmail;
+        this.quizBookUserName = quizBookUserName;
     }
 }
