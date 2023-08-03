@@ -40,12 +40,14 @@ const CenteredContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  // height: 100vh;
+  height: 100vh;
   min-height: 100vh;
+  // overflow: hidden; /* 스크롤바 없애기 */
 `;
 
 const GameCreateButton = styled(Button)`
   margin-top: 1rem;
+  margin-right: 1rem; 
 `;
 
 const StyledInput = styled(Input)``;
@@ -75,22 +77,25 @@ const DropdownMenu = styled.div`
 `;
 
 const LogoImage = styled.img`
-  width: 650px; /* 원하는 로고 이미지 크기로 설정 */
-  // margin-bottom: 2rem
+  width: 280px; /* 원하는 로고 이미지 크기로 설정 */
+  margin-top: 5rem
+  position: absolute;
+  // bottom: 150px;
+  // left: 50%;
+  // transform: translateX(-50%);
 `;
 
 const StyledForm = styled.form`
   display: flex;
-  // flex-direction: column;
+  flex-direction: column;
+  // justify-content: space-between;
   align-items: center;
+  width: 500px
+  // margin-top: 150px;
 `;
 
 
 const MainPage = (props) => {
-  // const jwtToken = localStorage.getItem("accessToken");
-  // const userName = localStorage.getItem("userName")
-  // const userEmail = localStorage.getItem("userEmail")
-  // console.dir(jwtToken)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -105,15 +110,6 @@ const MainPage = (props) => {
   }
   // 반환된 객체에서 원하는 값을 각각 변수에 저장
   const { accessToken, refreshToken, userName, userEmail } = decodedState;
-  console.log('userName', userName)
-  console.log(typeof userName)
-  console.log(userEmail)
-  console.log(typeof userEmail)
-  console.log(accessToken)
-  console.log(typeof accessToken)
-  console.log(refreshToken)
-  console.log(typeof refreshToken)
-  // console.log('jwtToken 있음')
   const [view, setView] = useState(false);
 
   return (
@@ -136,18 +132,15 @@ const MainPage = (props) => {
         {/* {userName} */}
       {/* </span> */}
       {/* {view && <Dropdown />} */}
-      {/* <MainPageTitle>두뇌 풀 가동 메인 페이지</MainPageTitle> */}
-          <StyledInput autoComplete="code" name="code" placeholder="입장 코드" />
       <StyledForm>
-          <GameCreateButton><Link to={`/${userEmail}/gamecreate`}>방 만들기</Link></GameCreateButton>
-          <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>
-          
-          <GameCreateButton><Link to={`/game/1`}>게임방 테스트 방번호 1번</Link></GameCreateButton>
-          
-          <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>
+        <MainPageTitle>두뇌 풀 가동</MainPageTitle>
+        <StyledInput autoComplete="code" name="code" placeholder="입장 코드" />
+        <GameCreateButton><Link to={`/${userEmail}/gamecreate`}>방 만들기</Link></GameCreateButton>
+        <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>  
+        <GameCreateButton><Link to={`/game/1`}>게임방 테스트 방번호 1번</Link></GameCreateButton>
+        <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>
       </StyledForm>
     </CenteredContainer>
-    
   );
 };
 
