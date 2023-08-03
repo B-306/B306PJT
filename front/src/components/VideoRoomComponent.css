@@ -9,6 +9,24 @@
   min-width: 400px !important;
 }
 
+.counter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent; /* Remove background color */
+  z-index: 9999; /* Ensure the counter is displayed above other content */
+}
+
+.counter-container h1 {
+  font-size: 3rem;
+  color: white;
+}
+
 .toolbar{
   min-height: 40px !important;
 

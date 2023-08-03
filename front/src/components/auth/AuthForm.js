@@ -13,7 +13,8 @@ import { encodeState } from "../common/CodedState";
 const AuthFormBlock = styled.div`
     h3 {
         margin: 0;
-        color: ${palette.gray[8]};
+        // color: ${palette.gray[8]};
+        color : white;
         margin-bottom: 1rem;
     }
 `;
@@ -24,7 +25,8 @@ const Footer = styled.div`
     margin-top: 2rem;
     text-align: right;
     a {
-        color: $'#868e96';
+        // color: $'#868e96';
+        color: white;
         text-decoration: underline;
         &:hover {
             color: $'#212529';

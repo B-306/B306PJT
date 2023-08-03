@@ -5,6 +5,7 @@ import ChatComponent from './chat/ChatComponent';
 import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
+import Counter from './secCounter';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
@@ -33,6 +34,7 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
+            showCounter: true, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
         };
 
         this.joinSession = this.joinSession.bind(this);
@@ -501,6 +503,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
+                
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
@@ -514,6 +517,18 @@ class VideoRoomComponent extends Component {
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
                 />
+                {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                    <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
+                        <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
+                    </div>
+                )}
+                {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
+                {this.state.showCounter && (
+                    <div className="counter-container">
+                        {/* localUser와 onImageCaptured props를 전달합니다 */}
+                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
+                    </div>
+                )}
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 <div id="layout" className="bounds">
