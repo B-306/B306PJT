@@ -1,5 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import authReducer from '../modules/authSlice';
+import photoReducer from '../modules/photoSlice';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -9,11 +10,12 @@ import { persistReducer, persistStore } from 'redux-persist';
 const persistConfig = {
   key: "root", // localStorage key 
   storage, // localStorage
-  whitelist: ["auth"], // target (reducer name)
+  whitelist: ["auth", "photo"], // target (reducer name)
 }
 
 const reducers = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  photo: photoReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers)

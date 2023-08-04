@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {Link} from 'react-router-dom';
 import Button from '../components/common/Button';
 import Input from "../components/common/Input";
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Logout from '../components/auth/Logout';
 // import UserInfo from '../components/auth/UserInfo'
 import { checkLoginStatus } from '../redux/config/AuthMiddleware'
@@ -77,6 +77,15 @@ const DropdownMenu = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
+const rotateAnimation = keyframes`
+0%, 100% {
+  transform: translateY(2px) rotate(-3deg);
+}
+50% {
+  transform: translateY(-2px) rotate(3deg);
+}
+`;
+
 const LogoImage = styled.img`
   width: 280px; /* 원하는 로고 이미지 크기로 설정 */
   margin-top: 5rem
@@ -84,6 +93,7 @@ const LogoImage = styled.img`
   // bottom: 150px;
   // left: 50%;
   // transform: translateX(-50%);
+  animation: ${rotateAnimation} 5s linear infinite; /* Apply the rotation animation */
 `;
 
 const StyledForm = styled.form`

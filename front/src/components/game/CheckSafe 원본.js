@@ -4,8 +4,6 @@ import '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-converter';
 // Register WebGL backend.
 import '@tensorflow/tfjs-backend-webgl';
-import '@mediapipe/selfie_segmentation';
-
 
 
 
@@ -23,18 +21,6 @@ async function convertBlobToImageData(blob) {
         reader.readAsDataURL(blob);
     });
 }
-
-async function imageBitmapToImageData(imageBitmap) {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    
-    canvas.width = imageBitmap.width;
-    canvas.height = imageBitmap.height;
-    
-    context.drawImage(imageBitmap, 0, 0);
-    return context.getImageData(0, 0, imageBitmap.width, imageBitmap.height);
-  }
-  
 
 class Check extends Component {
     constructor(props) {
@@ -61,14 +47,14 @@ class Check extends Component {
         // Canvas에서 ImageData를 추출합니다
         const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
 
-        const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
+        const model = bodySegmentation.SupportedModels.BodyPix;
         const segmenterConfig = {
-          runtime: 'mediapipe',
-          solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation'
-                        // or 'base/node_modules/@mediapipe/selfie_segmentation' in npm.
+            architecture: 'ResNet50',
+            outputStride: 32,
+            quantBytes: 2
         };
         const segmenter = await bodySegmentation.createSegmenter(model, segmenterConfig);
-        const segmentationConfig = { flipHorizontal: true };
+        const segmentationConfig = { flipHorizontal: false };
     
         // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
         const imageElement = await convertBlobToImageData(this.props.image);
@@ -86,46 +72,63 @@ class Check extends Component {
         if (!people || people.length === 0) {
             return null; // 세그멘테이션 결과가 없으면 아무것도 렌더링하지 않음
         }
-
+    
         // 이미지 데이터 뒤집기
         const maskImageData = people[0].mask.mask;
-        console.log(maskImageData)
+
         
-        // const flippedImageData = new ImageData(maskImageData.width, maskImageData.height);
+        const flippedImageData = new ImageData(maskImageData.width, maskImageData.height);
     
-        // for (let y = 0; y < maskImageData.height; y++) {
-        //     for (let x = 0; x < maskImageData.width; x++) {
-        //         const sourceIndex = (y * maskImageData.width + (maskImageData.width - 1 - x)) * 4;
-        //         const targetIndex = (y * maskImageData.width + x) * 4;
+        for (let y = 0; y < maskImageData.height; y++) {
+            for (let x = 0; x < maskImageData.width; x++) {
+                const sourceIndex = (y * maskImageData.width + (maskImageData.width - 1 - x)) * 4;
+                const targetIndex = (y * maskImageData.width + x) * 4;
     
-        //         flippedImageData.data[targetIndex] = maskImageData.data[sourceIndex];
-        //         flippedImageData.data[targetIndex + 1] = maskImageData.data[sourceIndex + 1];
-        //         flippedImageData.data[targetIndex + 2] = maskImageData.data[sourceIndex + 2];
-        //         flippedImageData.data[targetIndex + 3] = maskImageData.data[sourceIndex + 3];
+                flippedImageData.data[targetIndex] = maskImageData.data[sourceIndex];
+                flippedImageData.data[targetIndex + 1] = maskImageData.data[sourceIndex + 1];
+                flippedImageData.data[targetIndex + 2] = maskImageData.data[sourceIndex + 2];
+                flippedImageData.data[targetIndex + 3] = maskImageData.data[sourceIndex + 3];
+            }
+        }
+        console.log('샘플 이미지', checkImageData)
+        // let score = 0
+        let srgb = [0,0,0,0];
+        // for (let i=0; i<307200; i++) {
+        //     // if (checkImageData.data[40*i+3] == 0 && flippedImageData.data[40*i+3])
+        //     if (checkImageData.data[4*i] != 0) {
+        //         srgb[0]++;
+        //     }
+        //     if (checkImageData.data[4*i+1] != 0) {
+        //         srgb[1]++;
+        //     }
+        //     if (checkImageData.data[4*i+2] != 0) {
+        //         srgb[2]++;
+        //     }
+        //     if (checkImageData.data[4*i+3] != 0) {
+        //         srgb[3]++;
         //     }
         // }
-        console.log('샘플 이미지', checkImageData)
-        console.log('마스크데이터', maskImageData)
+        // // console.log(flippedImageData)
+        // console.log('srgb', srgb)
+        
+    
         return (
             <div className="check-container">
                 <div style={{ overflowX: 'auto' }}>
-                <canvas
-                    ref={canvasRef => {
-                        if (canvasRef) {
-                            const ctx = canvasRef.getContext('2d');
-
-                            // Canvas의 크기를 이미지 데이터 크기에 맞게 설정
-                            canvasRef.width = maskImageData.width;
-                            canvasRef.height = maskImageData.height;
-
-                            // ImageBitmap을 ImageData로 변환
-                            imageBitmapToImageData(maskImageData).then(imageData => {
+                    <canvas
+                        ref={canvasRef => {
+                            if (canvasRef) {
+                                const ctx = canvasRef.getContext('2d');
+    
+                                // Canvas의 크기를 이미지 데이터 크기에 맞게 설정
+                                canvasRef.width = flippedImageData.width;
+                                canvasRef.height = flippedImageData.height;
+    
                                 // 이미지 데이터를 캔버스에 그립니다
-                                ctx.putImageData(imageData, 0, 0);
-                            });
-                        }
-                    }}
-                />
+                                ctx.putImageData(flippedImageData, 0, 0);
+                            }
+                        }}
+                    />
                 </div>
             </div>
         );

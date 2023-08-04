@@ -6,6 +6,7 @@ import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
+import Check from './game/CheckSafe';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
@@ -35,6 +36,7 @@ class VideoRoomComponent extends Component {
             chatDisplay: 'none',
             currentVideoDevice: undefined,
             showCounter: true, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
+            capturedImage: null, // 이미지 데이터를 저장할 상태 변수
         };
 
         this.joinSession = this.joinSession.bind(this);
@@ -495,11 +497,18 @@ class VideoRoomComponent extends Component {
         }
     }
 
+    handleImageCaptured = (capturedImageBlob) => {
+        this.setState({
+            capturedImage: capturedImageBlob,
+        });
+    }
+    
     render() {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
         
+        const { capturedImage } = this.state;
 
         return (
             <div className="container" id="container">
@@ -518,7 +527,7 @@ class VideoRoomComponent extends Component {
                     toggleChat={this.toggleChat}
                 />
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                    <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
+                    <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                     </div>
                 )}
@@ -527,6 +536,12 @@ class VideoRoomComponent extends Component {
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
                         <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
+                    </div>
+                )}
+                {/* Check 컴포넌트를 여기에 렌더링합니다 */}
+                {capturedImage && (
+                    <div style={{ position: 'relative', zIndex: 9999, overflow: 'visible' }}>
+                        <Check image={this.state.capturedImage} />
                     </div>
                 )}
 
@@ -545,6 +560,7 @@ class VideoRoomComponent extends Component {
                     )}
                     
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                        // 채팅 컴포넌트
                         <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
                             <ChatComponent
                                 user={localUser}
