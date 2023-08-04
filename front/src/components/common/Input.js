@@ -8,6 +8,24 @@ const StyledInput = styled.input`
     padding-bottom: 0.5rem;
     outline: none;
     width: 100%;
+    border-radius:5px;
+
+    &::placeholder {
+
+        /* placeholder 텍스트의 가로 정렬을 조정 */
+        text-align: center; /* 가운데 정렬로 설정 */
+        /* 다른 원하는 가로 정렬 옵션도 가능(left, right) */
+
+        // text-indent
+        /* placeholder 텍스트와 입력 상자 사이의 간격을 조정 */
+        padding-top: 5rem; /* 원하는 값으로 설정 */
+
+        /* 입력 상자와 주변 요소 사이의 간격을 조정 */
+        margin-top: 0.5rem; /* 원하는 값으로 설정 */
+       
+    }
+
+
     &:focus {
         color: $oc-teal-7;
         border-bottom: 1px solid ${palette.gray[7]};
