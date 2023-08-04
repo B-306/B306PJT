@@ -70,7 +70,7 @@ dependencies {
 	implementation "org.springframework.session:spring-session-data-redis"
 
 	//openvidu
-	implementation 'io.openvidu:openvidu-java-client:2.19.0'
+//	implementation 'io.openvidu:openvidu-java-client:2.19.0'
 }
 jar {
 	enabled = false
