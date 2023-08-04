@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Springboot build') {
+            steps {
+                dir('BACKEND'){
+                    sh '''
+                    echo 'springboot build'
+                    chmod +x gradlew
+                    ./gradlew clean build //스프링 부트 빌드, .jar파일 생성
+                    '''
+                }
+            }
+        }
+        stage('Dockerimage build') {
+            steps {
+                dir('BACKEND'){
+                    sh '''
+                    echo 'Dockerimage build'
+                    docker build -t docker-springboot:0.0.1 .
+                    '''
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                dir('BACKEND'){
+                    sh '''
+                    echo 'Deploy' //배포
+												// 스프링 구동
+	                  docker stop springboot
+                    docker rm springboot
+                    docker run -d -p 8080:8080 --name springboot docker-springboot:0.0.1
+                    '''
+                }
+            }
+        }
+    }
+}
