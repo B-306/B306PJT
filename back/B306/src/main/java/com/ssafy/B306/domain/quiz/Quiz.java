@@ -15,6 +15,8 @@ import org.hibernate.annotations.SQLDelete;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static java.time.LocalDateTime.now;
+
 @Entity
 @Getter
 @Setter
@@ -86,6 +88,7 @@ public class Quiz {
     public void modifyQuiz(QuizRequestSaveDto quiz) {
         quizText = quiz.getQuizText();
         quizAnswer = quiz.getQuizAnswer();
+        quizModifyDate = now();
     }
 
 }

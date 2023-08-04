@@ -7,6 +7,7 @@ import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 
 
@@ -41,6 +42,7 @@ public class Template {
     @JoinColumn(name = "user_id")
     private User templateUserId;
 
+    @CreationTimestamp
     @Column(name = "template_create_date")
     private LocalDateTime templateCreateDate;
 
@@ -82,7 +84,6 @@ public class Template {
         templateResponseDto.setTemplateImage(template.getTemplateImage());
         templateResponseDto.setTemplateType(template.getTemplateType());
         templateResponseDto.setTemplateName(template.getTemplateName());
-        templateResponseDto.setTemplateUserId(template.getTemplateUserId());
         return templateResponseDto;
     }
 

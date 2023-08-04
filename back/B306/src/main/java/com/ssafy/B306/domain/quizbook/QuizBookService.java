@@ -48,8 +48,12 @@ public class QuizBookService {
         List<QuizBookListResponseDto> quizListResponseDtoList = new ArrayList<>();
 
         for(QuizBook quizBook : quizBookList){
-            QuizBookListResponseDto qlrd = quizBook.toListDto(quizBook);
-            quizListResponseDtoList.add(qlrd);
+
+            if(quizBook.getQuizBookdeleteDate() == null) {
+                QuizBookListResponseDto quizBookListResponseDto = quizBook.toListDto(quizBook);
+                quizListResponseDtoList.add(quizBookListResponseDto);
+            }
+
         }
 
         return quizListResponseDtoList;
@@ -57,6 +61,7 @@ public class QuizBookService {
 
     public QuizBookResponseDto getQuizBook(QuizBook quizBookId) {
         QuizBook quizBook = quizBookRepository.findById(quizBookId.getQuizBookId()).get();
+        if(quizBook.getQuizBookdeleteDate() != null) return null;
 
         List<QuizResponseDto> quizList = quizService.getQuizList(quizBookId);
 
