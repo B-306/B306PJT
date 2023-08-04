@@ -5,6 +5,7 @@ import ChatComponent from './chat/ChatComponent';
 import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
+import Counter from './secCounter';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
@@ -33,12 +34,13 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
+            showCounter: true, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
         };
 
         this.joinSession = this.joinSession.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
         this.onbeforeunload = this.onbeforeunload.bind(this);
-        this.updateLayout = this.updateLayout.bind(this);
+        // this.updateLayout = this.updateLayout.bind(this);
         this.camStatusChanged = this.camStatusChanged.bind(this);
         this.micStatusChanged = this.micStatusChanged.bind(this);
         this.nicknameChanged = this.nicknameChanged.bind(this);
@@ -68,14 +70,14 @@ class VideoRoomComponent extends Component {
 
         this.layout.initLayoutContainer(document.getElementById('layout'), openViduLayoutOptions);
         window.addEventListener('beforeunload', this.onbeforeunload);
-        window.addEventListener('resize', this.updateLayout);
+        // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
     }
 
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.onbeforeunload);
-        window.removeEventListener('resize', this.updateLayout);
+        // window.removeEventListener('resize', this.updateLayout);
         window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
     }
@@ -172,7 +174,7 @@ class VideoRoomComponent extends Component {
 
         this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
             this.state.localUser.getStreamManager().on('streamPlaying', (e) => {
-                this.updateLayout();
+                // this.updateLayout();
                 publisher.videos[0].video.parentElement.classList.remove('custom-class');
             });
         });
@@ -193,7 +195,7 @@ class VideoRoomComponent extends Component {
                         isScreenShareActive: this.state.localUser.isScreenShareActive(),
                     });
                 }
-                this.updateLayout();
+                // this.updateLayout();
             },
         );
     }
@@ -281,7 +283,7 @@ class VideoRoomComponent extends Component {
                 this.checkSomeoneShareScreen();
             }, 20);
             event.preventDefault();
-            this.updateLayout();
+            // this.updateLayout();
         });
     }
 
@@ -315,11 +317,11 @@ class VideoRoomComponent extends Component {
         });
     }
 
-    updateLayout() {
-        setTimeout(() => {
-            this.layout.updateLayout();
-        }, 20);
-    }
+    // updateLayout() {
+    //     setTimeout(() => {
+    //         this.layout.updateLayout();
+    //     }, 20);
+    // }
 
     sendSignalUserChanged(data) {
         const signalOptions = {
@@ -429,7 +431,7 @@ class VideoRoomComponent extends Component {
             });
         });
         publisher.on('streamPlaying', () => {
-            this.updateLayout();
+            // this.updateLayout();
             publisher.videos[0].video.parentElement.classList.remove('custom-class');
         });
     }
@@ -460,7 +462,7 @@ class VideoRoomComponent extends Component {
             animate: true,
         };
         this.layout.setLayoutOptions(openviduLayoutOptions);
-        this.updateLayout();
+        // this.updateLayout();
     }
 
     toggleChat(property) {
@@ -475,7 +477,7 @@ class VideoRoomComponent extends Component {
             console.log('chat', display);
             this.setState({ chatDisplay: display });
         }
-        this.updateLayout();
+        // this.updateLayout();
     }
 
     checkNotification(event) {
@@ -497,9 +499,11 @@ class VideoRoomComponent extends Component {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
+        
 
         return (
             <div className="container" id="container">
+                
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
@@ -513,20 +517,33 @@ class VideoRoomComponent extends Component {
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
                 />
+                {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                    <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
+                        <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
+                    </div>
+                )}
+                {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
+                {this.state.showCounter && (
+                    <div className="counter-container">
+                        {/* localUser와 onImageCaptured props를 전달합니다 */}
+                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
+                    </div>
+                )}
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
-
                 <div id="layout" className="bounds">
-                    {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        <div className="OT_root OT_publisher custom-class" id="localUser">
-                            <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
-                        </div>
-                    )}
                     {this.state.subscribers.map((sub, i) => (
-                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers">
+                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'absolute'}}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                         </div>
                     ))}
+                    {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
+                            <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
+                        </div>
+                        
+                    )}
+                    
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
                             <ChatComponent
@@ -538,6 +555,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
+                
             </div>
         );
     }

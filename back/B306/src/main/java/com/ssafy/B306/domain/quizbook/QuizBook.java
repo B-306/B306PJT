@@ -59,7 +59,6 @@ public class QuizBook {
         QuizBookResponseDto quizBookResponseDto = new QuizBookResponseDto();
         quizBookResponseDto.setQuizBookId(quizBook.quizBookId);
         quizBookResponseDto.setQuizBookTitle(quizBook.getQuizBookTitle());
-        quizBookResponseDto.setQuizBookUserId(quizBook.getQuizBookUserId());
         quizBookResponseDto.setQuizList(quizList);
         return quizBookResponseDto;
     }
@@ -67,8 +66,9 @@ public class QuizBook {
     public static QuizBookListResponseDto toListDto(QuizBook quizBook){
         QuizBookListResponseDto quizBookListResponseDto = new QuizBookListResponseDto();
         quizBookListResponseDto.setQuizBookId(quizBook.getQuizBookId());
-        quizBookListResponseDto.setQuizBookUserId(quizBook.getQuizBookUserId());
-        quizBookListResponseDto.setQuizBookTitle(quizBookListResponseDto.getQuizBookTitle());
+        quizBookListResponseDto.setQuizBookTitle(quizBook.getQuizBookTitle());
+        quizBookListResponseDto.setQuizBookUserEmail(quizBook.getQuizBookUserId().getUserEmail());
+        quizBookListResponseDto.setQuizBookUserName(quizBook.getQuizBookUserId().getUserName());
 
         return quizBookListResponseDto;
     }

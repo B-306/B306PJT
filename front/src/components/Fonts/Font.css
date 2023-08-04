@@ -1,0 +1,34 @@
+@font-face {
+    font-family: "BMEULJIRO";
+    font-style: normal;
+    /* font-weight: 100; */
+    src: url("./BMEULJIRO.otf");
+  }
+  
+  @font-face {
+    font-family: "BMEuljiro10yearslaterOTF";
+    font-style: normal;
+    /* font-weight: normal; */
+    src: url("./BMEuljiro10yearslaterOTF.otf");
+  }
+  
+  @font-face {
+    font-family: "BMEuljirooraeoraeOTF";
+    font-style: normal;
+    /* font-weight: 500; */
+    src: url("./BMEuljirooraeoraeOTF.otf");
+  }
+  
+  @font-face {
+    font-family: "BMHANNAProOTF";
+    font-style: normal;
+    /* font-weight: bold; */
+    src: url("./BMHANNAProOTF.otf");
+  }
+  
+  @font-face {
+    font-family: "JSArirang";
+    font-style: normal;
+    /* font-weight: lighter; */
+    src: url("./JSArirang.otf");
+  }

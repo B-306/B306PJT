@@ -48,10 +48,12 @@ public class QuizBookService {
         List<QuizBookListResponseDto> quizListResponseDtoList = new ArrayList<>();
 
         for(QuizBook quizBook : quizBookList){
+
             if(quizBook.getQuizBookdeleteDate() == null) {
                 QuizBookListResponseDto quizBookListResponseDto = quizBook.toListDto(quizBook);
                 quizListResponseDtoList.add(quizBookListResponseDto);
             }
+
         }
 
         return quizListResponseDtoList;

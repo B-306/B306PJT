@@ -50,9 +50,9 @@
   }
   .user-img {
     position: absolute;
-    border-radius: 45px;
-    width: 60px;
-    height: 60px;
+    border-radius: 0px;
+    width: 800px;
+    height: 450px;
     top: 15px;
   }
   
