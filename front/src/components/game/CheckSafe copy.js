@@ -24,18 +24,6 @@ async function convertBlobToImageData(blob) {
     });
 }
 
-async function imageBitmapToImageData(imageBitmap) {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    
-    canvas.width = imageBitmap.width;
-    canvas.height = imageBitmap.height;
-    
-    context.drawImage(imageBitmap, 0, 0);
-    return context.getImageData(0, 0, imageBitmap.width, imageBitmap.height);
-  }
-  
-
 class Check extends Component {
     constructor(props) {
         super(props);
@@ -68,7 +56,7 @@ class Check extends Component {
                         // or 'base/node_modules/@mediapipe/selfie_segmentation' in npm.
         };
         const segmenter = await bodySegmentation.createSegmenter(model, segmenterConfig);
-        const segmentationConfig = { flipHorizontal: true };
+        const segmentationConfig = { flipHorizontal: false };
     
         // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
         const imageElement = await convertBlobToImageData(this.props.image);
@@ -86,46 +74,43 @@ class Check extends Component {
         if (!people || people.length === 0) {
             return null; // 세그멘테이션 결과가 없으면 아무것도 렌더링하지 않음
         }
-
+    
         // 이미지 데이터 뒤집기
         const maskImageData = people[0].mask.mask;
-        console.log(maskImageData)
+
         
-        // const flippedImageData = new ImageData(maskImageData.width, maskImageData.height);
+        const flippedImageData = new ImageData(maskImageData.width, maskImageData.height);
     
-        // for (let y = 0; y < maskImageData.height; y++) {
-        //     for (let x = 0; x < maskImageData.width; x++) {
-        //         const sourceIndex = (y * maskImageData.width + (maskImageData.width - 1 - x)) * 4;
-        //         const targetIndex = (y * maskImageData.width + x) * 4;
+        for (let y = 0; y < maskImageData.height; y++) {
+            for (let x = 0; x < maskImageData.width; x++) {
+                const sourceIndex = (y * maskImageData.width + (maskImageData.width - 1 - x)) * 4;
+                const targetIndex = (y * maskImageData.width + x) * 4;
     
-        //         flippedImageData.data[targetIndex] = maskImageData.data[sourceIndex];
-        //         flippedImageData.data[targetIndex + 1] = maskImageData.data[sourceIndex + 1];
-        //         flippedImageData.data[targetIndex + 2] = maskImageData.data[sourceIndex + 2];
-        //         flippedImageData.data[targetIndex + 3] = maskImageData.data[sourceIndex + 3];
-        //     }
-        // }
+                flippedImageData.data[targetIndex] = maskImageData.data[sourceIndex];
+                flippedImageData.data[targetIndex + 1] = maskImageData.data[sourceIndex + 1];
+                flippedImageData.data[targetIndex + 2] = maskImageData.data[sourceIndex + 2];
+                flippedImageData.data[targetIndex + 3] = maskImageData.data[sourceIndex + 3];
+            }
+        }
         console.log('샘플 이미지', checkImageData)
-        console.log('마스크데이터', maskImageData)
+    
         return (
             <div className="check-container">
                 <div style={{ overflowX: 'auto' }}>
-                <canvas
-                    ref={canvasRef => {
-                        if (canvasRef) {
-                            const ctx = canvasRef.getContext('2d');
-
-                            // Canvas의 크기를 이미지 데이터 크기에 맞게 설정
-                            canvasRef.width = maskImageData.width;
-                            canvasRef.height = maskImageData.height;
-
-                            // ImageBitmap을 ImageData로 변환
-                            imageBitmapToImageData(maskImageData).then(imageData => {
+                    <canvas
+                        ref={canvasRef => {
+                            if (canvasRef) {
+                                const ctx = canvasRef.getContext('2d');
+    
+                                // Canvas의 크기를 이미지 데이터 크기에 맞게 설정
+                                canvasRef.width = flippedImageData.width;
+                                canvasRef.height = flippedImageData.height;
+    
                                 // 이미지 데이터를 캔버스에 그립니다
-                                ctx.putImageData(imageData, 0, 0);
-                            });
-                        }
-                    }}
-                />
+                                ctx.putImageData(flippedImageData, 0, 0);
+                            }
+                        }}
+                    />
                 </div>
             </div>
         );

@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { setPhoto } from '../../redux/modules/photoSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+]
+`;
+
 
 function PhotoUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
+
+  const dispatch = useDispatch()
+  // const storedImageUrl = useSelector((state) => state.photo.photoUrl);
 
   useEffect(() => {
     // 로컬 스토리지에서 이미지 URL을 불러와서 상태로 설정
@@ -13,9 +29,15 @@ function PhotoUpload() {
       setPreviewUrl(storedImageUrl);
     }
   }, []);
+  // }, [storedImageUrl]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    if (!file || !(file instanceof Blob)) {
+      // 파일이 선택되지 않았거나 Blob 형식이 아닌 경우 처리
+      console.error('Invalid file');
+      return;
+    }
     setSelectedFile(file);
 
     // 파일을 미리 보기 위해 FileReader를 사용
@@ -42,6 +64,8 @@ function PhotoUpload() {
         }
       })
       console.log(response)
+      dispatch(setPhoto({ photoUrl: imageUrl}))
+      localStorage.setItem('imageUrl', imageUrl);
       // const imageUrl = response.data.imageUrl;
       // response.data가 formdata {}로 빈 값이 출력 
       // setPreviewUrl(imageUrl);
@@ -59,13 +83,18 @@ function PhotoUpload() {
       {/* 이미지 미리 보기 */}
       {previewUrl && <img src={previewUrl} alt="Preview" width="200" height="200" />}
       
+      <StyledForm>
       {/* 파일 선택 버튼 */}
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-
+      <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
+      <input type="button" value="파일추가"
+        onClick={() => {
+          document.getElementById('selectedFile1').click();
+        }}
+      />
       {/* 업로드 버튼 */}
       <button onClick={handleSubmit}>업로드</button>
-
-      {imageUrl && <img src={imageUrl} alt='Uploaded' />}
+      </StyledForm>
+      {/* {imageUrl && <img src={imageUrl} alt='Uploaded' />} */}
     </div>
   );
 }

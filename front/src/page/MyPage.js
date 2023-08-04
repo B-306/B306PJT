@@ -176,7 +176,7 @@ const MyPage = (props) => {
         <React.Fragment>
           {/* <Grid> */}
               {/* <Grid is_flex> */}
-                <PhotoUpload />
+              <PhotoUpload />
               <Image shape="circle" src= {props.src}/>
               {/* </Grid> */}
               {/* <Grid padding='16px'> */}

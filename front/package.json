@@ -5,11 +5,13 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
+    "@mediapipe/selfie_segmentation": "^0.1.1675465747",
     "@reduxjs/toolkit": "^1.9.5",
     "@tensorflow-models/body-pix": "^2.2.0",
     "@tensorflow-models/body-segmentation": "^1.0.2",
     "@tensorflow/tfjs": "^4.10.0",
     "@tensorflow/tfjs-backend-webgl": "^4.10.0",
+    "@tensorflow/tfjs-converter": "^4.10.0",
     "@tensorflow/tfjs-core": "^4.10.0",
     "axios": "^1.4.0",
     "base-64": "^1.0.0",

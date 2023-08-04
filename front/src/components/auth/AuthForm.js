@@ -9,6 +9,13 @@ import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
 import { encodeState } from "../common/CodedState";
+// import AuthMail from "./AuthMail"
+
+const EmailForm = styled.form`
+  display: flex;
+
+
+`
 
 const AuthFormBlock = styled.div`
     h3 {
@@ -51,7 +58,9 @@ const textMap = {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-    
+    const [eamilConfirm, setEmailConfirm] = useState('');
+    // const [view, setView] = useState(false);
+
     const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
@@ -82,11 +91,17 @@ const textMap = {
             alert('유효한 비밀번호(영문, 숫자, 특수기호 조합으로 8자리 이상)를 입력해주세요.');
             return;
           }
+          // e메일 인증보내기
+          // const response = await axios.post('/user/email', {
+          //   // emailConfirm: emailConfirm
+          // });
+
           // 회원가입 요청 보내기
           const response = await axios.post('/user/signup', {
             userName : name,
             userPassword : password,
             userEmail : email,
+            // emailConfirm: emailConfirm
           });
           
           // 회원가입이 성공하면 로그인 페이지로 이동하거나 다른 동작 수행
@@ -184,6 +199,7 @@ const textMap = {
       <AuthFormBlock>
         <h3>{text}</h3>
         <form onSubmit={handleSubmit}>
+          {/* <EmailForm> */}
           {type !== 'modify' && (
             <StyledInput 
               autoComplete="username"
@@ -193,6 +209,21 @@ const textMap = {
               onChange={(e) => setEmail(e.target.value)}
             />
           )}
+          {type !== 'login' && type !== 'modify' && (
+            <ButtonWithMarginTop>
+              인증
+            </ButtonWithMarginTop>
+          )}
+          {/* {type !== 'login' && type !== 'modify' &&(
+                <StyledInput
+                    name="emailConfirm"
+                    placeholder="이메일 인증번호 입력"
+                    value={emailConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)
+                    }
+                />
+            )} */}
+          {/* </EmailForm> */}
           {type !== 'login' && (
             <StyledInput
               // autoComplete="newname"
