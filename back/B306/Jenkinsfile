@@ -6,13 +6,23 @@ pipeline {
             steps {
                 dir('back/B306'){
                     sh '''
+                    pwd
                     echo 'springboot build'
                     chmod +x gradlew
                     ./gradlew clean build
                     '''
                 }
             }
+            post {
+                success {
+                    sh 'echo "Successfully "'
+                }
+                failure {
+                    sh 'echo "Fail"'
+                }
+            }
         }
+
         stage('Dockerimage build') {
             steps {
                 dir('back/B306'){
@@ -22,17 +32,33 @@ pipeline {
                     '''
                 }
             }
+            post {
+                success {
+                    sh 'echo "Successfully "'
+                }
+                failure {
+                    sh 'echo "Fail"'
+                }
+            }
         }
+
         stage('Deploy') {
             steps {
                 dir('back/B306'){
                     sh '''
                     echo 'Deploy'
-
 	                docker stop springboot
                     docker rm springboot
                     docker run -d -p 8080:8080 --name springboot docker-springboot:0.0.1
                     '''
+                }
+            }
+            post {
+                success {
+                    sh 'echo "Successfully "'
+                }
+                failure {
+                    sh 'echo "Fail"'
                 }
             }
         }
