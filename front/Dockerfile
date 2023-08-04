@@ -15,7 +15,7 @@ RUN /bin/sh -c /bin/sh cp -r ./build/ ./openvidu-basic-node/public
 RUN /bin/sh -c /bin/sh cp -r ./openvidu-basic-node /opt/openvidu-basic-node 
 
 RUN /bin/sh -c /bin/sh rm -rf ../openvidu-call-react
-zxcbn
+
 # Install openvidu-basic-node dependencies
 RUN /bin/sh -c yarn --prefix /opt/openvidu-basic-node install
 
