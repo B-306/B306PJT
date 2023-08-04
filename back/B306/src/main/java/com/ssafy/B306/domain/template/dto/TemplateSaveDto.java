@@ -25,8 +25,8 @@ public class TemplateSaveDto {
     private String templateName;
     @NotNull
     private User userPk;
-//    @NotNull
-//    private LocalDateTime templateCreateDate;
+    @NotNull
+    private LocalDateTime templateCreateDate;
 
 
     @Builder
@@ -35,7 +35,7 @@ public class TemplateSaveDto {
         this.templateType = templateType;
         this.templateName = templateName;
         this.userPk = userPk;
-//        this.templateCreateDate = now();
+        this.templateCreateDate = now();
     }
 
     public Template toEntity(TemplateSaveDto templateSaveDto) {
@@ -44,7 +44,7 @@ public class TemplateSaveDto {
                 .templateType(templateSaveDto.getTemplateType())
                 .templateName(templateSaveDto.getTemplateName())
                 .templateUserId(templateSaveDto.getUserPk())
-//                .templateCreateDate(now())
+                .templateCreateDate(now())
                 .build();
     }
 }

@@ -44,7 +44,6 @@ public class QuizService {
         for(Quiz quiz : quizList){
             Quiz q = quizRepository.findById(quiz.getQuizId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 문제집이 없습니다."));
-//            QuizRequestSaveDto saveQuiz = q.toADto(quiz);
             q.modifyQuiz(quiz.toRequestDto(quiz, q.getQuizBookId()));
         }
     }
@@ -59,5 +58,9 @@ public class QuizService {
         }
 
         return quizResponseDtoList;
+    }
+
+    public void deleteQuizList(Long quizBookId) {
+        quizRepository.deleteById(quizBookId);
     }
 }

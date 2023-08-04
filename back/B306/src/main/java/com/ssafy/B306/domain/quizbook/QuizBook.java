@@ -8,6 +8,7 @@ import com.ssafy.B306.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class QuizBook {
     @JoinColumn(name = "user_id")
     private User quizBookUserId;
 
+    @CreationTimestamp
     @Column(name = "quizbook_create_date")
     private LocalDateTime quizBookCreateDate;
 
