@@ -2,14 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Springboot build') {
+        stage('Install Dependencies') {
             steps {
-                dir('back/B306'){
+                dir('front'){
                     sh '''
                     pwd
-                    echo 'springboot build'
-                    chmod +x gradlew
-                    ./gradlew clean build
+                    echo 'yarn install'
+                    yarn install
                     '''
                 }
             }
@@ -23,12 +22,23 @@ pipeline {
             }
         }
 
+        stage('Build') {
+            steps {
+                dir('front') {
+                    sh '''
+                    echo 'yarn build'
+                    yarn build
+                    '''
+                }
+            }
+        }
+
         stage('Dockerimage build') {
             steps {
-                dir('back/B306'){
+                dir('front'){
                     sh '''
                     echo 'Dockerimage build'
-                    docker build -t docker-springboot:0.0.1 .
+                    docker build -t docker-react:0.0.1 .
                     '''
                 }
             }
@@ -44,14 +54,11 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                dir('back/B306'){
+                dir('front'){
                     sh '''
                     echo 'Deploy'
 
-                    docker stop springboot
-                    docker rm springboot
-
-                    docker run -d -p 8080:8080 --name springboot docker-springboot:0.0.1
+                    docker run -d -p 3000:3000 --name react docker-react:0.0.1
                     '''
                 }
             }
