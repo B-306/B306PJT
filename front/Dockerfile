@@ -19,9 +19,11 @@ RUN /bin/sh -c /bin/sh rm -rf ../openvidu-call-react
 # Install openvidu-basic-node dependencies
 RUN /bin/sh -c yarn --prefix /opt/openvidu-basic-node install
 
+RUN chmod +x /path/to/entrypoint.sh
+
 WORKDIR /opt/openvidu-basic-node
 
-COPY /entrypoint.sh .
+COPY entrypoint.sh /path/to/entrypoint.sh
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 
