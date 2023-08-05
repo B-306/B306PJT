@@ -6,7 +6,7 @@ import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
-import Check from './game/CheckSafe';
+import Check from './game/Check';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
@@ -58,14 +58,14 @@ class VideoRoomComponent extends Component {
 
     componentDidMount() {
         const openViduLayoutOptions = {
-            maxRatio: 3 / 2, // The narrowest ratio that will be used (default 2x3)
-            minRatio: 9 / 16, // The widest ratio that will be used (default 16x9)
-            fixedRatio: false, // If this is true then the aspect ratio of the video is maintained and minRatio and maxRatio are ignored (default false)
+            maxRatio: 3 / 4, // The narrowest ratio that will be used (default 2x3)
+            minRatio: 3 / 4, // The widest ratio that will be used (default 16x9)
+            fixedRatio: true, // If this is true then the aspect ratio of the video is maintained and minRatio and maxRatio are ignored (default false)
             bigClass: 'OV_big', // The class to add to elements that should be sized bigger
             bigPercentage: 0.8, // The maximum percentage of space the big ones should take up
-            bigFixedRatio: false, // fixedRatio for the big ones
-            bigMaxRatio: 3 / 2, // The narrowest ratio to use for the big elements (default 2x3)
-            bigMinRatio: 9 / 16, // The widest ratio to use for the big elements (default 16x9)
+            bigFixedRatio: true, // fixedRatio for the big ones
+            bigMaxRatio: 3 / 4, // The narrowest ratio to use for the big elements (default 2x3)
+            bigMinRatio: 3 / 4, // The widest ratio to use for the big elements (default 16x9)
             bigFirst: true, // Whether to place the big one in the top left (true) or bottom right
             animate: true, // Whether you want to animate the transitions
         };
@@ -540,23 +540,36 @@ class VideoRoomComponent extends Component {
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
                 {capturedImage && (
-                    <div style={{ position: 'relative', zIndex: 9999, overflow: 'visible' }}>
+                    <div style={{ position: 'relative', zIndex: 9999, overflow: 'visible', top:'62.4%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute' }}>
                         <Check image={this.state.capturedImage} />
                     </div>
                 )}
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
+                
                 <div id="layout" className="bounds">
                     {this.state.subscribers.map((sub, i) => (
-                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'absolute'}}>
+                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                         </div>
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
+                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
+                            <img
+                                src={require('../assets/images/test_sample.png')}
+                                alt="Sample"
+                                style={{
+                                    position: 'absolute',
+                                    top: '0',
+                                    left: '0',
+                                    width: '100%',
+                                    height: '100%',
+                                    zIndex: '1',
+                                    opacity: '0.3',
+                                }}
+                            />
                         </div>
-                        
                     )}
                     
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
