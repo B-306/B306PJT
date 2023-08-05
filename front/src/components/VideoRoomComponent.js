@@ -540,7 +540,7 @@ class VideoRoomComponent extends Component {
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
                 {capturedImage && (
-                    <div style={{ position: 'relative', zIndex: 9999, overflow: 'visible', top:'62.4%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute' }}>
+                    <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}>
                         <Check image={this.state.capturedImage} />
                     </div>
                 )}
