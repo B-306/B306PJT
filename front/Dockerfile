@@ -27,8 +27,6 @@
 
 # ENTRYPOINT [ "./entrypoint.sh" ]
 
-
-
 FROM node:18-alpine
 
 WORKDIR /app
