@@ -1,4 +1,4 @@
-// authSlice.js
+// photoSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { encodeState } from '../../components/common/CodedState'
 
@@ -14,11 +14,11 @@ const photoSlice = createSlice({
       // console.dir(action.payload);
       state.photoUrl = encodeState(action.payload.photoUrl);
     },
-    clearAuthData: (state) => {
+    clearPhotoData: (state) => {
       state.photoUrl = null;
     },
   },
 });
 
-export const { setPhoto, clearAuthData } = photoSlice.actions;
+export const { setPhoto, clearPhotoData } = photoSlice.actions;
 export default photoSlice.reducer;

@@ -46,11 +46,13 @@ export default function GetDecodedState() {
     const refreshToken = decodeState(useSelector((state) => state.auth.refreshToken));
     const userName = decodeState(useSelector((state) => state.auth.userName));
     const userEmail = decodeState(useSelector((state) => state.auth.userEmail));
+    // const photoUrl = decodeState(useSelector((state) => state.photo.photoUrl));
       // 복호화된 정보를 객체 형태로 리턴
     return {
       accessToken,
       refreshToken,
       userName,
       userEmail,
+      // photoUrl
     };
 }
