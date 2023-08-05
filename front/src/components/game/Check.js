@@ -6,7 +6,7 @@ import '@tensorflow/tfjs-converter';
 // Register WebGL backend.
 import '@tensorflow/tfjs-backend-webgl';
 import '@mediapipe/selfie_segmentation';
-import { div } from '../../../node_modules/@tensorflow/tfjs-core/dist/base';
+// import { div } from '../../../node_modules/@tensorflow/tfjs-core/dist/base';
 
 
 

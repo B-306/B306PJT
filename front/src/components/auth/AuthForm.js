@@ -8,14 +8,14 @@ import axios from "axios";
 import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
-import { encodeState } from "../common/CodedState";
+// import { encodeState } from "../common/CodedState";
 // import AuthMail from "./AuthMail"
 
-const EmailForm = styled.form`
-  display: flex;
+// const EmailForm = styled.form`
+//   display: flex;
 
 
-`
+// `
 
 const AuthFormBlock = styled.div`
     h3 {
@@ -58,7 +58,7 @@ const textMap = {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-    const [eamilConfirm, setEmailConfirm] = useState('');
+    // const [eamilConfirm, setEmailConfirm] = useState('');
     // const [view, setView] = useState(false);
 
     const dispatch = useDispatch()
