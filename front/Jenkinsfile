@@ -7,6 +7,9 @@ pipeline {
                 dir('front'){
                     sh '''
                     pwd
+                    echo 'prepare'
+                    npm install -g yarn
+
                     echo 'yarn install'
                     yarn install
                     '''
