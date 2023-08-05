@@ -14,7 +14,7 @@ public class TemplateResponseDto {
     private String templateImage;
     private char templateType;
     private String templateName;
-    private User templateUserId;
+//    private User templateUserId;
 
     @Builder
     public TemplateResponseDto(Long templateId, String templateImage, char templateType, String templateName, User templateUserId) {
@@ -22,6 +22,6 @@ public class TemplateResponseDto {
         this.templateImage = templateImage;
         this.templateType = templateType;
         this.templateName = templateName;
-        this.templateUserId = templateUserId;
+//        this.templateUserId = templateUserId;
     }
 }

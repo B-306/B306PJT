@@ -22,9 +22,9 @@ public class TemplateController {
     private final ImageUploadService imageUploadService;
 
     @GetMapping("/get")
-    public ResponseEntity<List<TemplateResponseDto>> getTemplateList() {
-
-        return new ResponseEntity<>(templateService.getTemplateList(), HttpStatus.OK);
+    public ResponseEntity<List<TemplateResponseDto>> getTemplateList(HttpServletRequest request) {
+        List<TemplateResponseDto> templateList = templateService.getTemplateList(request);
+        return new ResponseEntity<>(templateList, HttpStatus.OK);
     }
 
     @GetMapping("/get/{templateId}")

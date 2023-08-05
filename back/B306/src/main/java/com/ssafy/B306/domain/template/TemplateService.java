@@ -40,13 +40,15 @@ public class TemplateService {
     }
 
     // 전체 template 조회
-    public List<TemplateResponseDto> getTemplateList() {
+    public List<TemplateResponseDto> getTemplateList(HttpServletRequest request) {
+
+        Long userPk = jwtUtil.extractUserPkFromToken(request);
 
         List<Template> templateList = templateRepository.findAll();
         List<TemplateResponseDto> templateResponseDtoList = new ArrayList<>();
 
         for(Template template : templateList) {
-            if(template.getTemplateDeleteDate() == null) { //삭제 확인
+            if(template.getTemplateDeleteDate() == null && template.getTemplateUserId().getUserId().equals(userPk)) { //삭제 확인
                 TemplateResponseDto trd = template.makeTemplateDto(template);
                 templateResponseDtoList.add(trd);
             }
@@ -97,7 +99,6 @@ public class TemplateService {
 
         templateSaveDto.setTemplateImage(originalTemplate.getTemplateImage());
         originalTemplate.modifyTemplate(templateSaveDto);
-
     }
 
     @Transactional
@@ -116,8 +117,4 @@ public class TemplateService {
 
         originalTemplate.modifyTemplateImage(savePath);
     }
-
-
-
-
 }
