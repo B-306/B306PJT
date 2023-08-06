@@ -35,7 +35,9 @@ WORKDIR /app
 
 COPY package.json .
 
-RUN npm install
+RUN npm install -g yarn
+
+RUN yarn install
 
 # RUN yarn build
 
@@ -43,4 +45,4 @@ COPY . .
 
 EXPOSE 5442
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
