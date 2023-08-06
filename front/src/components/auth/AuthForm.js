@@ -58,7 +58,7 @@ const textMap = {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-    const [eamilConfirm, setEmailConfirm] = useState('');
+    // const [eamilConfirm, setEmailConfirm] = useState('');
     // const [view, setView] = useState(false);
 
     const dispatch = useDispatch()
@@ -195,6 +195,31 @@ const textMap = {
       handleSubmit();
     };
 
+    const emailSubmit = async (e) => {
+      // e.preventDefault();
+      console.log('handleSubmit 실행 \n')
+
+      try {
+        // e메일 인증보내기
+          const response = await axios.post('/user/email', {
+            userEmail : email,
+          });
+          console.log(response.data)
+        } catch (error) {
+          console.error('실패:', error);
+          alert('잘 못된 이메일입니다. 확인해 주세요.')
+          // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+        }
+      }
+        
+
+    const emailButtonClick = (e) => {
+      e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
+      console.log('handleButton1Click 실행 \n')
+      // type에 따라서 다른 동작 수행
+      emailSubmit();
+    };
+
     return (
       <AuthFormBlock>
         <h3>{text}</h3>
@@ -210,7 +235,8 @@ const textMap = {
             />
           )}
           {type !== 'login' && type !== 'modify' && (
-            <ButtonWithMarginTop>
+            // onClick={(e) => handleButton1Click(e)}
+            <ButtonWithMarginTop onClick={(e) => emailButtonClick(e)}>
               인증
             </ButtonWithMarginTop>
           )}
