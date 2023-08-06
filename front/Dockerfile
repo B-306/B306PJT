@@ -29,14 +29,18 @@
 
 FROM node:18-alpine
 
+# FROM nginx
+
 WORKDIR /app
 
 COPY package.json .
 
 RUN yarn install
 
+# RUN yarn build
+
 COPY . .
 
-EXPOSE 3000
+EXPOSE 5442
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
