@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'maven-publish'
 }
 
 group = 'com.ssafy'
@@ -21,6 +22,9 @@ repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/milestone' }
 	maven { url 'https://repo.spring.io/snapshot' }
+	maven {
+		url = uri('https://repo.maven.apache.org/maven2/')
+	}
 }
 
 dependencies {
@@ -71,6 +75,7 @@ dependencies {
 
 	//openvidu
 //	implementation 'io.openvidu:openvidu-java-client:2.19.0'
+	implementation 'io.openvidu:openvidu-java-client:2.28.0'
 }
 jar {
 	enabled = false
@@ -78,4 +83,23 @@ jar {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+
+
+group = 'io.openvidu'
+version = '2.28.0'
+description = 'openvidu-basic-java'
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from(components.java)
+		}
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
 }
