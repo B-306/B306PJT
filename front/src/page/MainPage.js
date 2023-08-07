@@ -143,7 +143,6 @@ const MainPage = () => {
   };
 
 
-  const navigate = useNavigate();
 
   return (
     <CenteredContainer>
