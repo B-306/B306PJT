@@ -38,7 +38,7 @@
     "styled-components": "^6.0.4",
     "web-vitals": "^2.1.0"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://i9b306.q.ssafy.io:8080",
   "scripts": {
     "build": "react-scripts --openssl-legacy-provider build",
     "build:openvidu-react": "npm install --prefix ../library/ && node library-copy.js && cd ../library && npm run create-library",

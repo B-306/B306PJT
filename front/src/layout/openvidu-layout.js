@@ -280,8 +280,8 @@ class OpenViduLayout {
   
     let offsetLeft = 0;
     let offsetTop = 0;
-    let bigOffsetTop = 0;
-    let bigOffsetLeft = 0;
+    // let bigOffsetTop = 0;
+    // let bigOffsetLeft = 0;
   
     const bigOnes = Array.prototype.filter.call(
       this.layoutContainer.querySelectorAll('#' + id + '>.' + this.opts.bigClass),
@@ -301,14 +301,14 @@ class OpenViduLayout {
         bigWidth = WIDTH;
         bigHeight = Math.floor(HEIGHT * this.opts.bigPercentage);
         offsetTop = bigHeight;
-        bigOffsetTop = HEIGHT - offsetTop;
+        // bigOffsetTop = HEIGHT - offsetTop;
       } else {
         // We are wide, going to take up the whole height and arrange the small
         // guys on the right
         bigHeight = HEIGHT;
         bigWidth = Math.floor(WIDTH * this.opts.bigPercentage);
         offsetLeft = bigWidth;
-        bigOffsetLeft = WIDTH - offsetLeft;
+        // bigOffsetLeft = WIDTH - offsetLeft;
       }
       if (this.opts.bigFirst) {
         // Arrange big video in the center

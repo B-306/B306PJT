@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 const InviteLink = () => {
   // 초대 링크 상태
