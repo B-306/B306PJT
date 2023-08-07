@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import Scoring from './Scoring';
 import * as bodySegmentation from '@tensorflow-models/body-segmentation';
 import '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-converter';
 // Register WebGL backend.
 import '@tensorflow/tfjs-backend-webgl';
 import '@mediapipe/selfie_segmentation';
+// import { div } from '../../../node_modules/@tensorflow/tfjs-core/dist/base';
 
 
 
@@ -73,62 +75,67 @@ class Check extends Component {
         // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
         const imageElement = await convertBlobToImageData(this.props.image);
         const people = await segmenter.segmentPeople(imageElement, segmentationConfig);
+
+        const maskImageBitmap = people[0].mask.mask;
+        const maskImageData = await imageBitmapToImageData(maskImageBitmap);
         
         this.setState({
             people: people,
             checkImageData: checkImageData,
+            maskImageBitmap: maskImageBitmap,
+            maskImageData: maskImageData,
         });
     }
 
     render() {
-        const { people, checkImageData } = this.state;
+        const { people, checkImageData, maskImageBitmap, maskImageData } = this.state;
     
         if (!people || people.length === 0) {
             return null; // 세그멘테이션 결과가 없으면 아무것도 렌더링하지 않음
         }
-
-        const maskImageBitmap = people[0].mask.mask;
-        const maskImageData = imageBitmapToImageData(maskImageBitmap);
         
         console.log('샘플 이미지', checkImageData)
         const srgb = [0,0,0,0]
         for (let i=0; i<307200; i++) {
-            if (checkImageData.data[4*i]!=0) {
+            if (checkImageData.data[4*i]!==0) {
                 srgb[0] ++;
             }
-            if (checkImageData.data[4*i+1]!=0) {
+            if (checkImageData.data[4*i+1]!==0) {
                 srgb[1] ++;
             }
-            if (checkImageData.data[4*i+2]!=0) {
+            if (checkImageData.data[4*i+2]!==0) {
                 srgb[2] ++;
             }
-            if (checkImageData.data[4*i+3]!=0) {
+            if (checkImageData.data[4*i+3]!==0) {
                 srgb[3] ++;
             }
         }
         console.log('srgb', srgb)
         console.log('마스크데이터', maskImageData)
         return (
-            <div className="check-container">
-                <div style={{ overflowX: 'auto' }}>
-                <canvas
-                    ref={canvasRef => {
-                        if (canvasRef) {
-                            const ctx = canvasRef.getContext('2d');
+            <div>
+                <div className="check-container">
+                    <div style={{ overflowX: 'auto' }}>
+                        <canvas
+                            ref={canvasRef => {
+                                if (canvasRef) {
+                                    const ctx = canvasRef.getContext('2d');
 
-                            // Canvas의 크기를 이미지 데이터 크기에 맞게 설정
-                            canvasRef.width = maskImageBitmap.width;
-                            canvasRef.height = maskImageBitmap.height;
+                                    // Canvas의 크기를 이미지 데이터 크기에 맞게 설정
+                                    canvasRef.width = maskImageBitmap.width;
+                                    canvasRef.height = maskImageBitmap.height;
 
-                            // ImageBitmap을 ImageData로 변환
-                            imageBitmapToImageData(maskImageBitmap).then(imageData => {
-                                // 이미지 데이터를 캔버스에 그립니다
-                                ctx.putImageData(imageData, 0, 0);
-                            });
-                        }
-                    }}
-                />
+                                    // ImageBitmap을 ImageData로 변환
+                                    imageBitmapToImageData(maskImageBitmap).then(imageData => {
+                                        // 이미지 데이터를 캔버스에 그립니다
+                                        ctx.putImageData(imageData, 0, 0);
+                                    });
+                                }
+                            }}
+                        />
+                    </div>
                 </div>
+                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} />
             </div>
         );
     }

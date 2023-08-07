@@ -1,6 +1,6 @@
 // mainPage.js
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {Link} from 'react-router-dom';
 import Button from '../components/common/Button';
 import Input from "../components/common/Input";
@@ -19,20 +19,20 @@ const handleButtonClick = (e) => {
 };
 
 
-function Dropdown() {
-  // const userEmail = localStorage.getItem("userEmail")
-  const decodedState = GetDecodedState();
-  const { accessToken, refreshToken, userName, userEmail } = decodedState;
+// function Dropdown() {
+//   // const userEmail = localStorage.getItem("userEmail")
+//   const decodedState = GetDecodedState();
+//   const { accessToken, refreshToken, userName, userEmail } = decodedState;
 
-  return (
-    <>
-      <div><Link to={`/${userEmail}/mypage`}>마이페이지</Link></div>
-      {/* <li>마이페이지</li> */}
-      <Button onClick={(e) => handleButtonClick(e)}>로그아웃</Button>
-      {/* <li>로그아웃</li> */}
-    </>
-  );
-}
+//   return (
+//     <>
+//       <div><Link to={`/${userEmail}/mypage`}>마이페이지</Link></div>
+//       {/* <li>마이페이지</li> */}
+//       <Button onClick={(e) => handleButtonClick(e)}>로그아웃</Button>
+//       {/* <li>로그아웃</li> */}
+//     </>
+//   );
+// }
 
 
 const CenteredContainer = styled.div`
@@ -120,7 +120,7 @@ const MainPage = (props) => {
     window.location.href = '/login';
   }
   // 반환된 객체에서 원하는 값을 각각 변수에 저장
-  const { accessToken, refreshToken, userName, userEmail } = decodedState;
+  const { userName, userEmail } = decodedState;
   const [view, setView] = useState(false);
 
   return (
