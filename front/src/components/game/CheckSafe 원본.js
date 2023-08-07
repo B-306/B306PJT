@@ -92,7 +92,7 @@ class Check extends Component {
         }
         console.log('샘플 이미지', checkImageData)
         // let score = 0
-        let srgb = [0,0,0,0];
+        // let srgb = [0,0,0,0];
         // for (let i=0; i<307200; i++) {
         //     // if (checkImageData.data[40*i+3] == 0 && flippedImageData.data[40*i+3])
         //     if (checkImageData.data[4*i] != 0) {
