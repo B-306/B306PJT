@@ -1,7 +1,7 @@
 // mainPage.js
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Button from '../components/common/Button';
 import Input from "../components/common/Input";
 import styled, { keyframes } from 'styled-components';
@@ -106,8 +106,9 @@ const StyledForm = styled.form`
 `;
 
 
-const MainPage = (props) => {
+const MainPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // useHistory 훅을 추가
 
   useEffect(() => {
     dispatch(checkLoginStatus()); // checkLoginStatus 액션을 디스패치합니다.
@@ -122,6 +123,17 @@ const MainPage = (props) => {
   // 반환된 객체에서 원하는 값을 각각 변수에 저장
   const { userName, userEmail } = decodedState;
   const [view, setView] = useState(false);
+  const [code, setCode] = useState('');
+  const handleCodeSubmit = () => {
+    const url = `/game/${code}`;
+    navigate(url);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleCodeSubmit();
+    }
+  };
 
   return (
     <CenteredContainer>
@@ -145,11 +157,19 @@ const MainPage = (props) => {
       {/* {view && <Dropdown />} */}
       <StyledForm>
         <MainPageTitle>두뇌 풀 가동</MainPageTitle>
-        <StyledInput autoComplete="code" name="code" placeholder="입장 코드" />
+        <StyledInput
+          autoComplete="code"
+          name="code"
+          placeholder="입장 코드"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
         <GameCreateButton><Link to={`/${userEmail}/gamecreate`}>방 만들기</Link></GameCreateButton>
-        <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>  
+        {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
         <GameCreateButton><Link to={`/game/1`}>게임방 테스트 방번호 1번</Link></GameCreateButton>
         <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>
+        <GameCreateButton><Link to={`/templatecreate`}>템플릿 업로드 페이지</Link></GameCreateButton>
       </StyledForm>
     </CenteredContainer>
   );
