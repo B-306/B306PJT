@@ -24,6 +24,7 @@ const ImageCircle = styled.div`
     background-image: url("${(props) => props.src}");
     background-size: cover;
     margin: 4px;
+    border: 2px solid #ffffff; /* 추가 */
 `
 
 const Image = (props) => {

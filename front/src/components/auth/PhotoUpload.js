@@ -67,6 +67,7 @@ function PhotoUpload() {
         }
       })
       console.log(response)
+      console.log("사진 업로드")
       dispatch(setPhoto({ photoUrl: imageUrl}))
       localStorage.setItem('imageUrl', imageUrl);
       // const imageUrl = response.data.imageUrl;
