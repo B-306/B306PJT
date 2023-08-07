@@ -11,6 +11,13 @@ import { checkLoginStatus } from '../redux/config/AuthMiddleware'
 import GetDecodedState from '../components/common/CodedState';
 import gamelogoImage from '../assets/images/bfo_logo.png';
 
+//primereact
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+
+
 const handleButtonClick = (e) => {
   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
   return(
@@ -134,6 +141,9 @@ const MainPage = () => {
       handleCodeSubmit();
     }
   };
+
+
+  const navigate = useNavigate();
 
   return (
     <CenteredContainer>
