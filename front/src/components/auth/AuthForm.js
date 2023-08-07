@@ -197,7 +197,7 @@ const textMap = {
 
     const emailSubmit = async (e) => {
       // e.preventDefault();
-      console.log('handleSubmit 실행 \n')
+      console.log('eamilSubmit 실행 \n')
 
       try {
         // e메일 인증보내기
@@ -215,7 +215,7 @@ const textMap = {
 
     const emailButtonClick = (e) => {
       e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
-      console.log('handleButton1Click 실행 \n')
+      console.log('emailButtonClick 실행 \n')
       // type에 따라서 다른 동작 수행
       emailSubmit();
     };
