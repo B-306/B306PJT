@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
-import Button from '../common/Button';
+// import Button from '../common/Button';
+import { Button } from 'primereact/button';
 import Input from "../common/Input";
 import palette from "../../lib/styles/palette";
 import axios from "axios";
@@ -15,7 +16,10 @@ import { setTokens, setUserData } from '../../redux/modules/authSlice';
 //   display: flex;
 
 
-// `
+// 
+// import 'primereact/resources/themes/saga-blue/theme.css';
+// import 'primereact/resources/primereact.min.css';
+// import 'primeicons/primeicons.css';
 
 const AuthFormBlock = styled.div`
     h3 {
@@ -255,6 +259,7 @@ const textMap = {
       emailCheck();
     };
 
+    
 
     return (
       <AuthFormBlock>

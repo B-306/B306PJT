@@ -25,6 +25,7 @@ const GetQuiz = () => {
     axios.get('/quizbook/get')
       .then(response => {
         setQuizBooks(response.data);
+        console.log(response)
       })
       .catch(error => {
         console.error('서버 요청 실패:', error);
