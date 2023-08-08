@@ -15,6 +15,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.time.LocalDateTime.now;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -75,6 +77,7 @@ public class QuizBook {
 
     public void modifyQuizBook(String quizBookTitle) {
         this.quizBookTitle = quizBookTitle;
+        this.quizBookModifyDate = now();
     }
 
 }
