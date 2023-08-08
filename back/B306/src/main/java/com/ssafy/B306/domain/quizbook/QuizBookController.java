@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/quizbook")
+@RequestMapping("/api1/quizbook")
 @RequiredArgsConstructor
 public class QuizBookController {
 

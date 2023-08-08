@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api1/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
