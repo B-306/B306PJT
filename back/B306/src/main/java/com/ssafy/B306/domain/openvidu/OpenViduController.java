@@ -17,7 +17,7 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/openvidu")
 public class OpenViduController {
 
 //    private final OpenViduService openViduService;

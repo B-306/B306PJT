@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api1/template")
+@RequestMapping("/template")
 @RequiredArgsConstructor
 public class TemplateController {
 
