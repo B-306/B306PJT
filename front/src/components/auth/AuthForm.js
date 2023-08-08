@@ -101,10 +101,10 @@ const textMap = {
           //   // emailConfirm: emailConfirm
           // });
 
-          if (!emailConfirm) {
-            alert('email 인증을 해주세요!');
-            return;
-          }
+          // if (!emailConfirm) {
+          //   alert('email 인증을 해주세요!');
+          //   return;
+          // }
 
           // 회원가입 요청 보내기
           const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/signup', {
