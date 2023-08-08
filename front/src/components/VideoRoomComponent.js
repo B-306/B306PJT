@@ -15,7 +15,7 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io:8443/';
 
 
 class VideoRoomComponent extends Component {
@@ -613,7 +613,7 @@ class VideoRoomComponent extends Component {
 
     async createSession(sessionId) {
         const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic T1BFTlZJRFVBUFA6YjMwNmFkbWlu'},
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*",},
         });
         return response.data; // The sessionId
     }
@@ -621,7 +621,7 @@ class VideoRoomComponent extends Component {
     async createToken(sessionId) {
         console.log(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connection')
         const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions' + sessionId + 'connection', {}, {
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic T1BFTlZJRFVBUFA6YjMwNmFkbWlu' },
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", },
         });
         return response.data; // The token
     }
