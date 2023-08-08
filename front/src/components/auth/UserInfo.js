@@ -9,7 +9,7 @@ const UserInfo = () => {
     const accessToken = localStorage.getItem('accessToken');
 
     // 액세스 토큰을 헤더에 포함하여 서버로 요청 보내기
-    axios.get('/api1/user/name', {
+    axios.get('https://i9b306.q.ssafy.io:8080/api1/user/name', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
       },
