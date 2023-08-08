@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';
-import Button from '../components/common/Button';
+// import Button from '../components/common/Button';
+import { Button } from 'primereact/button';
 import Input from "../components/common/Input";
 import styled, { keyframes } from 'styled-components';
 import Logout from '../components/auth/Logout';
@@ -174,9 +175,9 @@ const MainPage = () => {
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <GameCreateButton><Link to={`/${userEmail}/gamecreate`}>방 만들기</Link></GameCreateButton>
+        <GameCreateButton onClick={()=>navigate(`/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
         {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
-        <GameCreateButton><Link to={`/game/1`}>게임방 테스트 방번호 1번</Link></GameCreateButton>
+        <GameCreateButton onClick={()=>navigate(`/game/1`)} >게임방 테스트 방번호 1번</GameCreateButton>
         <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>
         <GameCreateButton><Link to={`/templatecreate`}>템플릿 업로드 페이지</Link></GameCreateButton>
       </StyledForm>
