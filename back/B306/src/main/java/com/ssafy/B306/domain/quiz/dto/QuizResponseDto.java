@@ -13,12 +13,12 @@ import lombok.Setter;
 public class QuizResponseDto {
 
     private Long quizId;
-    private Template quizTemplateId;
+    private Long quizTemplateId;
     private String quizText;
     private char quizAnswer;
 
     @Builder
-    public QuizResponseDto(Long quizId, Template quizTemplateId, String quizText, char quizAnswer) {
+    public QuizResponseDto(Long quizId, Long quizTemplateId, String quizText, char quizAnswer) {
         this.quizId = quizId;
         this.quizTemplateId = quizTemplateId;
         this.quizText = quizText;
