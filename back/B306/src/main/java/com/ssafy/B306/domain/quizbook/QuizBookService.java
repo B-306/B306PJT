@@ -59,11 +59,11 @@ public class QuizBookService {
         return quizListResponseDtoList;
     }
 
-    public QuizBookResponseDto getQuizBook(QuizBook quizBookId) {
-        QuizBook quizBook = quizBookRepository.findById(quizBookId.getQuizBookId()).get();
+    public QuizBookResponseDto getQuizBook(Long quizBookId) {
+        QuizBook quizBook = quizBookRepository.findById(quizBookId).get();
         if(quizBook.getQuizBookdeleteDate() != null) return null;
 
-        List<QuizResponseDto> quizList = quizService.getQuizList(quizBookId);
+        List<QuizResponseDto> quizList = quizService.getQuizList(quizBook);
 
         QuizBookResponseDto quizBookResponseDto = new QuizBookResponseDto();
         quizBookResponseDto = quizBook.toDto(quizBook, quizList);

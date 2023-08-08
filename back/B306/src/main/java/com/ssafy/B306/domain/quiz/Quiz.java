@@ -78,7 +78,7 @@ public class Quiz {
     public QuizResponseDto toDto(Quiz quiz){
         QuizResponseDto quizResponseDto = new QuizResponseDto();
         quizResponseDto.setQuizId(quiz.getQuizId());
-        quizResponseDto.setQuizTemplateId(quiz.getQuizTemplateId());
+        quizResponseDto.setQuizTemplateId(quiz.getQuizTemplateId().getTemplateId());
         quizResponseDto.setQuizText(quiz.getQuizText());
         quizResponseDto.setQuizAnswer(quiz.getQuizAnswer());
 
