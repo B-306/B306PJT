@@ -225,39 +225,39 @@ const textMap = {
       }
         
 
-    const emailButtonClick = (e) => {
-      e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
-      console.log('emailButtonClick 실행 \n')
-      // type에 따라서 다른 동작 수행
-      emailSubmit();
-    };
+    // const emailButtonClick = (e) => {
+    //   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
+    //   console.log('emailButtonClick 실행 \n')
+    //   // type에 따라서 다른 동작 수행
+    //   emailSubmit();
+    // };
 
-    const emailCheck = async () => {
-      // e.preventDefault();
-      console.log('eamilCheck 실행 \n')
-      try {
-        // e메일 검증
-          const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email/auth', {
-            authCode : authCode, 
-            email : email,
-          });
-          console.log(response.data)
-          alert('Email 검증이 완료되었습니다.')
-          setEmailConfirm(true);
-        } catch (error) {
-          console.error('실패:', error);
-          alert('잘 못된 인증코드 입니다. 확인해 주세요.')
-          // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
-        }
-      }
+    // const emailCheck = async () => {
+    //   // e.preventDefault();
+    //   console.log('eamilCheck 실행 \n')
+    //   try {
+    //     // e메일 검증
+    //       const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email/auth', {
+    //         authCode : authCode, 
+    //         email : email,
+    //       });
+    //       console.log(response.data)
+    //       alert('Email 검증이 완료되었습니다.')
+    //       setEmailConfirm(true);
+    //     } catch (error) {
+    //       console.error('실패:', error);
+    //       alert('잘 못된 인증코드 입니다. 확인해 주세요.')
+    //       // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+    //     }
+    //   }
         
 
-    const emailCheckClick = (e) => {
-      e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
-      console.log('emailcheckButtonClick 실행 \n')
-      // type에 따라서 다른 동작 수행
-      emailCheck();
-    };
+    // const emailCheckClick = (e) => {
+    //   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
+    //   console.log('emailcheckButtonClick 실행 \n')
+    //   // type에 따라서 다른 동작 수행
+    //   emailCheck();
+    // };
 
     
 
@@ -275,7 +275,7 @@ const textMap = {
               onChange={(e) => setEmail(e.target.value)}
             />
           )}
-          {type !== 'login' && type !== 'modify' && (
+          {/* {type !== 'login' && type !== 'modify' && (
             <ButtonWithMarginTop onClick={(e) => emailButtonClick(e)}>
               인증
             </ButtonWithMarginTop>
@@ -293,7 +293,7 @@ const textMap = {
             <ButtonWithMarginTop onClick={(e) => emailCheckClick(e)}>
               인증 확인
             </ButtonWithMarginTop>
-          )}
+          )} */}
           {/* </EmailForm> */}
           {type !== 'login' && (
             <StyledInput
