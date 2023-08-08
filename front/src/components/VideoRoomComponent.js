@@ -12,8 +12,10 @@ import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 
+
+
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io:8443/';
 
 
 class VideoRoomComponent extends Component {
@@ -23,7 +25,7 @@ class VideoRoomComponent extends Component {
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
+        let sessionName = this.props.sessionName ? this.props.sessionName : 'sessionA'; // 'sessionA' 대신 방 코드 
         let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
@@ -214,7 +216,7 @@ class VideoRoomComponent extends Component {
         this.setState({
             session: undefined,
             subscribers: [],
-            mySessionId: 'SessionA',
+            mySessionId: 'ses_MBQXIRXOvg',
             myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
             localUser: undefined,
         });
@@ -610,15 +612,16 @@ class VideoRoomComponent extends Component {
     }
 
     async createSession(sessionId) {
-        const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
-            headers: { 'Content-Type': 'application/json', },
+        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions', { customSessionId: sessionId }, {
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*",},
         });
         return response.data; // The sessionId
     }
 
     async createToken(sessionId) {
-        const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
-            headers: { 'Content-Type': 'application/json', },
+        console.log(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connection')
+        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions' + sessionId + 'connection', {}, {
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", },
         });
         return response.data; // The token
     }
