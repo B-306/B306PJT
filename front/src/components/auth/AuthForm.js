@@ -107,7 +107,7 @@ const textMap = {
           // }
 
           // 회원가입 요청 보내기
-          const response = await axios.post('http://i9b306.q.ssafy.io:8080/api1/user/signup', {
+          const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/signup', {
             userName : name,
             userPassword : password,
             userEmail : email,
@@ -127,7 +127,7 @@ const textMap = {
         }} else if (type === 'login') {
           try {
           // 로그인 요청 보내기
-          const response = await axios.post('http://i9b306.q.ssafy.io:8080/api1/user/login', {
+          const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/login', {
             userEmail : email,
             userPassword : password,
           });
