@@ -22,7 +22,7 @@ const GetQuiz = () => {
   const [quizBooks, setQuizBooks] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get('/quizbook/get')
+    axios.get('/api1/quizbook/get')
       .then(response => {
         setQuizBooks(response.data);
         console.log(response)
