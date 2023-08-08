@@ -62,8 +62,8 @@ const textMap = {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-    const [authCode, setAuthCode] = useState('');
-    const [emailConfirm, setEmailConfirm] = useState(false);
+    // const [authCode, setAuthCode] = useState('');
+    // const [emailConfirm, setEmailConfirm] = useState(false);
     // const [view, setView] = useState(false);
 
     const dispatch = useDispatch()
