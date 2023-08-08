@@ -58,7 +58,8 @@ const textMap = {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-    // const [eamilConfirm, setEmailConfirm] = useState('');
+    const [authCode, setAuthCode] = useState('');
+    const [emailConfirm, setEmailConfirm] = useState(false);
     // const [view, setView] = useState(false);
 
     const dispatch = useDispatch()
@@ -95,6 +96,11 @@ const textMap = {
           // const response = await axios.post('/user/email', {
           //   // emailConfirm: emailConfirm
           // });
+
+          if (!emailConfirm) {
+            alert('email 인증을 해주세요!');
+            return;
+          }
 
           // 회원가입 요청 보내기
           const response = await axios.post('/user/signup', {
@@ -195,16 +201,18 @@ const textMap = {
       handleSubmit();
     };
 
-    const emailSubmit = async (e) => {
+    const emailSubmit = async () => {
       // e.preventDefault();
       console.log('eamilSubmit 실행 \n')
+      console.log(email)
 
       try {
         // e메일 인증보내기
           const response = await axios.post('/user/email', {
-            userEmail : email,
+            email : email,
           });
           console.log(response.data)
+          alert('email 인증 코드를 보냈습니다. 5분 안에 인증코드를 입력해주세요!')
         } catch (error) {
           console.error('실패:', error);
           alert('잘 못된 이메일입니다. 확인해 주세요.')
@@ -219,6 +227,34 @@ const textMap = {
       // type에 따라서 다른 동작 수행
       emailSubmit();
     };
+
+    const emailCheck = async () => {
+      // e.preventDefault();
+      console.log('eamilCheck 실행 \n')
+      try {
+        // e메일 검증
+          const response = await axios.post('/user/email/auth', {
+            authCode : authCode, 
+            email : email,
+          });
+          console.log(response.data)
+          alert('Email 검증이 완료되었습니다.')
+          setEmailConfirm(true);
+        } catch (error) {
+          console.error('실패:', error);
+          alert('잘 못된 인증코드 입니다. 확인해 주세요.')
+          // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+        }
+      }
+        
+
+    const emailCheckClick = (e) => {
+      e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
+      console.log('emailcheckButtonClick 실행 \n')
+      // type에 따라서 다른 동작 수행
+      emailCheck();
+    };
+
 
     return (
       <AuthFormBlock>
@@ -235,20 +271,24 @@ const textMap = {
             />
           )}
           {type !== 'login' && type !== 'modify' && (
-            // onClick={(e) => handleButton1Click(e)}
             <ButtonWithMarginTop onClick={(e) => emailButtonClick(e)}>
               인증
             </ButtonWithMarginTop>
           )}
-          {/* {type !== 'login' && type !== 'modify' &&(
+          {type !== 'login' && type !== 'modify' &&(
                 <StyledInput
-                    name="emailConfirm"
+                    name="authCode"
                     placeholder="이메일 인증번호 입력"
-                    value={emailConfirm}
-                    onChange={(e) => setPasswordConfirm(e.target.value)
+                    value={authCode}
+                    onChange={(e) => setAuthCode(e.target.value)
                     }
                 />
-            )} */}
+            )}
+          {type !== 'login' && type !== 'modify' && (
+            <ButtonWithMarginTop onClick={(e) => emailCheckClick(e)}>
+              인증 확인
+            </ButtonWithMarginTop>
+          )}
           {/* </EmailForm> */}
           {type !== 'login' && (
             <StyledInput
