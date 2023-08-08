@@ -43,13 +43,15 @@ public class SecurityConfig  {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/user").permitAll()
+                .antMatchers("/**").permitAll()
+//                .antMatchers("/user/login").permitAll()
+//                .antMatchers("/user/signup").permitAll()
                 .and()
                 .authenticationProvider(jwtAuthenticationProvider)
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login() //oauth2로그인도 추가로 진행
-                .userInfoEndpoint() //oauth2로그인 성공 후에 사용자 정보를 바로 가져온다.
-                .userService(customOAuth2UserService);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+//                .oauth2Login() //oauth2로그인도 추가로 진행
+//                .userInfoEndpoint() //oauth2로그인 성공 후에 사용자 정보를 바로 가져온다.
+//                .userService(customOAuth2UserService);
         return httpSecurity.build();
     }
 }
