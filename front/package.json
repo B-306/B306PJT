@@ -42,6 +42,7 @@
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.0"
   },
+  "proxy": "https://i9b306.q.ssafy.io:8080",
   "scripts": {
     "build": "react-scripts --openssl-legacy-provider build",
     "build:openvidu-react": "npm install --prefix ../library/ && node library-copy.js && cd ../library && npm run create-library",
