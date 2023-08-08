@@ -90,4 +90,10 @@ public class User {
     public void modifyUserImage(String savePath) {
         userProfile = savePath;
     }
+
+    public User modifyUserName(String userName) {
+        this.userName = userName;
+        return this;
+    }
+
 }
