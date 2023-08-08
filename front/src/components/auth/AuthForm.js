@@ -205,24 +205,24 @@ const textMap = {
       handleSubmit();
     };
 
-    const emailSubmit = async () => {
-      // e.preventDefault();
-      console.log('eamilSubmit 실행 \n')
-      console.log(email)
+    // const emailSubmit = async () => {
+    //   // e.preventDefault();
+    //   console.log('eamilSubmit 실행 \n')
+    //   console.log(email)
 
-      try {
-        // e메일 인증보내기
-          const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email', {
-            email : email,
-          });
-          console.log(response.data)
-          alert('email 인증 코드를 보냈습니다. 5분 안에 인증코드를 입력해주세요!')
-        } catch (error) {
-          console.error('실패:', error);
-          alert('잘 못된 이메일입니다. 확인해 주세요.')
-          // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
-        }
-      }
+    //   try {
+    //     // e메일 인증보내기
+    //       const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email', {
+    //         email : email,
+    //       });
+    //       console.log(response.data)
+    //       alert('email 인증 코드를 보냈습니다. 5분 안에 인증코드를 입력해주세요!')
+    //     } catch (error) {
+    //       console.error('실패:', error);
+    //       alert('잘 못된 이메일입니다. 확인해 주세요.')
+    //       // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+    //     }
+    //   }
         
 
     // const emailButtonClick = (e) => {
