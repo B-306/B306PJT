@@ -260,8 +260,9 @@ const textMap = {
     // };
 
     
-
+    console.log('authform확인 test 2023-08-09 13:57')
     return (
+      
       <AuthFormBlock>
         <h3>{text}</h3>
         <form onSubmit={handleSubmit}>
