@@ -612,6 +612,8 @@ class VideoRoomComponent extends Component {
     }
 
     async createSession(sessionId) {
+        console.log('세션 생성')
+        console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions')
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions', { customSessionId: sessionId }, {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
@@ -620,7 +622,7 @@ class VideoRoomComponent extends Component {
 
     async createToken(sessionId) {
         console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection')
-        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions' + sessionId + 'connection', {}, {
+        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection', {}, {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
         return response.data; // The token
