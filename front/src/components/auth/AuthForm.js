@@ -153,7 +153,7 @@ const textMap = {
   
           // 로그인이 성공하면 메인 페이지로 이동하거나 다른 동작 수행
           // 예시: 페이지 리디렉션
-          window.location.href = '/api3/'; // 메인 페이지로 리디렉션
+          window.location.href = '/'; // 메인 페이지로 리디렉션
           // console.log("저장된 토큰:", localStorage.getItem("jwtToken"));
         } catch (error) {
           console.error('실패:', error);
@@ -337,9 +337,9 @@ const textMap = {
           </form>
           <Footer>
             {type === 'login' ? (
-              <Link to="/api3/signup">아직 회원이 아니신가요?</Link>
+              <Link to="/signup">아직 회원이 아니신가요?</Link>
             ) : type === 'signup' ? (
-              <Link to="/api3/login">이미 가입하셨나요?</Link>
+              <Link to="/login">이미 가입하셨나요?</Link>
             ) : null}
           </Footer>
         </AuthFormBlock>
