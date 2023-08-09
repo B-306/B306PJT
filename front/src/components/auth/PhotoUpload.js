@@ -94,7 +94,7 @@ function PhotoUpload() {
     <div>
       {/* 이미지 미리 보기 */}
       {previewUrl && <img src={previewUrl} alt="Preview" width="200" height="200" />}
-      {photoUrl && <img src={photoUrl} alt="Preview" width="200" height="200" />}
+      {photoUrl && <img src={photoUrl} alt="Profile" width="200" height="200" />}
       <StyledForm onSubmit={handleSubmit}>
       {/* 파일 선택 버튼 */}
       <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>

@@ -127,6 +127,7 @@ const MainPage = () => {
   const jwtToken = localStorage.getItem('accessToken');
   if (!jwtToken) {
     console.log('토큰없음 테스트 2023-08-09 13:55')
+    
     window.location.href = '/login';
   }
   // 반환된 객체에서 원하는 값을 각각 변수에 저장
@@ -155,7 +156,7 @@ const MainPage = () => {
           <div>
             <Link to={`/${userEmail}/mypage`}>마이페이지</Link>
           </div>
-          <Button onClick={(e) => handleButtonClick(e)}>로그아웃</Button>
+          <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
         </DropdownMenu>
       )}
       {/* <span
