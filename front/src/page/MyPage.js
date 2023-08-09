@@ -1,7 +1,7 @@
 // import Grid from '../components/common/Grid';
 import Image from '../components/common/Image';
-import React, { useState, useNavigate } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 // import Input from "../components/common/Input";
 import styled from 'styled-components';
 // import Button from "../components/common/Button";
