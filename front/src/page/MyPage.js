@@ -10,6 +10,10 @@ import axios from 'axios';
 import PhotoUpload from '../components/auth/PhotoUpload'
 import AuthForm from '../components/auth/AuthForm';
 import GetDecodedState from '../components/common/CodedState';
+import {
+  // useDispatch,
+  useSelector
+} from 'react-redux';
 
 // const ButtonWithMargin = styled(Button)`
 //   margin-top: 1rem;
@@ -166,7 +170,8 @@ const MyPage = (props) => {
 
   const decodedState = GetDecodedState();
   const { userName, userEmail } = decodedState;
-      
+
+  const photoUrl = useSelector((state) => state.photo.photoUrl);    
 
     return (
       <>
@@ -177,6 +182,7 @@ const MyPage = (props) => {
           {/* <Grid> */}
               {/* <Grid is_flex> */}
               <PhotoUpload />
+              <Image shape="circle" src= {photoUrl}/>
               <Image shape="circle" src= {props.src}/>
               {/* </Grid> */}
               {/* <Grid padding='16px'> */}
