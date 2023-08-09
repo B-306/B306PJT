@@ -9,6 +9,7 @@ import axios from "axios";
 import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
+import { setPhoto } from '../../redux/modules/photoSlice';
 // import { encodeState } from "../common/CodedState";
 // import AuthMail from "./AuthMail"
 
@@ -144,7 +145,7 @@ const textMap = {
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
           dispatch(setUserData({ userName: response.data.userName, userEmail: email }));
-          
+          dispatch(setPhoto({ photoUrl: response.data.userProfile}));
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
           // 07.27 오전 10:41분 작성 이름 확

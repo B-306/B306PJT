@@ -160,7 +160,7 @@ const MainPage = () => {
           <div>
             <Link to={`/${userEmail}/mypage`}>마이페이지</Link>
           </div>
-          <Button onClick={(e) => handleButtonClick(e)}>로그아웃</Button>
+          <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
         </DropdownMenu>
       )}
       {/* <span
