@@ -11,21 +11,22 @@ import Check from './game/Check';
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-
+// import { v4 } from 'uuid';
 
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io:8443/';
-
+console.log('NODE_ENV 상태 : ' + process.env.NODE_ENV);
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9b306.q.ssafy.io/api2' : 'https://i9b306.q.ssafy.io/api2';
+const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 
 class VideoRoomComponent extends Component {
 
     constructor(props) {
-        
+        // let roomCode = v4();
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = this.props.sessionName ? this.props.sessionName : 'sessionA'; // 'sessionA' 대신 방 코드 
+        let sessionName = this.props.sessionName ? this.props.sessionName : 'roomCode'; // 'sessionA' 대신 방 코드 
         let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
@@ -105,6 +106,7 @@ class VideoRoomComponent extends Component {
     }
 
     async connectToSession() {
+        console.log(this.props)
         if (this.props.token !== undefined) {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
@@ -511,7 +513,7 @@ class VideoRoomComponent extends Component {
         var chatDisplay = { display: this.state.chatDisplay };
         
         const { capturedImage } = this.state;
-
+        
         return (
             <div className="container" id="container">
                 
@@ -607,23 +609,32 @@ class VideoRoomComponent extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        const sessionId = await this.createSession(this.state.mySessionId);
+        const sessionData = await this.createSession(this.state.mySessionId);
+        const sessionId = sessionData.sessionId;
+        console.log('제발 나와라이' + sessionId);
         return await this.createToken(sessionId);
     }
 
     async createSession(sessionId) {
+        console.log('세션 생성')
+        console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions')
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions', { customSessionId: sessionId }, {
-            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*",},
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
+        console.log('createSession 리턴값------------')
+        console.log(response.data)
         return response.data; // The sessionId
     }
 
     async createToken(sessionId) {
-        console.log(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connection')
-        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions' + sessionId + 'connection', {}, {
-            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", },
+        
+        console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection')
+        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection', {}, {
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
-        return response.data; // The token
+        console.log('토큰 생성 확인')
+        console.log(response.data.token)
+        return response.data.token; // The token
     }
 }
 export default VideoRoomComponent;

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import Button from '../common/Button';
 import { Button } from 'primereact/button';
 import Input from "../common/Input";
@@ -9,6 +9,7 @@ import axios from "axios";
 import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
+import { setPhoto } from '../../redux/modules/photoSlice';
 // import { encodeState } from "../common/CodedState";
 // import AuthMail from "./AuthMail"
 
@@ -57,6 +58,7 @@ const textMap = {
 
   
   const AuthForm = ({ type }) => {
+    
     const text = textMap[type];
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -65,7 +67,8 @@ const textMap = {
     // const [authCode, setAuthCode] = useState('');
     // const [emailConfirm, setEmailConfirm] = useState(false);
     // const [view, setView] = useState(false);
-
+    
+    const navigate = useNavigate();
     const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
@@ -118,8 +121,11 @@ const textMap = {
           // 예시: 페이지 리디렉션
           console.log(response.data)
           console.log('회원가입 성공')
-          window.location.href = '/login'; // 로그인 페이지로 리디렉션
-          
+          setTimeout(function() {
+            const url = `/login`;
+            navigate(url);
+            console.log('로그인 페이지 리다이렉트');
+          }, 1);
         } catch (error) {
           console.error('실패:', error);
           alert('이미 가입된 이메일입니다.')
@@ -139,7 +145,7 @@ const textMap = {
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
           dispatch(setUserData({ userName: response.data.userName, userEmail: email }));
-          
+          dispatch(setPhoto({ photoUrl: response.data.userProfile}));
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
           // 07.27 오전 10:41분 작성 이름 확
@@ -168,7 +174,7 @@ const textMap = {
           // 회원가입 요청 보내기
           try {
             // 회원정보 수정 요청 보내기
-            const response = await axios.patch('http://i9b306.q.ssafy.io:8080/api1/user/modify', {
+            const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
               userName: name,
               userPassword: password,
               userProfile: null,
@@ -212,7 +218,7 @@ const textMap = {
 
     //   try {
     //     // e메일 인증보내기
-    //       const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email', {
+    //       const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email', {
     //         email : email,
     //       });
     //       console.log(response.data)
@@ -237,7 +243,7 @@ const textMap = {
     //   console.log('eamilCheck 실행 \n')
     //   try {
     //     // e메일 검증
-    //       const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email/auth', {
+    //       const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email/auth', {
     //         authCode : authCode, 
     //         email : email,
     //       });
@@ -260,8 +266,9 @@ const textMap = {
     // };
 
     
-
+    console.log('authform확인 test 2023-08-09 13:57')
     return (
+      
       <AuthFormBlock>
         <h3>{text}</h3>
         <form onSubmit={handleSubmit}>
