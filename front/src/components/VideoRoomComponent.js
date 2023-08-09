@@ -607,7 +607,8 @@ class VideoRoomComponent extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        const sessionId = this.createSession().sessionId;
+        const sessionData = await this.createSession();
+        const sessionId = sessionData.sessionId;
         console.log('제발 나와라이' + sessionId);
         return await this.createToken(sessionId);
     }
@@ -624,11 +625,12 @@ class VideoRoomComponent extends Component {
     }
 
     async createToken(sessionId) {
-        console.log('토큰 생성 확인')
+        
         console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection')
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection', {}, {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
+        console.log('토큰 생성 확인')
         return response.data; // The token
     }
 }
