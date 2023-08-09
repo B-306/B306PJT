@@ -27,20 +27,39 @@
 
 # ENTRYPOINT [ "./entrypoint.sh" ]
 
-FROM node:18-alpine
 
-# FROM nginx
+#####################원래 하던 거###########################
+
+
+# FROM node:18-alpine
+
+# # FROM nginx
+
+# WORKDIR /app
+
+# COPY package.json .
+
+# RUN yarn install
+
+# # RUN yarn build
+
+# COPY . .
+
+# EXPOSE 3000
+
+# CMD ["yarn", "start"]
+
+######################################################
+
+FROM node:18-alpine as builder
 
 WORKDIR /app
-
-COPY package.json .
+COPY ./package.json /app
 
 RUN yarn install
+COPY ./ ./
+RUN yarn build
 
-# RUN yarn build
-
-COPY . .
-
+FROM nginx
 EXPOSE 3000
-
-CMD ["yarn", "start"]
+COPY --from=builder /app/build /user/share/nginx/html
