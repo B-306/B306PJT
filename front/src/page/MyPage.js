@@ -134,7 +134,6 @@ const CenteredContainer = styled.div`
 // };
 
 const deleteAccount = async (e) => {
-  
     e.preventDefault();
     // const decodedState = GetDecodedState();
     // const { accessToken, refreshToken, userName, userEmail } = decodedState;
@@ -167,8 +166,8 @@ const MyPage = (props) => {
 
   const decodedState = GetDecodedState();
   const { userName, userEmail } = decodedState;
-  
   const navigate = useNavigate();
+      
 
     return (
       <>
@@ -209,7 +208,7 @@ const MyPage = (props) => {
               </div>
           {/* </Grid> */}
         </React.Fragment>
-        <button type="button" onClick={()=>{deleteAccount(); navigate('/login');}}>회원 탈퇴</button>
+        <button type="button" onClick={()=>{deleteAccount().then(()=>{navigate('/login');});}}>회원 탈퇴</button>
       </CenteredContainer>
       </>
     );
