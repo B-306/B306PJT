@@ -11,7 +11,7 @@ import Check from './game/Check';
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-import { v4 } from 'uuid';
+// import { v4 } from 'uuid';
 
 
 var localUser = new UserModel();
@@ -21,7 +21,7 @@ const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 class VideoRoomComponent extends Component {
 
     constructor(props) {
-        let roomCode = v4();
+        // let roomCode = v4();
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
