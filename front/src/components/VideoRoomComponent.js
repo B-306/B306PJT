@@ -11,7 +11,7 @@ import Check from './game/Check';
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-
+import { v4 } from 'uuid';
 
 
 var localUser = new UserModel();
@@ -21,11 +21,11 @@ const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 class VideoRoomComponent extends Component {
 
     constructor(props) {
-        
+        let roomCode = v4();
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = this.props.sessionName ? this.props.sessionName : 'sessionA'; // 'sessionA' 대신 방 코드 
+        let sessionName = this.props.sessionName ? this.props.sessionName : roomCode; // 'sessionA' 대신 방 코드 
         let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
@@ -632,7 +632,7 @@ class VideoRoomComponent extends Component {
         });
         console.log('토큰 생성 확인')
         console.log(response.data.token)
-        return response.data; // The token
+        return response.data.token; // The token
     }
 }
 export default VideoRoomComponent;
