@@ -31,23 +31,6 @@
 #####################원래 하던 거###########################
 
 
-# FROM node:18-alpine
-
-# WORKDIR /app
-
-# COPY package.json .
-
-# RUN yarn install
-  
-# COPY . .
-
-# EXPOSE 3000
-
-# CMD ["yarn", "start"]
-
-######################################################
-
-
 FROM node:18-alpine
 
 WORKDIR /app
@@ -60,9 +43,26 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["yarn", "build"]
+CMD ["yarn", "start"]
 
-# 502 Bad Gateway
+######################################################
+
+
+# FROM node:18-alpine
+
+# WORKDIR /app
+
+# COPY package.json .
+
+# RUN yarn install
+  
+# COPY . .
+
+# EXPOSE 3000
+
+# CMD ["yarn", "build"]
+
+## 502 Bad Gateway
 
 
 ########################################################
