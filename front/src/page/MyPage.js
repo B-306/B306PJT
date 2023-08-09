@@ -15,7 +15,6 @@ import GetDecodedState from '../components/common/CodedState';
 //   margin-top: 1rem;
 //   margin-bottom: 1rem;
 // `;
-
 const MypageH1 = styled.h1`
   text-align: center;
   color: white;
@@ -135,6 +134,7 @@ const CenteredContainer = styled.div`
 // };
 
 const deleteAccount = async (e) => {
+  
     e.preventDefault();
     // const decodedState = GetDecodedState();
     // const { accessToken, refreshToken, userName, userEmail } = decodedState;
@@ -153,13 +153,6 @@ const deleteAccount = async (e) => {
       alert('그동안 이용해주셔서 감사합니다.');
       // window.location.href = '/login';
       
-      setTimeout(function() {
-        const navigate = useNavigate();
-        const url = `/login`;
-        navigate(url);
-        console.log('로그인 페이지 리다이렉트');
-      }, 1);
-
     } catch(err) {
       console.error(err)
       alert(err.response.data.message);
@@ -175,6 +168,7 @@ const MyPage = (props) => {
   const decodedState = GetDecodedState();
   const { userName, userEmail } = decodedState;
   
+  const navigate = useNavigate();
 
     return (
       <>
@@ -215,7 +209,7 @@ const MyPage = (props) => {
               </div>
           {/* </Grid> */}
         </React.Fragment>
-        <button type="button" onClick={deleteAccount}>회원 탈퇴</button>
+        <button type="button" onClick={()=>{deleteAccount(); navigate('/login');}}>회원 탈퇴</button>
       </CenteredContainer>
       </>
     );
