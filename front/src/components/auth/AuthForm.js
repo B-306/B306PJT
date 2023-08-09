@@ -145,7 +145,8 @@ const textMap = {
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
           dispatch(setUserData({ userName: response.data.userName, userEmail: email }));
-          dispatch(setPhoto({ photoUrl: response.data.userProfile}));
+          const photoUrl = response.data.userProfile
+          dispatch(setPhoto({ photoUrl: photoUrl}));
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
           // 07.27 오전 10:41분 작성 이름 확
