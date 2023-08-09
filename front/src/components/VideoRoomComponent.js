@@ -15,8 +15,8 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io:8443';
-
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io';
+const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 
 class VideoRoomComponent extends Component {
 
@@ -511,7 +511,7 @@ class VideoRoomComponent extends Component {
         var chatDisplay = { display: this.state.chatDisplay };
         
         const { capturedImage } = this.state;
-
+        
         return (
             <div className="container" id="container">
                 
@@ -613,15 +613,15 @@ class VideoRoomComponent extends Component {
 
     async createSession(sessionId) {
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions', { customSessionId: sessionId }, {
-            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*",},
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
         return response.data; // The sessionId
     }
 
     async createToken(sessionId) {
-        console.log(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connection')
+        console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection')
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions' + sessionId + 'connection', {}, {
-            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", },
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
         return response.data; // The token
     }
