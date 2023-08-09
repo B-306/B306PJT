@@ -150,7 +150,7 @@ const deleteAccount = async (e) => {
         });
         localStorage.clear();
       alert('그동안 이용해주셔서 감사합니다.');
-      window.location.href = '/';
+      window.location.href = '/api3/';
       
     } catch(err) {
       console.error(err)

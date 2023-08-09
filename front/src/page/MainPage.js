@@ -128,7 +128,7 @@ const MainPage = () => {
   if (!jwtToken) {
     console.log('토큰없음 테스트 2023-08-09 13:55')
     setTimeout(function() {
-      const url = `/login`;
+      const url = `/api3/login`;
       navigate(url);
       console.log('로그인 페이지 리다이렉트');
     }, 1);
@@ -158,9 +158,9 @@ const MainPage = () => {
       {view && (
         <DropdownMenu>
           <div>
-            <Link to={`/${userEmail}/mypage`}>마이페이지</Link>
+            <Link to={`/api3/${userEmail}/mypage`}>마이페이지</Link>
           </div>
-          <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
+          <Button onClick={(e) => {handleButtonClick(e); navigate('/api3/login');}}>로그아웃</Button>
         </DropdownMenu>
       )}
       {/* <span
@@ -181,7 +181,7 @@ const MainPage = () => {
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <GameCreateButton onClick={()=>navigate(`/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
+        <GameCreateButton onClick={()=>navigate(`/api3/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
         {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
         <GameCreateButton onClick={()=>navigate(`/game/1`)} >게임방 테스트 방번호 1번</GameCreateButton>
         <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>

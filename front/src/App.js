@@ -13,17 +13,17 @@ import TemplateUploadPage from './page/TemplateUploadPage';
 const App = () => {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/api3/login" element={<LoginPage />} />
+      <Route path="/api3/signup" element={<SignupPage />} />
       <Route path="/game/:string" element={<VideoRoomComponent />} />
       {/* <Route path="/game/1" element={<VideoRoomComponent />} /> */}
-      <Route path="/@:useremail" element={<MainPage />} />
-      <Route path="/" element={<MainPage />} />
-      <Route path="/:useremail/mypage" element={<MyPage />} />
+      <Route path="/api3/@:useremail" element={<MainPage />} />
+      <Route path="/api3/" element={<MainPage />} />
+      <Route path="/api3/:useremail/mypage" element={<MyPage />} />
       {/* <Route path="/mypage" element={<MyPage />} /> */}
       {/* <Route path="/gamecreate" element={<GameCreate />} /> */}
-      <Route path="/:useremail/gamecreate" element={<GameCreate />} />
-      <Route path="/templatecreate" element={<TemplateUploadPage />} />
+      <Route path="/api3/:useremail/gamecreate" element={<GameCreate />} />
+      <Route path="/api3/templatecreate" element={<TemplateUploadPage />} />
     </Routes>
   );
 };

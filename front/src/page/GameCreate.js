@@ -45,7 +45,7 @@ const GetQuiz = () => {
       localStorage.setItem('selectedQuizes', quizIds);
       const roomCode = uuidv4();
       localStorage.setItem('roomCode',roomCode)
-      window.location.href = `/game/${roomCode}`;
+      window.location.href = `/api3/game/${roomCode}`;
     })
     .catch(error => {
       console.error('서버 요청 실패:', error);
