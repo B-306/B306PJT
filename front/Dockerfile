@@ -31,19 +31,19 @@
 #####################원래 하던 거###########################
 
 
-# FROM node:18-alpine
+FROM node:18-alpine
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY package.json .
+COPY package.json .
 
-# RUN yarn install
+RUN yarn install
   
-# COPY . .
+COPY . .
 
-# EXPOSE 3000
+EXPOSE 3000
 
-# CMD ["yarn", "start"]
+CMD ["yarn", "start"]
 
 ######################################################
 
@@ -63,28 +63,28 @@
 #######################################################
 
 
-# Node 이미지를 기반으로 애플리케이션을 빌드합니다.
-FROM node:18-alpine AS build
+# # Node 이미지를 기반으로 애플리케이션을 빌드합니다.
+# FROM node:18-alpine AS build
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY package.json .
-COPY yarn.lock .
+# COPY package.json .
+# COPY yarn.lock .
 
-RUN yarn install
+# RUN yarn install
 
-COPY . .
+# COPY . .
 
-# 프로덕션 모드로 애플리케이션을 빌드합니다.
-RUN yarn build
+# # 프로덕션 모드로 애플리케이션을 빌드합니다.
+# RUN yarn build
 
-# Nginx 이미지를 기반으로 프로덕션 환경을 설정합니다.
-FROM nginx
+# # Nginx 이미지를 기반으로 프로덕션 환경을 설정합니다.
+# FROM nginx
 
-# 빌드된 애플리케이션 파일을 Nginx 서버에 복사합니다.
-COPY --from=build /app/build /usr/share/nginx/html
+# # 빌드된 애플리케이션 파일을 Nginx 서버에 복사합니다.
+# COPY --from=build /app/build /usr/share/nginx/html
 
-# 포트를 열어 Nginx 서버를 실행합니다.
-EXPOSE 80
+# # 포트를 열어 Nginx 서버를 실행합니다.
+# EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
