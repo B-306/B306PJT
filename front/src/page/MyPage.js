@@ -1,7 +1,7 @@
 // import Grid from '../components/common/Grid';
 import Image from '../components/common/Image';
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import Input from "../components/common/Input";
 import styled from 'styled-components';
 // import Button from "../components/common/Button";
@@ -150,7 +150,7 @@ const deleteAccount = async (e) => {
         });
         localStorage.clear();
       alert('그동안 이용해주셔서 감사합니다.');
-      // window.location.href = '/login';
+      window.location.href = '/';
       
     } catch(err) {
       console.error(err)
@@ -166,7 +166,6 @@ const MyPage = (props) => {
 
   const decodedState = GetDecodedState();
   const { userName, userEmail } = decodedState;
-  const navigate = useNavigate();
       
 
     return (
@@ -208,7 +207,7 @@ const MyPage = (props) => {
               </div>
           {/* </Grid> */}
         </React.Fragment>
-        <button type="button" onClick={()=>{deleteAccount().then(()=>{navigate('/login');});}}>회원 탈퇴</button>
+        <button type="button" onClick={()=>deleteAccount()}>회원 탈퇴</button>
       </CenteredContainer>
       </>
     );
