@@ -106,7 +106,7 @@ class VideoRoomComponent extends Component {
     }
 
     async connectToSession() {
-        console.log('props 확인 : ' + this.props)
+        console.log(this.props)
         if (this.props.token !== undefined) {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
