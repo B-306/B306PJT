@@ -11,11 +11,13 @@ public class UserRegisterRequestDto {
     private String userEmail;
     private String userName;
     private String userPassword;
+    private String userProfile;
 
     public User toEntity(String password){
         return User.builder()
                 .userEmail(this.userEmail)
                 .userName(this.userName)
+                .userProfile("src/main/resources/image/profile/neo.png")
                 .userPassword(password)
                 .build();
     }
