@@ -1,6 +1,6 @@
 // import Grid from '../components/common/Grid';
 import Image from '../components/common/Image';
-import React, { useState } from 'react'
+import React, { useState, useNavigate } from 'react'
 import { Link } from 'react-router-dom';
 // import Input from "../components/common/Input";
 import styled from 'styled-components';
@@ -151,7 +151,15 @@ const deleteAccount = async (e) => {
         });
         localStorage.clear();
       alert('그동안 이용해주셔서 감사합니다.');
-      window.location.href = '/login';
+      // window.location.href = '/login';
+      
+      setTimeout(function() {
+        const navigate = useNavigate();
+        const url = `/login`;
+        navigate(url);
+        console.log('로그인 페이지 리다이렉트');
+      }, 1);
+
     } catch(err) {
       console.error(err)
       alert(err.response.data.message);
