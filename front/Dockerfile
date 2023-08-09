@@ -73,12 +73,14 @@ WORKDIR /app
 COPY ./package.json /app
 
 RUN yarn install
-COPY ./ ./
+COPY . .
 RUN yarn build
 
 FROM nginx
 EXPOSE 3000
 COPY --from=builder /app/build /usr/share/nginx/html
+
+CMD ["nginx", "-g", "daemon off;"]
 
 ## 502 Bad Gateway
 
