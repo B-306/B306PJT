@@ -168,7 +168,7 @@ const textMap = {
           // 회원가입 요청 보내기
           try {
             // 회원정보 수정 요청 보내기
-            const response = await axios.patch('http://i9b306.q.ssafy.io:8080/api1/user/modify', {
+            const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
               userName: name,
               userPassword: password,
               userProfile: null,
@@ -212,7 +212,7 @@ const textMap = {
 
     //   try {
     //     // e메일 인증보내기
-    //       const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email', {
+    //       const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email', {
     //         email : email,
     //       });
     //       console.log(response.data)
@@ -237,7 +237,7 @@ const textMap = {
     //   console.log('eamilCheck 실행 \n')
     //   try {
     //     // e메일 검증
-    //       const response = await axios.post('https://i9b306.q.ssafy.io:8080/api1/user/email/auth', {
+    //       const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email/auth', {
     //         authCode : authCode, 
     //         email : email,
     //       });

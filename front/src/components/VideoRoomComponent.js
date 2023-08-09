@@ -15,7 +15,7 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io:8443/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io:8443';
 
 
 class VideoRoomComponent extends Component {

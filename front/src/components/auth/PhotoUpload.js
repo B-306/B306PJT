@@ -61,7 +61,7 @@ function PhotoUpload() {
 
       
       // 서버로 업로드하는 API 호출
-      const response = await axios.post("https://i9b306.q.ssafy.io:8080/api1/image/profile", formData, {
+      const response = await axios.post("https://i9b306.q.ssafy.io/api1/image/profile", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'accessToken': `${localStorage.getItem("accessToken")}`

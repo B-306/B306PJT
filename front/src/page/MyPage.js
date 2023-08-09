@@ -143,7 +143,7 @@ const deleteAccount = async (e) => {
     if (window.confirm('확인을 누르면 회원 정보가 삭제됩니다.')) {
       // console.log(`${localStorage.getItem("accessToken")}`)
       try {
-        await axios.patch('https://i9b306.q.ssafy.io:8080/api1/user/delete', null, {
+        await axios.patch('https://i9b306.q.ssafy.io/api1/user/delete', null, {
           headers: {
             'accessToken': localStorage.getItem("accessToken"), // 토큰을 헤더에 포함하여 전송
             // 'accessToken': accessToken
