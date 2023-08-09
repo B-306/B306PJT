@@ -27,20 +27,90 @@
 
 # ENTRYPOINT [ "./entrypoint.sh" ]
 
-FROM node:18-alpine
 
-# FROM nginx
+#####################원래 하던 거###########################
+
+
+# FROM node:18-alpine
+
+# WORKDIR /app
+
+# COPY package.json .
+
+# RUN yarn install
+  
+# COPY . .
+
+# EXPOSE 3000
+
+# CMD ["yarn", "start"]
+
+######################################################
+
+
+# FROM node:18-alpine
+
+# WORKDIR /app
+
+# COPY package.json .
+
+# RUN yarn install
+  
+# COPY . .
+
+# EXPOSE 3000
+
+# CMD ["yarn", "build"]
+
+## 502 Bad Gateway
+
+
+########################################################
+
+FROM node:18-alpine as builder
 
 WORKDIR /app
-
-COPY package.json .
+COPY ./package.json /app
 
 RUN yarn install
+COPY . .
+RUN yarn build
 
+FROM nginx
+EXPOSE 3000
+COPY --from=builder /app/build /usr/share/nginx/html
+
+CMD ["nginx", "-g", "daemon off;"]
+
+## 502 Bad Gateway
+
+#######################################################
+
+
+# Node 이미지를 기반으로 애플리케이션을 빌드합니다.
+# FROM node:18-alpine AS build
+
+# WORKDIR /app
+
+# COPY package.json .
+# COPY yarn.lock .
+
+# RUN yarn install
+
+# COPY . .
+
+# # 프로덕션 모드로 애플리케이션을 빌드합니다.
 # RUN yarn build
 
-COPY . .
+# # Nginx 이미지를 기반으로 프로덕션 환경을 설정합니다.
+# FROM nginx
 
-EXPOSE 3000
+# # 빌드된 애플리케이션 파일을 Nginx 서버에 복사합니다.
+# COPY --from=build /app/build /usr/share/nginx/html
 
-CMD ["yarn", "start"]
+# # 포트를 열어 Nginx 서버를 실행합니다.
+# EXPOSE 3000
+
+# CMD ["nginx", "-g", "daemon off;"]
+
+## 502 Bad Gateway
