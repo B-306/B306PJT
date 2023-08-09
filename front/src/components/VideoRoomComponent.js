@@ -631,6 +631,7 @@ class VideoRoomComponent extends Component {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
         console.log('토큰 생성 확인')
+        console.log(response.data.token)
         return response.data; // The token
     }
 }
