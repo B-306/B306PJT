@@ -31,19 +31,19 @@
 #####################원래 하던 거###########################
 
 
-FROM node:18-alpine
+# FROM node:18-alpine
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY package.json .
+# COPY package.json .
 
-RUN yarn install
+# RUN yarn install
   
-COPY . .
+# COPY . .
 
-EXPOSE 3000
+# EXPOSE 3000
 
-CMD ["yarn", "start"]
+# CMD ["yarn", "start"]
 
 ######################################################
 
@@ -67,18 +67,18 @@ CMD ["yarn", "start"]
 
 ########################################################
 
-# FROM node:18-alpine as builder
+FROM node:18-alpine as builder
 
-# WORKDIR /app
-# COPY ./package.json /app
+WORKDIR /app
+COPY ./package.json /app
 
-# RUN yarn install
-# COPY ./ ./
-# RUN yarn build
+RUN yarn install
+COPY ./ ./
+RUN yarn build
 
-# FROM nginx
-# EXPOSE 3000
-# COPY --from=builder /app/build /usr/share/nginx/html
+FROM nginx
+EXPOSE 3000
+COPY --from=builder /app/build /usr/share/nginx/html
 
 ## 502 Bad Gateway
 
