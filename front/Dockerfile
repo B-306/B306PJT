@@ -80,7 +80,10 @@ FROM nginx
 EXPOSE 3000
 COPY --from=builder /app/build /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# nginx 의 default.conf 를 삭제
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY default.conf /etc/nginx/conf.d
 
 ########
 
