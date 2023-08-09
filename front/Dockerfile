@@ -31,6 +31,23 @@
 #####################원래 하던 거###########################
 
 
+# FROM node:18-alpine
+
+# WORKDIR /app
+
+# COPY package.json .
+
+# RUN yarn install
+  
+# COPY . .
+
+# EXPOSE 3000
+
+# CMD ["yarn", "start"]
+
+######################################################
+
+
 FROM node:18-alpine
 
 WORKDIR /app
@@ -43,9 +60,10 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["yarn", "build"]
 
-######################################################
+
+########################################################
 
 # FROM node:18-alpine as builder
 
@@ -85,6 +103,6 @@ CMD ["yarn", "start"]
 # COPY --from=build /app/build /usr/share/nginx/html
 
 # # 포트를 열어 Nginx 서버를 실행합니다.
-# EXPOSE 80
+# EXPOSE 3000
 
 # CMD ["nginx", "-g", "daemon off;"]
