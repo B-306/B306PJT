@@ -15,7 +15,8 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9b306.q.ssafy.io/api2';
+console.log('NODE_ENV 상태 : ' + process.env.NODE_ENV);
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9b306.q.ssafy.io/api2' : 'https://i9b306.q.ssafy.io/api2';
 const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 
 class VideoRoomComponent extends Component {
