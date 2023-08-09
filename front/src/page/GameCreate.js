@@ -33,7 +33,7 @@ const GetQuiz = () => {
   }, []);
 
   const handleMoveToVideoRoom = (quizBookId) => {
-    axios.get(`https://i9b306.q.ssafy.io/quizbook/get/${quizBookId}`, {
+    axios.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
       headers: {
         accessToken: localStorage.getItem('accessToken') // 여기에 액세스 토큰 값을 넣어주세요
       }
