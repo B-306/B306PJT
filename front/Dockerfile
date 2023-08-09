@@ -78,7 +78,7 @@ RUN yarn build
 
 FROM nginx
 EXPOSE 3000
-COPY --from=builder /app/build /user/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 
 ## 502 Bad Gateway
 
