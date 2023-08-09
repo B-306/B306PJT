@@ -31,34 +31,54 @@
 #####################원래 하던 거###########################
 
 
-FROM node:18-alpine
+# FROM node:18-alpine
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY package.json .
+# COPY package.json .
 
-RUN yarn install
+# RUN yarn install
   
-COPY . .
+# COPY . .
 
-EXPOSE 3000
+# EXPOSE 3000
 
-CMD ["yarn", "start"]
+# CMD ["yarn", "start"]
 
 ######################################################
 
-# FROM node:18-alpine as builder
+
+# FROM node:18-alpine
 
 # WORKDIR /app
-# COPY ./package.json /app
+
+# COPY package.json .
 
 # RUN yarn install
-# COPY ./ ./
-# RUN yarn build
+  
+# COPY . .
 
-# FROM nginx
 # EXPOSE 3000
-# COPY --from=builder /app/build /user/share/nginx/html
+
+# CMD ["yarn", "build"]
+
+## 502 Bad Gateway
+
+
+########################################################
+
+FROM node:18-alpine as builder
+
+WORKDIR /app
+COPY ./package.json /app
+
+RUN yarn install
+COPY ./ ./
+RUN yarn build
+
+FROM nginx
+EXPOSE 3000
+COPY --from=builder /app/build /user/share/nginx/html
 
 #######################################################
 
@@ -85,6 +105,6 @@ CMD ["yarn", "start"]
 # COPY --from=build /app/build /usr/share/nginx/html
 
 # # 포트를 열어 Nginx 서버를 실행합니다.
-# EXPOSE 80
+# EXPOSE 3000
 
 # CMD ["nginx", "-g", "daemon off;"]
