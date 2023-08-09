@@ -25,7 +25,7 @@ class VideoRoomComponent extends Component {
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = this.props.sessionName ? this.props.sessionName : roomCode; // 'sessionA' 대신 방 코드 
+        let sessionName = this.props.sessionName ? this.props.sessionName : 'roomCode'; // 'sessionA' 대신 방 코드 
         let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
