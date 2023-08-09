@@ -607,7 +607,7 @@ class VideoRoomComponent extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        const sessionId = await this.createSession().sessionId;
+        const sessionId = this.createSession().sessionId;
         console.log('제발 나와라이' + sessionId);
         return await this.createToken(sessionId);
     }
