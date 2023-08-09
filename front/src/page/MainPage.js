@@ -127,12 +127,8 @@ const MainPage = () => {
   const jwtToken = localStorage.getItem('accessToken');
   if (!jwtToken) {
     console.log('토큰없음 테스트 2023-08-09 13:55')
-    setTimeout(function() {
-      const url = `/api3/login`;
-      navigate(url);
-      console.log('로그인 페이지 리다이렉트');
-    }, 1);
-    // window.location.href = 'https://i9b306.q.ssafy.io/login';
+    
+    window.location.href = '/api3/login';
   }
   // 반환된 객체에서 원하는 값을 각각 변수에 저장
   const { userName, userEmail } = decodedState;
