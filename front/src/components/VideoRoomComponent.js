@@ -608,7 +608,7 @@ class VideoRoomComponent extends Component {
      */
     async getToken() {
         const sessionId = await this.createSession(this.state.mySessionId).sessionId;
-        console.log(sessionId);
+        console.log('제발 나와라이' + sessionId);
         return await this.createToken(sessionId);
     }
 
@@ -618,6 +618,8 @@ class VideoRoomComponent extends Component {
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions', { customSessionId: sessionId }, {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
+        console.log('createSession 리턴값------------')
+        console.log(response.data)
         return response.data; // The sessionId
     }
 
