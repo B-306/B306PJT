@@ -42,7 +42,7 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Column(name = "user_profile")
+    @Column(name = "user_profile", columnDefinition = "VARCHAR(255) DEFAULT 'src/main/resources/image/profile/neo.png'")
     private String userProfile;
 
     @CreationTimestamp
