@@ -149,6 +149,13 @@ const textMap = {
           dispatch(setPhoto({ photoUrl: photoUrl}));
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
+          console.log(response.data.userProfile)
+          console.log(photoUrl)
+          console.log(response.data.userProfile.photoUrl)
+          console.log(response.data.userProfile['photoUrl'])
+          console.log(dispatch(setPhoto({ photoUrl: photoUrl})))
+          alert('로그인 로그 확인')
+
           // 07.27 오전 10:41분 작성 이름 확
           console.log(name);
   
