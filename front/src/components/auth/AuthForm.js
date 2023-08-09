@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import Button from '../common/Button';
 import { Button } from 'primereact/button';
 import Input from "../common/Input";
@@ -57,6 +57,7 @@ const textMap = {
 
   
   const AuthForm = ({ type }) => {
+    
     const text = textMap[type];
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -65,7 +66,8 @@ const textMap = {
     // const [authCode, setAuthCode] = useState('');
     // const [emailConfirm, setEmailConfirm] = useState(false);
     // const [view, setView] = useState(false);
-
+    
+    const navigate = useNavigate();
     const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
@@ -118,8 +120,11 @@ const textMap = {
           // 예시: 페이지 리디렉션
           console.log(response.data)
           console.log('회원가입 성공')
-          window.location.href = '/login'; // 로그인 페이지로 리디렉션
-          
+          setTimeout(function() {
+            const url = `/login`;
+            navigate(url);
+            console.log('로그인 페이지 리다이렉트');
+          }, 1);
         } catch (error) {
           console.error('실패:', error);
           alert('이미 가입된 이메일입니다.')

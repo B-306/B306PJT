@@ -131,7 +131,7 @@ const MainPage = () => {
       const url = `/login`;
       navigate(url);
       console.log('로그인 페이지 리다이렉트');
-    }, 3000);
+    }, 1);
     // window.location.href = 'https://i9b306.q.ssafy.io/login';
   }
   // 반환된 객체에서 원하는 값을 각각 변수에 저장
