@@ -337,7 +337,7 @@ class VideoRoomComponent extends Component {
     }
 
 // Start Game
-    sendGameSignal() {
+    sendGameSignal = () => {
         const signalOptions = {
             type: 'gameStart',
         };
