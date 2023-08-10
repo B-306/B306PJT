@@ -209,6 +209,14 @@ class VideoRoomComponent extends Component {
         );
     }
 
+    startCounter = () => {
+        this.setState(
+            {
+                showCounter:true,
+            }
+        )
+    }
+
     leaveSession() {
         const mySession = this.state.session;
 
@@ -316,6 +324,8 @@ class VideoRoomComponent extends Component {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
                 }
+    
+                console.log('event.data : ' + JSON.parse(event.data));
                 if (JSON.parse(event.data).type === 'signal:gameStart') {
                     this.setState({
                         showCounter: true,
