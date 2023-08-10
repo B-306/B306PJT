@@ -213,7 +213,7 @@ const MyPage = (props) => {
               </div>
           {/* </Grid> */}
         </React.Fragment>
-        <button type="button" onClick={()=>deleteAccount()}>회원 탈퇴</button>
+        <button type="button" onClick={deleteAccount}>회원 탈퇴</button>
       </CenteredContainer>
       </>
     );
