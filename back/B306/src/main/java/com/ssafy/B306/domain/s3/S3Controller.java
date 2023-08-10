@@ -28,9 +28,9 @@ public class S3Controller {
     @PostMapping("/template")
     public ResponseEntity<Void> uploadTemplate(MultipartFile file, HttpServletRequest request, Long templateId) throws IOException {
 
-        if(!file.getContentType().startsWith("image")) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+//        if(!file.getContentType().startsWith("image")) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
 
         String url = s3Service.uploadFile(file);
 
@@ -42,9 +42,9 @@ public class S3Controller {
     @PostMapping("/profile")
     public ResponseEntity<Void> uploadProfile(MultipartFile file, HttpServletRequest request) throws IOException {
 
-        if(!file.getContentType().startsWith("image")) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+//        if(!file.getContentType().startsWith("image")) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
         String url = s3Service.uploadFile(file);
 
         userService.modifyUserImage(url, request);
