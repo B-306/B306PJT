@@ -353,10 +353,12 @@ class VideoRoomComponent extends Component {
 
 // Start Game
     sendGameSignal () {
-        const signalOptions = {
-            type: 'gameStart',
-        };
-        this.state.session.signal(signalOptions);
+        // const signalOptions = {
+        //     type: 'gameStart',
+        //     data: '제발 되자.',
+        // };
+        // this.state.session.signal(signalOptions);
+        console.log(this.state.session)
     }
 
     receiveGameSignal() {
