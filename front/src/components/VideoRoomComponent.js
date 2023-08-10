@@ -81,6 +81,7 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
+        this.OV.on('signal', this.handleSignalReceived);
     }
 
     componentWillUnmount() {
@@ -88,6 +89,25 @@ class VideoRoomComponent extends Component {
         // window.removeEventListener('resize', this.updateLayout);
         window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
+        this.OV.off('signal', this.handleSignalReceived);
+    }
+
+    handleSignalReceived = (event) => {
+        // 시그널 데이터를 처리하고 원하는 동작을 수행합니다.
+        const signalType = event.type; // 시그널 타입
+    
+        if (signalType === 'signal:gameStart') {
+            // 시그널 타입이 'signal:gameStart'일 때 실행할 코드
+            this.startGame(); // 예시: 게임 시작 함수 호출
+        }
+    };
+
+    startGame() {
+        // 게임 시작 로직을 여기에 구현합니다.
+        // 예시: 카운터를 시작하고 게임이 시작되었음을 상태에 업데이트합니다.
+        this.setState({
+            showCounter: true, // Counter 컴포넌트를 표시하도록 상태를 업데이트합니다.
+        });
     }
 
     onbeforeunload(event) {

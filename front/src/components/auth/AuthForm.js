@@ -98,10 +98,6 @@ const textMap = {
             alert('유효한 비밀번호(영문, 숫자, 특수기호 조합으로 8자리 이상)를 입력해주세요.');
             return;
           }
-          // e메일 인증보내기
-          // const response = await axios.post('/user/email', {
-          //   // emailConfirm: emailConfirm
-          // });
 
           if (!emailConfirm) {
             alert('email 인증을 해주세요!');
@@ -149,13 +145,11 @@ const textMap = {
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
 
-          // 07.27 오전 10:41분 작성 이름 확
-          console.log(name);
   
           // 로그인이 성공하면 메인 페이지로 이동하거나 다른 동작 수행
           // 예시: 페이지 리디렉션
           window.location.href = '/'; // 메인 페이지로 리디렉션
-          // console.log("저장된 토큰:", localStorage.getItem("jwtToken"));
+          
         } catch (error) {
           console.error('실패:', error);
           alert('이메일과 비밀번호를 확인해 주세요.')
@@ -266,8 +260,6 @@ const textMap = {
       emailCheck();
     };
 
-    
-    console.log('authform확인 test 2023-08-09 13:57')
     return (
       
       <AuthFormBlock>
