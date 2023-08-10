@@ -84,14 +84,7 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
-        // signal test
-        const remoteUsers = this.state.subscribers;
-        this.state.session.on('signal:gameStart', (event) => {
-            remoteUsers.forEach((user) => {
-                user.showCounter = true;
-            })
-        });
-        this.setState({ subscribers: remoteUsers });
+        
     }
 
     
@@ -138,8 +131,17 @@ class VideoRoomComponent extends Component {
                 this.subscribeToStreamCreated();
                 await this.connectToSession();
                 // this.OV.on('signal', this.handleSignalReceived);
+                
             },
         );
+        // signal test
+        // const remoteUsers = this.state.subscribers;
+        // this.state.session.on('signal:gameStart', (event) => {
+        //     remoteUsers.forEach((user) => {
+        //         user.showCounter = true;
+        //     })
+        // });
+        // this.setState({ subscribers: remoteUsers });
     }
 
     async connectToSession() {
@@ -380,14 +382,21 @@ class VideoRoomComponent extends Component {
     }
     
 
-    sendSignal() {
-        const signalOptions ={
-            data: localStorage.getItem('selectedQuizes'),
-            type: 'gameStart',
+    // sendSignal() {
+    //     const signalOptions ={
+    //         data: localStorage.getItem('selectedQuizes'),
+    //         type: 'gameStart',
+    //     }
+    //     this.state.session.signal(signalOptions);
+    // }
+// signal test
+    changeShowCounter () {
+        const remoteUsers = this.state.subscribers;
+        remoteUsers.forEach((user) => {
+            console.log(user.showCounter);
         }
-        this.state.session.signal(signalOptions);
+        )
     }
-
 
 
     toggleFullscreen() {
@@ -607,7 +616,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.changeShowCounter} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
