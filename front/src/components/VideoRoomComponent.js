@@ -186,7 +186,6 @@ class VideoRoomComponent extends Component {
         await this.OV.getUserMedia({ audioSource: undefined, videoSource: undefined });
         var devices = await this.OV.getDevices();
         var videoDevices = devices.filter(device => device.kind === 'videoinput');
-
         let publisher = this.OV.initPublisher(undefined, {
             audioSource: undefined,
             videoSource: videoDevices[0].deviceId,
@@ -213,6 +212,7 @@ class VideoRoomComponent extends Component {
         localUser.setConnectionId(this.state.session.connection.connectionId);
         localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
+        this.receiveGameSignal();
         this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
@@ -337,19 +337,14 @@ class VideoRoomComponent extends Component {
     }
 
 // Start Game
-    gameStart() {
-        this.gameReceiveSignal();
-        this.gameSendSignal();
-    }
-
-    gameSendSignal() {
+    sendGameSignal() {
         const signalOptions = {
             type: 'gameStart',
         };
         this.state.session.signal(signalOptions);
     }
 
-    gameReceiveSignal() {
+    receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
             this.setState(
                 {
@@ -617,7 +612,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.gameStart()} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.sendGameSignal()} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
