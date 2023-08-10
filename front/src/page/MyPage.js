@@ -133,7 +133,20 @@ const CenteredContainer = styled.div`
 //     // 회원정보 수정 실패 처리를 원하는 경우 적절한 방법으로 처리
 //   }
 // };
+import React from 'react';
 
+function App() {
+  const filename = 'your-image-filename.jpg'; // 이미지 파일 이름
+  const type = 'profile'; // 이미지 타입 (profile 또는 다른 값)
+
+  const imageUrl = `/images/${filename}?type=${type}`; // 백엔드 엔드포인트에 요청할 URL
+
+  return (
+    <div>
+      <img src={imageUrl} alt="Image" />
+    </div>
+  );
+}
 const deleteAccount = async (e) => {
     e.preventDefault();
     // const decodedState = GetDecodedState();
