@@ -61,7 +61,7 @@ function PhotoUpload() {
 
       
       // 서버로 업로드하는 API 호출
-      const response = await axios.post("https://i9b306.q.ssafy.io:8080/api1/image/profile", formData, {
+      const response = await axios.post("https://i9b306.q.ssafy.io/api1/image/profile", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'accessToken': `${localStorage.getItem("accessToken")}`
@@ -94,7 +94,7 @@ function PhotoUpload() {
     <div>
       {/* 이미지 미리 보기 */}
       {previewUrl && <img src={previewUrl} alt="Preview" width="200" height="200" />}
-      {photoUrl && <img src={photoUrl} alt="Preview" width="200" height="200" />}
+      {photoUrl && <img src={photoUrl} alt="Profile" width="200" height="200" />}
       <StyledForm onSubmit={handleSubmit}>
       {/* 파일 선택 버튼 */}
       <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>

@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         // 토큰 유효성 검사
         if(accessToken == null || !jwtUtil.validateToken(accessToken)) {
-            log.error("잘못된 token");
+//            log.error("잘못된 token");
             filterchain.doFilter(servletRequest, servletResponse);
             return;
         }

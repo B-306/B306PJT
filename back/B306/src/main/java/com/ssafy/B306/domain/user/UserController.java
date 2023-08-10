@@ -31,13 +31,8 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<UserRegisterResponseDto> signUp(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
-        try{
-            UserDto userDto = userService.signUp(userRegisterRequestDto);
-            return new ResponseEntity<>(new UserRegisterResponseDto(userDto.getUserName()), HttpStatus.OK);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        UserDto userDto = userService.signUp(userRegisterRequestDto);
+        return new ResponseEntity<>(new UserRegisterResponseDto(userDto.getUserName()), HttpStatus.OK);
     }
 
     /*

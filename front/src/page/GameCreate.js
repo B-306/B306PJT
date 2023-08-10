@@ -22,7 +22,7 @@ const GetQuiz = () => {
   const [quizBooks, setQuizBooks] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get('https://i9b306.q.ssafy.io:8080/api1/quizbook/get')
+    axios.get('https://i9b306.q.ssafy.io/api1/quizbook/get')
       .then(response => {
         setQuizBooks(response.data);
         console.log(response)
@@ -33,7 +33,7 @@ const GetQuiz = () => {
   }, []);
 
   const handleMoveToVideoRoom = (quizBookId) => {
-    axios.get(`https://i9b306.q.ssafy.io:8080/quizbook/get/${quizBookId}`, {
+    axios.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
       headers: {
         accessToken: localStorage.getItem('accessToken') // 여기에 액세스 토큰 값을 넣어주세요
       }
