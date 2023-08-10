@@ -111,17 +111,17 @@ class VideoRoomComponent extends Component {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
         } else {
-            var token = await this.getToken();
-            console.log(token);
-            this.connect(token);
-            // try {
-            // } catch (error) {
-            //     console.error('There was an error getting the token:', error.code, error.message);
-            //     if(this.props.error){
-            //         this.props.error({ error: error.error, messgae: error.message, code: error.code, status: error.status });
-            //     }
-            //     alert('There was an error getting the token:', error.message);
-            // }
+            try {
+                var token = await this.getToken();
+                console.log(token);
+                this.connect(token);
+            } catch (error) {
+                console.error('There was an error getting the token:', error.code, error.message);
+                if(this.props.error){
+                    this.props.error({ error: error.error, messgae: error.message, code: error.code, status: error.status });
+                }
+                alert('There was an error getting the token:', error.message);
+            }
         }
     }
 
@@ -609,16 +609,16 @@ class VideoRoomComponent extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        const sessionData = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
-            headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },
-        });
-        if (sessionData.status === 404){
-            const sessionData = await this.createSession(this.state.mySessionId);
-            const sessionId = sessionData.sessionId;
-            console.log('제발 나와라이' + sessionId);
-            return await this.createToken(sessionId);
+        try {
+            const sessionData = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
+                headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },});
+                const sessionId = sessionData.sessionId;
+                console.log('제발 나와라이' + sessionId);
+                return await this.createToken(sessionId);
         }
-        else{
+        catch(error){
+                    
+            const sessionData = await this.createSession(this.state.mySessionId);
             const sessionId = sessionData.sessionId;
             console.log('제발 나와라이' + sessionId);
             return await this.createToken(sessionId);
