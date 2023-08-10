@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
-    USERNAME_DUPLICATED(HttpStatus.CONFLICT, "");
+    USEREMAIL_DUPLICATED(HttpStatus.CONFLICT, "");
 
     private HttpStatus httpStatus;
     private String message;
