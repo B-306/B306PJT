@@ -67,7 +67,7 @@ const textMap = {
     const [authCode, setAuthCode] = useState('');
     const [emailConfirm, setEmailConfirm] = useState(false);
     // const [view, setView] = useState(false);
-    const userProfile = useSelector(((state) => state.photo.photoUrl))
+    const profile = useSelector(((state) => state.photo.photoUrl))
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
@@ -174,13 +174,14 @@ const textMap = {
             return;
           }
           // 회원가입 요청 보내기
+          console.log(profile)
           try {
             // 회원정보 수정 요청 보내기
             
             const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
               userName: name,
               userPassword: password,
-              userProfile: userProfile,
+              userProfile: profile,
             }, {
               headers: {
                 'accessToken': `${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
