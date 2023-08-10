@@ -234,6 +234,7 @@ class VideoRoomComponent extends Component {
             () => {
                 if (this.state.localUser) {
                     this.sendSignalUserChanged({
+                        isShowCounter: this.state.localUser.isShowCounter(),
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
                         nickname: this.state.localUser.getNickname(),
@@ -272,6 +273,17 @@ class VideoRoomComponent extends Component {
         this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
         this.setState({ localUser: localUser });
     }
+
+    showCounterStatusChanged() {
+        let localUser = this.state.localUser;
+        localUser.setShowCounter();
+        this.setState({ localUser: localUser });
+        this.sendSignalUserChanged({ ShowCounter: true });
+    }
+
+
+
+
 
     micStatusChanged() {
         localUser.setAudioActive(!localUser.isAudioActive());
@@ -352,6 +364,9 @@ class VideoRoomComponent extends Component {
                     if (data.isScreenShareActive !== undefined) {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
+                    if (data.ShowCounter !== undefined) {
+                        user.setShowCounter();
+                    }
                 }
             });
             this.setState(
@@ -389,15 +404,6 @@ class VideoRoomComponent extends Component {
     //     }
     //     this.state.session.signal(signalOptions);
     // }
-// signal test
-    changeShowCounter () {
-        const remoteUsers = this.state.subscribers;
-        remoteUsers.forEach((user) => {
-            console.log(user.showCounter);
-        }
-        )
-    }
-
 
     toggleFullscreen() {
         const document = window.document;
@@ -578,7 +584,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
-                <ToolbarComponent
+                {/* <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -590,7 +596,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
+                /> */}
                 
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
@@ -654,7 +660,19 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                
+                <ToolbarComponent
+                    sessionId={mySessionId}
+                    user={localUser}
+                    showNotification={this.state.messageReceived}
+                    camStatusChanged={this.camStatusChanged}
+                    micStatusChanged={this.micStatusChanged}
+                    screenShare={this.screenShare}
+                    stopScreenShare={this.stopScreenShare}
+                    toggleFullscreen={this.toggleFullscreen}
+                    switchCamera={this.switchCamera}
+                    leaveSession={this.leaveSession}
+                    toggleChat={this.toggleChat}
+                />
             </div>
         );
     }

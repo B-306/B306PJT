@@ -27,7 +27,7 @@
 }
 
 #chatComponent {
-  background-color: #b8b8b8;
+  background-color: #1d213f;
   position: absolute;
   z-index: 99999;
   top: 0;
@@ -96,7 +96,7 @@ span.triangle {
 }
 
 .text {
-  word-break: break-all;color: #000000;
+  word-break: break-all;color: #39f7f0;
 }
 
 /* Start message from other user */

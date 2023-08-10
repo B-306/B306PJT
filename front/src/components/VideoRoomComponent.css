@@ -9,6 +9,19 @@
   min-width: 400px !important;
 } */
 
+#header {
+  color: #ffffff;
+  height: 40px;
+  background-color: #140c70;
+  padding: 0 14px 0 0;
+  position: absolute;
+  /* top: 0; */
+  bottom: 0;
+  left: 0;
+  z-index: 999999;
+  min-width: 400px !important;
+}
+
 .counter-container {
   display: flex;
   justify-content: center;
