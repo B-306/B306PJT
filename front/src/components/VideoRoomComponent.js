@@ -60,6 +60,7 @@ class VideoRoomComponent extends Component {
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
+        this.handleSignalReceived = this.handleSignalReceived.bind(this);
     }
 
     componentDidMount() {
@@ -81,6 +82,9 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
+        // this.state.session.on('signal:gameStart', (event) => {
+        //     const remoteUsers = this.state.subscribers;
+        // }
 
     }
 
