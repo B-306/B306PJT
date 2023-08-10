@@ -41,7 +41,7 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
-            showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
+            // showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
         };
 
@@ -234,7 +234,6 @@ class VideoRoomComponent extends Component {
             () => {
                 if (this.state.localUser) {
                     this.sendSignalUserChanged({
-                        isShowCounter: this.state.localUser.isShowCounter(),
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
                         nickname: this.state.localUser.getNickname(),
@@ -273,17 +272,6 @@ class VideoRoomComponent extends Component {
         this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
         this.setState({ localUser: localUser });
     }
-
-    showCounterStatusChanged() {
-        let localUser = this.state.localUser;
-        localUser.setShowCounter();
-        this.setState({ localUser: localUser });
-        this.sendSignalUserChanged({ ShowCounter: true });
-    }
-
-
-
-
 
     micStatusChanged() {
         localUser.setAudioActive(!localUser.isAudioActive());
@@ -364,8 +352,8 @@ class VideoRoomComponent extends Component {
                     if (data.isScreenShareActive !== undefined) {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
-                    if (data.ShowCounter !== undefined) {
-                        user.setShowCounter();
+                    if (data.showCounter !== undefined) {
+                        user.setShowCounter(data.showCounter);
                     }
                 }
             });
@@ -397,14 +385,24 @@ class VideoRoomComponent extends Component {
     }
     
 
-    // sendSignal() {
-    //     const signalOptions ={
-    //         data: localStorage.getItem('selectedQuizes'),
-    //         type: 'gameStart',
-    //     }
-    //     this.state.session.signal(signalOptions);
-    // }
-
+    sendSignal = () => {
+        // UserModel의 setShowCounter 메서드를 호출하여 showCounter 값을 변경합니다.
+        this.state.localUser.setShowCounter();
+        
+        const signalOptions = {
+            data: localStorage.getItem('selectedQuizes'),
+            type: 'gameStart',
+        };
+        this.state.session.signal(signalOptions);
+        
+        // 모든 유저들에게 showCounter 값을 업데이트하도록 시그널을 보냅니다.
+        const userChangedSignal = {
+            type: 'userChanged',
+            data: JSON.stringify({ showCounter: this.state.localUser.isShowCounter() }),
+        };
+        this.state.session.signal(userChangedSignal);
+    };
+    
     toggleFullscreen() {
         const document = window.document;
         const fs = document.getElementById('container');
@@ -579,12 +577,12 @@ class VideoRoomComponent extends Component {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage } = this.state;
+        const { capturedImage } = this.state;
 
 
         return (
             <div className="container" id="container">
-                {/* <ToolbarComponent
+                <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -596,7 +594,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                /> */}
+                />
                 
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
@@ -604,7 +602,7 @@ class VideoRoomComponent extends Component {
                     </div>
                 )}
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
-                {showCounter && (
+                {localUser.showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
                         <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
@@ -622,7 +620,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.changeShowCounter} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.sendSignal()} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
@@ -660,19 +658,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                <ToolbarComponent
-                    sessionId={mySessionId}
-                    user={localUser}
-                    showNotification={this.state.messageReceived}
-                    camStatusChanged={this.camStatusChanged}
-                    micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
-                    toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
-                    leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                />
+                
             </div>
         );
     }
