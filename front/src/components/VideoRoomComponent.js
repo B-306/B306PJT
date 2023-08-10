@@ -141,13 +141,7 @@ class VideoRoomComponent extends Component {
     async connectToSession(isNewSession) {
         console.log('뉴 세션인가? : ' + isNewSession);
         console.dir(this.state);
-    
-        // 새로운 세션인 경우 세션 생성
-        if (isNewSession) {
-            const sessionId = this.state.mySessionId;
-            await this.createSession(sessionId);
-        }
-    
+        
         // 세션 연결 처리
         this.OV = new OpenVidu();
     
@@ -653,7 +647,7 @@ class VideoRoomComponent extends Component {
      */
     async getToken() {
         let sessionId = this.state.mySessionId;
-    
+        
         if (this.isNewSession) {
             const sessionData = await this.createSession(sessionId);
             sessionId = sessionData.sessionId;
@@ -661,8 +655,9 @@ class VideoRoomComponent extends Component {
         } else {
             console.log('기존 세션 ID 사용: ' + sessionId);
         }
-    
-        return await this.createToken(sessionId);
+        
+        const token = await this.createToken(sessionId);
+        return token;
     }
 
     async createSession(sessionId) {
