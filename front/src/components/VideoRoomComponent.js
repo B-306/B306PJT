@@ -13,6 +13,12 @@ import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 // import { v4 } from 'uuid';
 
+import { ScrollPanel } from 'primereact/scrollpanel';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+
 
 var localUser = new UserModel();
 console.log('NODE_ENV 상태 : ' + process.env.NODE_ENV);
@@ -553,9 +559,12 @@ class VideoRoomComponent extends Component {
                 
                 <div id="layout" className="bounds">
                     {this.state.subscribers.map((sub, i) => (
-                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
+                        <ScrollPanel style={{ width: '100%', height: '150px' }}>
+                            <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers">
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
-                        </div>
+                            </div>
+                        </ScrollPanel>
+                        
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
