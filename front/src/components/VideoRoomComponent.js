@@ -81,6 +81,7 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
+
     }
 
     componentWillUnmount() {
@@ -94,7 +95,7 @@ class VideoRoomComponent extends Component {
     handleSignalReceived = (event) => {
         // 시그널 데이터를 처리하고 원하는 동작을 수행합니다.
         const signalType = event.type; // 시그널 타입
-    
+        console.log('signalType : ' + signalType);
         if (signalType === 'signal:gameStart') {
             // 시그널 타입이 'signal:gameStart'일 때 실행할 코드
             this.startGame(); // 예시: 게임 시작 함수 호출
