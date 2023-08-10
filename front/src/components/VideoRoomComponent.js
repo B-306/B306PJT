@@ -80,6 +80,12 @@ class VideoRoomComponent extends Component {
         window.addEventListener('beforeunload', this.onbeforeunload);
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
+        // 게임시작 버튼을 누르면 이벤트리스너가 발동될까?
+        this.state.session.on('signal:gameStart', (event) => {
+            // gameStart 시그널을 수신했을 때 실행될 로직을 작성
+            console.log('게임시작 시그널 수신')
+            this.startCounter(); // 예시로 Counter를 시작하는 함수를 호출
+        });
         this.joinSession();
     }
 
@@ -93,6 +99,16 @@ class VideoRoomComponent extends Component {
     onbeforeunload(event) {
         this.leaveSession();
     }
+
+    startCounter() {
+        this.setState(
+            {
+            showCounter:true,
+        }
+        )
+    }
+
+
 
     joinSession() {
         this.OV = new OpenVidu();
@@ -209,13 +225,6 @@ class VideoRoomComponent extends Component {
         );
     }
 
-    startCounter = () => {
-        this.setState(
-            {
-                showCounter:true,
-            }
-        )
-    }
 
     leaveSession() {
         const mySession = this.state.session;
@@ -333,6 +342,10 @@ class VideoRoomComponent extends Component {
             );
         });
     }
+
+
+
+
 
     // updateLayout() {
     //     setTimeout(() => {
@@ -576,7 +589,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={() => {this.sendSignal(); this.startCounter();}} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
