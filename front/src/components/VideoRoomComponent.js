@@ -316,7 +316,7 @@ class VideoRoomComponent extends Component {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
                 }
-                if (JSON.parse(event.data).type === 'gameStart') {
+                if (JSON.parse(event.data).type === 'signal:gameStart') {
                     this.setState({
                         showCounter: true,
                     })
