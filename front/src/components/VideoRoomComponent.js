@@ -320,6 +320,9 @@ class VideoRoomComponent extends Component {
         });
     }
 
+
+
+
     subscribeToStreamDestroyed() {
         // On every Stream destroyed...
         this.state.session.on('streamDestroyed', (event) => {
@@ -331,6 +334,29 @@ class VideoRoomComponent extends Component {
             event.preventDefault();
             // this.updateLayout();
         });
+    }
+
+// Start Game
+    gameStart() {
+        this.gameReceiveSignal();
+        this.gameSendSignal();
+    }
+
+    gameSendSignal() {
+        const signalOptions = {
+            type: 'gameStart',
+        };
+        this.state.session.signal(signalOptions);
+    }
+
+    gameReceiveSignal() {
+        this.state.session.on('signal:gameStart', (event) => {
+            this.setState(
+                {
+                    showCounter: true,
+                }
+            )
+        })
     }
 
     subscribeToUserChanged() {
@@ -352,11 +378,6 @@ class VideoRoomComponent extends Component {
                     if (data.isScreenShareActive !== undefined) {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
-                    if (data.showCounter !== undefined) {
-                        this.setState({
-                            showCounter: true,
-                        });
-                    }
                 }
             });
             this.setState(
@@ -370,14 +391,6 @@ class VideoRoomComponent extends Component {
 
 
 
-
-
-    // updateLayout() {
-    //     setTimeout(() => {
-    //         this.layout.updateLayout();
-    //     }, 20);
-    // }
-
     sendSignalUserChanged(data) {
         const signalOptions = {
             data: JSON.stringify(data),
@@ -387,26 +400,6 @@ class VideoRoomComponent extends Component {
     }
     
 
-    sendSignal = () => {
-        // UserModel의 setShowCounter 메서드를 호출하여 showCounter 값을 변경합니다.
-        // this.setState('')
-        
-        const signalOptions = {
-            data: localStorage.getItem('selectedQuizes'),
-            type: 'gameStart',
-        };
-        this.state.session.signal(signalOptions);
-        
-        // 모든 유저들에게 showCounter 값을 업데이트하도록 시그널을 보냅니다.
-        const userChangedSignal = {
-            type: 'userChanged',
-            // data: JSON.stringify({ showCounter: this.state.localUser.isShowCounter() }),
-            data: JSON.stringify({ showCounter: true }),
-        };
-        this.subscribeToUserChanged();
-        this.state.session.signal(userChangedSignal);
-    };
-    
     toggleFullscreen() {
         const document = window.document;
         const fs = document.getElementById('container');
@@ -624,7 +617,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendSignal()} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.gameStart()} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
