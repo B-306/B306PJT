@@ -692,10 +692,10 @@ class VideoRoomComponent extends Component {
     async sendGameSignal(sessionId) {
         console.log('게임 신호 보내기')
         console.log(sessionId)
-        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { sessionId: sessionId , type: 'signal:gameStart',}, {
+        await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { sessionId: sessionId , type: 'signal:gameStart',}, {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
-        return response.data;
+        return;
     }
 
 
