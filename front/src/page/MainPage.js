@@ -136,6 +136,7 @@ const MainPage = () => {
   const [code, setCode] = useState('');
   const handleCodeSubmit = () => {
     const url = `/game/${code}`;
+    localStorage.setItem('roomCode', code);
     navigate(url);
   };
 
