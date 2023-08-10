@@ -613,14 +613,14 @@ class VideoRoomComponent extends Component {
             const sessionData = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
                 headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },});
                 const sessionId = sessionData.sessionId;
-                console.log('제발 나와라이' + sessionId);
+                console.log('이미 있는 방' + sessionId);
                 return await this.createToken(sessionId);
         }
         catch(error){
                     
             const sessionData = await this.createSession(this.state.mySessionId);
             const sessionId = sessionData.sessionId;
-            console.log('제발 나와라이' + sessionId);
+            console.log('새로운 방' + sessionId);
             return await this.createToken(sessionId);
         }
         
