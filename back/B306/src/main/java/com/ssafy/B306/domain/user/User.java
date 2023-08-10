@@ -42,7 +42,7 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Column(name = "user_profile")
+    @Column(name = "user_profile", columnDefinition = "VARCHAR(255) DEFAULT 'https://cdn-icons-png.flaticon.com/128/771/771372.png'")
     private String userProfile;
 
     @CreationTimestamp
@@ -83,11 +83,17 @@ public class User {
     public void modifyUser(UserModifyRequestDto userModifyDto) {
         userName = userModifyDto.getUserName();
         userPassword = userModifyDto.getUserPassword();
-        userProfile = userModifyDto.getUserProfile();
+//        userProfile = userModifyDto.getUserProfile();
         userModifyDate = LocalDateTime.now();
     }
 
     public void modifyUserImage(String savePath) {
         userProfile = savePath;
     }
+
+    public User modifyUserName(String userName) {
+        this.userName = userName;
+        return this;
+    }
+
 }

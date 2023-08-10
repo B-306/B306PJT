@@ -12,7 +12,7 @@ const persistConfig = {
   storage, // localStorage
   whitelist: ["auth", "photo"], // target (reducer name)
 }
-
+// /
 const reducers = combineReducers({
   auth: authReducer,
   photo: photoReducer,

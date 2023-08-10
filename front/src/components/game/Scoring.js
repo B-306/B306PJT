@@ -20,7 +20,7 @@ class Scoring extends Component {
         let differentPixels = 0;
         for (let i = 0; i < checkImageData.data.length; i += 4) {
             if (
-                checkImageData.data[i] !== maskImageData.data[i]
+                (checkImageData.data[i] !== maskImageData.data[i])&&(maskImageData.data[i+3]>150)
             ) {
                 differentPixels++;
             }

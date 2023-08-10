@@ -8,13 +8,14 @@ import GameCreate from './page/GameCreate';
 // import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import VideoRoomComponent from './components/VideoRoomComponent';
+import TemplateUploadPage from './page/TemplateUploadPage';
 
 const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      <Route path="/game/:number" element={<VideoRoomComponent />} />
+      <Route path="/game/:string" element={<VideoRoomComponent />} />
       {/* <Route path="/game/1" element={<VideoRoomComponent />} /> */}
       <Route path="/@:useremail" element={<MainPage />} />
       <Route path="/" element={<MainPage />} />
@@ -22,6 +23,7 @@ const App = () => {
       {/* <Route path="/mypage" element={<MyPage />} /> */}
       {/* <Route path="/gamecreate" element={<GameCreate />} /> */}
       <Route path="/:useremail/gamecreate" element={<GameCreate />} />
+      <Route path="/templatecreate" element={<TemplateUploadPage />} />
     </Routes>
   );
 };

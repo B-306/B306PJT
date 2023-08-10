@@ -1,13 +1,15 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
-import Button from '../common/Button';
+import { Link, useNavigate } from 'react-router-dom';
+// import Button from '../common/Button';
+import { Button } from 'primereact/button';
 import Input from "../common/Input";
 import palette from "../../lib/styles/palette";
 import axios from "axios";
 import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
+import { setPhoto } from '../../redux/modules/photoSlice';
 // import { encodeState } from "../common/CodedState";
 // import AuthMail from "./AuthMail"
 
@@ -15,7 +17,10 @@ import { setTokens, setUserData } from '../../redux/modules/authSlice';
 //   display: flex;
 
 
-// `
+// 
+// import 'primereact/resources/themes/saga-blue/theme.css';
+// import 'primereact/resources/primereact.min.css';
+// import 'primeicons/primeicons.css';
 
 const AuthFormBlock = styled.div`
     h3 {
@@ -53,14 +58,17 @@ const textMap = {
 
   
   const AuthForm = ({ type }) => {
+    
     const text = textMap[type];
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-    // const [eamilConfirm, setEmailConfirm] = useState('');
+    // const [authCode, setAuthCode] = useState('');
+    // const [emailConfirm, setEmailConfirm] = useState(false);
     // const [view, setView] = useState(false);
-
+    
+    const navigate = useNavigate();
     const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
@@ -96,8 +104,13 @@ const textMap = {
           //   // emailConfirm: emailConfirm
           // });
 
+          // if (!emailConfirm) {
+          //   alert('email 인증을 해주세요!');
+          //   return;
+          // }
+
           // 회원가입 요청 보내기
-          const response = await axios.post('/user/signup', {
+          const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/signup', {
             userName : name,
             userPassword : password,
             userEmail : email,
@@ -108,8 +121,11 @@ const textMap = {
           // 예시: 페이지 리디렉션
           console.log(response.data)
           console.log('회원가입 성공')
-          window.location.href = '/login'; // 로그인 페이지로 리디렉션
-          
+          setTimeout(function() {
+            const url = `/login`;
+            navigate(url);
+            console.log('로그인 페이지 리다이렉트');
+          }, 1);
         } catch (error) {
           console.error('실패:', error);
           alert('이미 가입된 이메일입니다.')
@@ -117,7 +133,7 @@ const textMap = {
         }} else if (type === 'login') {
           try {
           // 로그인 요청 보내기
-          const response = await axios.post('/user/login', {
+          const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/login', {
             userEmail : email,
             userPassword : password,
           });
@@ -129,7 +145,7 @@ const textMap = {
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
           dispatch(setUserData({ userName: response.data.userName, userEmail: email }));
-          
+          dispatch(setPhoto({ photoUrl: response.data.userProfile}));
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
           // 07.27 오전 10:41분 작성 이름 확
@@ -158,7 +174,7 @@ const textMap = {
           // 회원가입 요청 보내기
           try {
             // 회원정보 수정 요청 보내기
-            const response = await axios.patch('/user/modify', {
+            const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
               userName: name,
               userPassword: password,
               userProfile: null,
@@ -195,32 +211,64 @@ const textMap = {
       handleSubmit();
     };
 
-    const emailSubmit = async (e) => {
-      // e.preventDefault();
-      console.log('eamilSubmit 실행 \n')
+    // const emailSubmit = async () => {
+    //   // e.preventDefault();
+    //   console.log('eamilSubmit 실행 \n')
+    //   console.log(email)
 
-      try {
-        // e메일 인증보내기
-          const response = await axios.post('/user/email', {
-            userEmail : email,
-          });
-          console.log(response.data)
-        } catch (error) {
-          console.error('실패:', error);
-          alert('잘 못된 이메일입니다. 확인해 주세요.')
-          // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
-        }
-      }
+    //   try {
+    //     // e메일 인증보내기
+    //       const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email', {
+    //         email : email,
+    //       });
+    //       console.log(response.data)
+    //       alert('email 인증 코드를 보냈습니다. 5분 안에 인증코드를 입력해주세요!')
+    //     } catch (error) {
+    //       console.error('실패:', error);
+    //       alert('잘 못된 이메일입니다. 확인해 주세요.')
+    //       // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+    //     }
+    //   }
         
 
-    const emailButtonClick = (e) => {
-      e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
-      console.log('emailButtonClick 실행 \n')
-      // type에 따라서 다른 동작 수행
-      emailSubmit();
-    };
+    // const emailButtonClick = (e) => {
+    //   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
+    //   console.log('emailButtonClick 실행 \n')
+    //   // type에 따라서 다른 동작 수행
+    //   emailSubmit();
+    // };
 
+    // const emailCheck = async () => {
+    //   // e.preventDefault();
+    //   console.log('eamilCheck 실행 \n')
+    //   try {
+    //     // e메일 검증
+    //       const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email/auth', {
+    //         authCode : authCode, 
+    //         email : email,
+    //       });
+    //       console.log(response.data)
+    //       alert('Email 검증이 완료되었습니다.')
+    //       setEmailConfirm(true);
+    //     } catch (error) {
+    //       console.error('실패:', error);
+    //       alert('잘 못된 인증코드 입니다. 확인해 주세요.')
+    //       // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
+    //     }
+    //   }
+        
+
+    // const emailCheckClick = (e) => {
+    //   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
+    //   console.log('emailcheckButtonClick 실행 \n')
+    //   // type에 따라서 다른 동작 수행
+    //   emailCheck();
+    // };
+
+    
+    console.log('authform확인 test 2023-08-09 13:57')
     return (
+      
       <AuthFormBlock>
         <h3>{text}</h3>
         <form onSubmit={handleSubmit}>
@@ -234,21 +282,25 @@ const textMap = {
               onChange={(e) => setEmail(e.target.value)}
             />
           )}
-          {type !== 'login' && type !== 'modify' && (
-            // onClick={(e) => handleButton1Click(e)}
+          {/* {type !== 'login' && type !== 'modify' && (
             <ButtonWithMarginTop onClick={(e) => emailButtonClick(e)}>
               인증
             </ButtonWithMarginTop>
           )}
-          {/* {type !== 'login' && type !== 'modify' &&(
+          {type !== 'login' && type !== 'modify' &&(
                 <StyledInput
-                    name="emailConfirm"
+                    name="authCode"
                     placeholder="이메일 인증번호 입력"
-                    value={emailConfirm}
-                    onChange={(e) => setPasswordConfirm(e.target.value)
+                    value={authCode}
+                    onChange={(e) => setAuthCode(e.target.value)
                     }
                 />
-            )} */}
+            )}
+          {type !== 'login' && type !== 'modify' && (
+            <ButtonWithMarginTop onClick={(e) => emailCheckClick(e)}>
+              인증 확인
+            </ButtonWithMarginTop>
+          )} */}
           {/* </EmailForm> */}
           {type !== 'login' && (
             <StyledInput
