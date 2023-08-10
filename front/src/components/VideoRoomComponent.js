@@ -81,7 +81,6 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
-        this.OV.on('signal', this.handleSignalReceived);
     }
 
     componentWillUnmount() {
@@ -125,6 +124,7 @@ class VideoRoomComponent extends Component {
             async () => {
                 this.subscribeToStreamCreated();
                 await this.connectToSession();
+                this.OV.on('signal', this.handleSignalReceived);
             },
         );
     }
