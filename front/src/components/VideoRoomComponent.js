@@ -138,7 +138,7 @@ class VideoRoomComponent extends Component {
         }
     }
     
-    async connectToSession(isNewSession) {
+    async connectToSesssion(isNewSession) {
         console.log('뉴 세션인가? : ' + isNewSession);
         console.dir(this.state);
         
@@ -647,7 +647,7 @@ class VideoRoomComponent extends Component {
      */
     async getToken() {
         let sessionId = this.state.mySessionId;
-        
+        console.log('getToken 함수에서 isNewSession 값은? : ' + this.isNewSession)
         if (this.isNewSession) {
             const sessionData = await this.createSession(sessionId);
             sessionId = sessionData.sessionId;
