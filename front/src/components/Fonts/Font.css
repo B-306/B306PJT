@@ -32,3 +32,10 @@
     /* font-weight: lighter; */
     src: url("./JSArirang.otf");
   }
+
+  @font-face {
+    font-family: "Ftstardust";
+    font-style: normal;
+    /* font-weight: lighter; */
+    src: url("./PFstardust.ttf");
+  }

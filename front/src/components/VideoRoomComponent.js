@@ -610,6 +610,9 @@ class VideoRoomComponent extends Component {
      */
     async getToken() {
         try {
+            console.log('1번 후보 : ')
+            console.log(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`);
+            console.log('2번 후보 : ' + APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + this.state.mySessionId);
             const sessionData = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
                 headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },});
             console.log(sessionData, sessionData.sessionId, sessionData.id);    
