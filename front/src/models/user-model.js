@@ -6,7 +6,6 @@ class UserModel {
     nickname;
     streamManager;
     type; // 'remote' | 'local'
-    showCounter;
 
     constructor() {
         this.connectionId = '';
@@ -16,11 +15,6 @@ class UserModel {
         this.nickname = '';
         this.streamManager = null;
         this.type = 'local';
-        this.showCounter = false;
-    }
-
-    isShowCounter() {
-        return this.showCounter;
     }
 
     isAudioActive() {
@@ -53,11 +47,6 @@ class UserModel {
     isRemote() {
         return !this.isLocal();
     }
-    
-    setShowCounter() {
-        this.showCounter = true;
-    }
-
     setAudioActive(isAudioActive) {
         this.audioActive = isAudioActive;
     }
