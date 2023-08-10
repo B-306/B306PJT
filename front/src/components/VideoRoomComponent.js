@@ -11,7 +11,7 @@ import Check from './game/Check';
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-// import { v4 } from 'uuid';
+import { v4 } from 'uuid';
 
 
 var localUser = new UserModel();
@@ -102,52 +102,48 @@ class VideoRoomComponent extends Component {
             async () => {
                 this.subscribeToStreamCreated();
                 
-                const sessionId = localStorage.getItem('mySessionId'); // 세션 ID를 로컬 스토리지에서 가져옴
+                const roomCode = localStorage.getItem('roomCode'); // roomCode를 로컬 스토리지에서 가져옴
                 
-                if (sessionId) {
-                    await this.handleJoinWithSessionId(sessionId); // 기존 세션에 접속 시도
+                if (roomCode) {
+                    await this.handleJoinWithSessionId(roomCode); // 기존 세션에 접속 시도
                 } else {
-                    this.setState({ mySessionId: 'sessionA' }); // 기본 세션 ID 설정
-                    await this.connectToSession(); // 새로운 세션 생성 및 접속
+                    const newRoomCode = v4(); // 새로운 방 코드 생성
+                    localStorage.setItem('roomCode', newRoomCode); // 생성한 방 코드를 로컬 스토리지에 저장
+                    await this.connectToSession(newRoomCode); // 새로운 세션 생성 및 접속
                 }
             },
         );
     }
-    
     async handleJoinWithSessionId(sessionId) {
         try {
             const response = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${sessionId}`, {
                 headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },
             });
-            console.log('-----------handlejoinwithsessionid 확인---------------')
-            console.log(response.data)
-            if (response.data.id) {
-                // 세션 정보를 가져온 경우 이미 존재하는 세션에 참여하는 것으로 간주
-                this.isNewSession = false;
-            } else {
-                // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
-                this.isNewSession = true;
-            }
+            console.log('-----------handlejoinwithsessionid 확인---------------');
+            console.log(response.data);
+    
+            // 세션 정보가 있는 경우 isNewSession을 false로 설정
+            this.isNewSession = !!response.data.id;
     
             // 세션 ID 업데이트 및 연결 처리
             this.setState({ mySessionId: sessionId });
-            this.connectToSession();
+            this.connectToSession(false); // false: 기존 세션에 참여하는 경우
         } catch (error) {
-            // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
+            // 세션 정보를 가져오는 데 실패한 경우 isNewSession을 true로 설정
             this.isNewSession = true;
     
             // 세션 ID 업데이트 및 연결 처리
             this.setState({ mySessionId: sessionId });
-            this.connectToSession();
+            this.connectToSession(true); // true: 새로운 세션을 생성하는 경우
         }
     }
-
-    async connectToSession() {
-        console.log('뉴 세션인가? : ' + this.isNewSession);
+    
+    async connectToSession(isNewSession) {
+        console.log('뉴 세션인가? : ' + isNewSession);
         console.dir(this.state);
-        
-        if (this.isNewSession) {
-            // 새로운 세션 생성
+    
+        // 새로운 세션인 경우 세션 생성
+        if (isNewSession) {
             const sessionId = this.state.mySessionId;
             await this.createSession(sessionId);
         }
@@ -166,7 +162,7 @@ class VideoRoomComponent extends Component {
             } catch (error) {
                 console.error('There was an error getting the token:', error.code, error.message);
                 if (this.props.error) {
-                    this.props.error({ error: error.error, messgae: error.message, code: error.code, status: error.status });
+                    this.props.error({ error: error.error, message: error.message, code: error.code, status: error.status });
                 }
                 alert('There was an error getting the token:', error.message);
             }

@@ -169,9 +169,7 @@ const MyPage = (props) => {
   const [view, setView] = useState(false);
 
   const decodedState = GetDecodedState();
-  const { userName, userEmail } = decodedState;
-
-  const photoUrl = useSelector((state) => state.photo.photoUrl);    
+  const { userName, userEmail } = decodedState;  
 
     return (
       <>
@@ -182,7 +180,6 @@ const MyPage = (props) => {
           {/* <Grid> */}
               {/* <Grid is_flex> */}
               <PhotoUpload />
-              <img shape="circle" alt="Profile" src= {photoUrl} width="200" height="200"/>
               <Image shape="circle" src= {props.src}/>
               {/* </Grid> */}
               {/* <Grid padding='16px'> */}
