@@ -112,7 +112,7 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyUserImage(MultipartFile file, HttpServletRequest request) {
+    public void modifyUserImage(String url, HttpServletRequest request) {
 
         Long userPk = jwtUtil.extractUserPkFromToken(request);
         if (userPk == null) return;
@@ -120,9 +120,7 @@ public class UserService {
         User findUser = userRepository.findByUserId(userPk)
                 .orElseThrow(()-> new RuntimeException("유저 없는데?"));
 
-        String savePath = imageUploadService.makeImagePath(file, "profile");
-
-        findUser.modifyUserImage(savePath);
+        findUser.modifyUserImage(url);
     }
 
     @Transactional

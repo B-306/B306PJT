@@ -102,7 +102,7 @@ public class TemplateService {
     }
 
     @Transactional
-    public void modifyTemplateImage(Long templateId, MultipartFile file, HttpServletRequest request) {
+    public void modifyTemplateImage(Long templateId, String url, HttpServletRequest request) {
 
         Long templateUserId = jwtUtil.extractUserPkFromToken(request);
 
@@ -113,8 +113,6 @@ public class TemplateService {
             throw new IllegalStateException("이미 삭제된 템플릿입니다.");
         }
 
-        String savePath = imageUploadService.makeImagePath(file, "template");
-
-        originalTemplate.modifyTemplateImage(savePath);
+        originalTemplate.modifyTemplateImage(url);
     }
 }
