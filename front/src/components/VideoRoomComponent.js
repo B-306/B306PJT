@@ -338,7 +338,7 @@ class VideoRoomComponent extends Component {
         };
         this.state.session.signal(signalOptions);
     }
-
+    
     toggleFullscreen() {
         const document = window.document;
         const fs = document.getElementById('container');
@@ -515,7 +515,8 @@ class VideoRoomComponent extends Component {
         var chatDisplay = { display: this.state.chatDisplay };
         
         const { capturedImage } = this.state;
-        
+
+
         return (
             <div className="container" id="container">
                 
@@ -610,6 +611,9 @@ class VideoRoomComponent extends Component {
      * Visit https://docs.openvidu.io/en/stable/application-server to learn
      * more about the integration of OpenVidu in your application server.
      */
+
+
+
     async getToken() {
         try {
             console.log('1번 후보 : ')

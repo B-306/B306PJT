@@ -42,7 +42,7 @@ function PhotoUpload() {
       return;
     }
     setSelectedFile(URL.createObjectURL(file));
-    console.log(selectedFile)
+    console.log(URL.createObjectURL(file))
     // 파일을 미리 보기 위해 FileReader를 사용
     const reader = new FileReader();
     reader.onloadend = () => {
