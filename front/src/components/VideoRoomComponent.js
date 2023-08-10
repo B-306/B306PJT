@@ -115,6 +115,7 @@ class VideoRoomComponent extends Component {
                 
             },
         );
+        console.log(this.state)
     }
 
     async connectToSession() {
