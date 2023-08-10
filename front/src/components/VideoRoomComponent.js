@@ -60,6 +60,8 @@ class VideoRoomComponent extends Component {
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
+        // signal test
+        this.handleGameStartSignal = this.handleGameStartSignal.bind(this);
     }
 
     componentDidMount() {
@@ -81,6 +83,8 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
+        //signal test
+        this.openviduSession.on('signal:gameStart', this.handleGameStartSignal);
     }
 
     componentWillUnmount() {
@@ -88,23 +92,32 @@ class VideoRoomComponent extends Component {
         // window.removeEventListener('resize', this.updateLayout);
         window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
+        // signal test
+        this.openviduSession.off('signal:gameStart', this.handleGameStartSignal);
     }
 
     onbeforeunload(event) {
         this.leaveSession();
     }
 
-    startGameSignalRecieved() {
-        this.state.session.on('signal:startGame', (event) => {
-            console.log('Received signal:startGame');
-            this.startCounter();
-        });
+    // signal test
+    handleGameStartSignal(data) {
+        // 'signal:gameStart'를 수신했을 때 실행되는 함수
+        // 이곳에 게임 시작 로직을 작성합니다.
+        console.log('Received gameStart signal:', data); // 신호 데이터 출력 예시
+        this.startCounter(); // 게임 시작 메서드 호출
     }
 
+    // signal test
     startCounter() {
-        this.setState({
-            showCounter: true,
-        });
+        // 게임 시작 로직을 여기에 작성합니다.
+        console.log('Game has started!');
+        // 추가적인 게임 시작 동작 수행
+        this.setState(
+            {
+                showCounter:true,
+            }
+        )
     }
 
     joinSession() {
