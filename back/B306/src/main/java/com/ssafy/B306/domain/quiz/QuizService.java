@@ -60,6 +60,13 @@ public class QuizService {
         return quizResponseDtoList;
     }
 
+    public QuizResponseDto getQuiz(Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()->new RuntimeException("해당 문제는 없습니다."));
+        QuizResponseDto quizResponseDto = quiz.toDto(quiz);
+
+        return quizResponseDto;
+    }
+
     public void deleteQuizList(Long quizBookId) {
         quizRepository.deleteById(quizBookId);
     }

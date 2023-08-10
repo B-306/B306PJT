@@ -61,7 +61,7 @@ public class ImageUploadController {
         if ("png".equalsIgnoreCase(fileExtension)) {
             mediaType = MediaType.IMAGE_PNG;
         }
-        System.out.println(resource);
+
         return ResponseEntity.ok()
                 .contentType(mediaType) // 이미지 타입에 맞게 설정
                 .body(resource);
