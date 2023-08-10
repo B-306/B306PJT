@@ -336,24 +336,6 @@ class VideoRoomComponent extends Component {
         });
     }
 
-// Start Game
-    sendGameSignal = () => {
-        const signalOptions = {
-            type: 'gameStart',
-        };
-        this.state.session.signal(signalOptions);
-    }
-
-    receiveGameSignal() {
-        this.state.session.on('signal:gameStart', (event) => {
-            this.setState(
-                {
-                    showCounter: true,
-                }
-            )
-        })
-    }
-
     subscribeToUserChanged() {
         this.state.session.on('signal:userChanged', (event) => {
             let remoteUsers = this.state.subscribers;
@@ -394,6 +376,26 @@ class VideoRoomComponent extends Component {
         this.state.session.signal(signalOptions);
     }
     
+
+// Start Game
+    sendGameSignal () {
+        const signalOptions = {
+            type: 'gameStart',
+        };
+        this.state.session.signal(signalOptions);
+    }
+
+    receiveGameSignal() {
+        this.state.session.on('signal:gameStart', (event) => {
+            this.setState(
+                {
+                    showCounter: true,
+                }
+            )
+        })
+    }
+
+
 
     toggleFullscreen() {
         const document = window.document;
