@@ -17,7 +17,7 @@ public class UserRegisterRequestDto {
         return User.builder()
                 .userEmail(this.userEmail)
                 .userName(this.userName)
-                .userProfile("src/main/resources/image/profile/neo.png")
+                .userProfile("https://cdn-icons-png.flaticon.com/128/771/771372.png")
                 .userPassword(password)
                 .build();
     }
