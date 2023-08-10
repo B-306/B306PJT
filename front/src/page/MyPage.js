@@ -137,8 +137,8 @@ const CenteredContainer = styled.div`
 //   }
 // };
 
-const deleteAccount = async (e) => {
-    e.preventDefault();
+const deleteAccount = async () => {
+    // e.preventDefault();
     // const decodedState = GetDecodedState();
     // const { accessToken, refreshToken, userName, userEmail } = decodedState;
 
