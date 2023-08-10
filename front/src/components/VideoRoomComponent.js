@@ -547,7 +547,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
-                {/* <ToolbarComponent
+                <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -559,7 +559,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                /> */}
+                />
                 
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
@@ -623,7 +623,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                <ToolbarComponent
+                {/* <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -635,7 +635,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
+                /> */}
             </div>
         );
     }
