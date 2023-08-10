@@ -41,8 +41,8 @@ function PhotoUpload() {
       console.error('Invalid file');
       return;
     }
-    setSelectedFile(file);
-
+    setSelectedFile(URL.createObjectURL(file));
+    console.log(selectedFile)
     // 파일을 미리 보기 위해 FileReader를 사용
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -58,7 +58,7 @@ function PhotoUpload() {
       // FormData를 사용하여 선택한 파일을 서버로 업로드
       const formData = new FormData();
       formData.append('file', selectedFile);
-
+      
       
       // 서버로 업로드하는 API 호출
       const response = await axios.post("https://i9b306.q.ssafy.io/api1/image/profile", formData, {
