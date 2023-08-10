@@ -324,13 +324,6 @@ class VideoRoomComponent extends Component {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
                 }
-    
-                console.log('event.data : ' + JSON.parse(event.data));
-                if (JSON.parse(event.data).type === 'signal:gameStart') {
-                    this.setState({
-                        showCounter: true,
-                    })
-                }
             });
             this.setState(
                 {
@@ -583,7 +576,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={() => {this.sendSignal(); this.startCounter();}} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>

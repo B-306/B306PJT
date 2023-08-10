@@ -7,7 +7,7 @@ import Input from "../common/Input";
 import palette from "../../lib/styles/palette";
 import axios from "axios";
 import Logout from "./Logout";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
 import { setPhoto } from '../../redux/modules/photoSlice';
 // import { encodeState } from "../common/CodedState";
@@ -67,7 +67,7 @@ const textMap = {
     const [authCode, setAuthCode] = useState('');
     const [emailConfirm, setEmailConfirm] = useState(false);
     // const [view, setView] = useState(false);
-    
+    const userProfile = useSelector(((state) => state.photo.photoUrl))
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
@@ -176,10 +176,11 @@ const textMap = {
           // 회원가입 요청 보내기
           try {
             // 회원정보 수정 요청 보내기
+            
             const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
               userName: name,
               userPassword: password,
-              // userProfile: null,
+              userProfile: userProfile,
             }, {
               headers: {
                 'accessToken': `${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
