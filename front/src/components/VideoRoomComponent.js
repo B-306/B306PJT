@@ -134,6 +134,8 @@ class VideoRoomComponent extends Component {
     }
 
     async connectToSession() {
+        console.log('뉴 세션인가? : ' + this.isNewSession);
+        console.dir(this.state);
         if (this.isNewSession) {
             // 새로운 세션 생성
             const sessionId = this.state.mySessionId;
@@ -142,7 +144,7 @@ class VideoRoomComponent extends Component {
     
         // 세션 연결 처리
         this.OV = new OpenVidu();
-        
+
         if (this.props.token !== undefined) {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);

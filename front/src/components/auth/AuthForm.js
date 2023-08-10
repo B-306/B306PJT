@@ -179,7 +179,7 @@ const textMap = {
             const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
               userName: name,
               userPassword: password,
-              userProfile: null,
+              // userProfile: null,
             }, {
               headers: {
                 'accessToken': `${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
