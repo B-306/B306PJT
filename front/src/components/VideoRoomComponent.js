@@ -340,7 +340,8 @@ class VideoRoomComponent extends Component {
         this.state.session.signal(signalOptions);
     }
     
-    sendSignal() {
+
+    sendSignal = () => {
         const signalOptions ={
             data: '이거 되면 개 히트다',
         }
@@ -565,7 +566,7 @@ class VideoRoomComponent extends Component {
                 
                 <div id="layout" className="bounds">
                     
-                    <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}></Button>
+                    <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />

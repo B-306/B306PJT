@@ -47,7 +47,8 @@ function PhotoUpload() {
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewUrl(reader.result);
-      setImageUrl(URL.createObjectURL(file));
+      // setImageUrl(URL.createObjectURL(file));
+      setImageUrl(reader.result);
     };
     reader.readAsDataURL(file);
   };
