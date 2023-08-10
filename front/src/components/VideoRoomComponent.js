@@ -23,7 +23,7 @@ const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://
 const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 
 class VideoRoomComponent extends Component {
-
+    
     constructor(props) {
         // let roomCode = v4();
         super(props);
@@ -60,8 +60,10 @@ class VideoRoomComponent extends Component {
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
-        this.handleSignalReceived = this.handleSignalReceived.bind(this);
+        // this.handleSignalReceived = this.handleSignalReceived.bind(this);
     }
+
+    
 
     componentDidMount() {
         const openViduLayoutOptions = {
@@ -82,37 +84,43 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
-        // this.state.session.on('signal:gameStart', (event) => {
-        //     const remoteUsers = this.state.subscribers;
-        // }
-
+        // signal test
+        const remoteUsers = this.state.subscribers;
+        this.state.session.on('signal:gameStart', (event) => {
+            remoteUsers.forEach((user) => {
+                user.showCounter = true;
+            })
+        });
+        this.setState({ subscribers: remoteUsers });
     }
+
+    
 
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.onbeforeunload);
         // window.removeEventListener('resize', this.updateLayout);
         window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
-        this.OV.off('signal', this.handleSignalReceived);
+        // this.OV.off('signal', this.handleSignalReceived);
     }
 
-    handleSignalReceived = (event) => {
-        // 시그널 데이터를 처리하고 원하는 동작을 수행합니다.
-        const signalType = event.type; // 시그널 타입
-        console.log('signalType : ' + signalType);
-        if (signalType === 'signal:gameStart') {
-            // 시그널 타입이 'signal:gameStart'일 때 실행할 코드
-            this.startGame(); // 예시: 게임 시작 함수 호출
-        }
-    };
+    // handleSignalReceived = (event) => {
+    //     // 시그널 데이터를 처리하고 원하는 동작을 수행합니다.
+    //     const signalType = event.type; // 시그널 타입
+    //     console.log('signalType : ' + signalType);
+    //     if (signalType === 'signal:gameStart') {
+    //         // 시그널 타입이 'signal:gameStart'일 때 실행할 코드
+    //         this.startGame(); // 예시: 게임 시작 함수 호출
+    //     }
+    // };
 
-    startGame() {
-        // 게임 시작 로직을 여기에 구현합니다.
-        // 예시: 카운터를 시작하고 게임이 시작되었음을 상태에 업데이트합니다.
-        this.setState({
-            showCounter: true, // Counter 컴포넌트를 표시하도록 상태를 업데이트합니다.
-        });
-    }
+    // startGame() {
+    //     // 게임 시작 로직을 여기에 구현합니다.
+    //     // 예시: 카운터를 시작하고 게임이 시작되었음을 상태에 업데이트합니다.
+    //     this.setState({
+    //         showCounter: true, // Counter 컴포넌트를 표시하도록 상태를 업데이트합니다.
+    //     });
+    // }
 
     onbeforeunload(event) {
         this.leaveSession();
@@ -129,7 +137,7 @@ class VideoRoomComponent extends Component {
             async () => {
                 this.subscribeToStreamCreated();
                 await this.connectToSession();
-                this.OV.on('signal', this.handleSignalReceived);
+                // this.OV.on('signal', this.handleSignalReceived);
             },
         );
     }
@@ -372,7 +380,7 @@ class VideoRoomComponent extends Component {
     }
     
 
-    sendSignal = () => {
+    sendSignal() {
         const signalOptions ={
             data: localStorage.getItem('selectedQuizes'),
             type: 'gameStart',
