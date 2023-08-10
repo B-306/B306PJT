@@ -76,6 +76,9 @@ dependencies {
 
 	//openvidu
 	implementation 'io.openvidu:openvidu-java-client:2.28.0'
+
+	//AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 jar {
 	enabled = false
