@@ -63,7 +63,7 @@ const StyledInput = styled(Input)``;
 const MainPageTitle = styled.h1`
   text-align: center;
   color: white;
-  font-family: 'JSArirang'
+  font-family: 'Ftstardust'
 `;
 
 const UserProfile = styled.span`
