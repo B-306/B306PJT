@@ -60,33 +60,6 @@ class VideoRoomComponent extends Component {
         this.checkSize = this.checkSize.bind(this);
     }
 
-    async handleJoinWithSessionId(sessionId) {
-        try {
-            const response = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${sessionId}`, {
-                headers: { "Authorization": openvidu_key },
-            });
-
-            if (response.status === 200) {
-                // 세션 정보를 가져온 경우 이미 존재하는 세션에 참여하는 것으로 간주
-                this.isNewSession = false;
-            } else {
-                // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
-                this.isNewSession = true;
-            }
-
-            // 세션 ID 업데이트 및 연결 처리
-            this.setState({ mySessionId: sessionId });
-            this.connectToSession();
-        } catch (error) {
-            // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
-            this.isNewSession = true;
-
-            // 세션 ID 업데이트 및 연결 처리
-            this.setState({ mySessionId: sessionId });
-            this.connectToSession();
-        }
-    }
-
     componentDidMount() {
         const openViduLayoutOptions = {
             maxRatio: 3 / 4, // The narrowest ratio that will be used (default 2x3)
@@ -119,23 +92,60 @@ class VideoRoomComponent extends Component {
         this.leaveSession();
     }
 
-    joinSession() {
+    async joinSession() {
         this.OV = new OpenVidu();
-
+    
         this.setState(
             {
                 session: this.OV.initSession(),
             },
             async () => {
                 this.subscribeToStreamCreated();
-                await this.connectToSession();
+                
+                const sessionId = localStorage.getItem('mySessionId'); // 세션 ID를 로컬 스토리지에서 가져옴
+                
+                if (sessionId) {
+                    await this.handleJoinWithSessionId(sessionId); // 기존 세션에 접속 시도
+                } else {
+                    this.setState({ mySessionId: 'sessionA' }); // 기본 세션 ID 설정
+                    await this.connectToSession(); // 새로운 세션 생성 및 접속
+                }
             },
         );
+    }
+    
+    async handleJoinWithSessionId(sessionId) {
+        try {
+            const response = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${sessionId}`, {
+                headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },
+            });
+            console.log('-----------handlejoinwithsessionid 확인---------------')
+            console.log(response.data)
+            if (response.data.id) {
+                // 세션 정보를 가져온 경우 이미 존재하는 세션에 참여하는 것으로 간주
+                this.isNewSession = false;
+            } else {
+                // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
+                this.isNewSession = true;
+            }
+    
+            // 세션 ID 업데이트 및 연결 처리
+            this.setState({ mySessionId: sessionId });
+            this.connectToSession();
+        } catch (error) {
+            // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
+            this.isNewSession = true;
+    
+            // 세션 ID 업데이트 및 연결 처리
+            this.setState({ mySessionId: sessionId });
+            this.connectToSession();
+        }
     }
 
     async connectToSession() {
         console.log('뉴 세션인가? : ' + this.isNewSession);
         console.dir(this.state);
+        
         if (this.isNewSession) {
             // 새로운 세션 생성
             const sessionId = this.state.mySessionId;
@@ -144,7 +154,7 @@ class VideoRoomComponent extends Component {
     
         // 세션 연결 처리
         this.OV = new OpenVidu();
-
+    
         if (this.props.token !== undefined) {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
@@ -155,7 +165,7 @@ class VideoRoomComponent extends Component {
                 this.connect(token);
             } catch (error) {
                 console.error('There was an error getting the token:', error.code, error.message);
-                if(this.props.error){
+                if (this.props.error) {
                     this.props.error({ error: error.error, messgae: error.message, code: error.code, status: error.status });
                 }
                 alert('There was an error getting the token:', error.message);
@@ -256,7 +266,7 @@ class VideoRoomComponent extends Component {
         this.setState({
             session: undefined,
             subscribers: [],
-            mySessionId: 'ses_MBQXIRXOvg',
+            mySessionId: 'sessionA',
             myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
             localUser: undefined,
         });
