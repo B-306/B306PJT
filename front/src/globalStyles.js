@@ -1,6 +1,7 @@
 // GlobalStyles.js
 import { createGlobalStyle } from 'styled-components';
-import backgroundImage from './assets/images/bfo_bgimg.png';
+// import backgroundImage from './assets/images/bfo_bgimg.png';
+import backgroundImage from './assets/images/bfo_move_bg.gif';
 
 const GlobalStyles = createGlobalStyle`
   body {

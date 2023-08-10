@@ -609,19 +609,16 @@ class VideoRoomComponent extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        const response = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
+        const sessionData = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
             headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },
         });
-        if (response.status === 404){
+        if (sessionData.status === 404){
             const sessionData = await this.createSession(this.state.mySessionId);
             const sessionId = sessionData.sessionId;
             console.log('제발 나와라이' + sessionId);
             return await this.createToken(sessionId);
         }
         else{
-            const sessionData = await axios.get(APPLICATION_SERVER_URL + '/openvidu/api/sessions' + this.state.mySessionId, {
-                headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
-            });
             const sessionId = sessionData.sessionId;
             console.log('제발 나와라이' + sessionId);
             return await this.createToken(sessionId);
