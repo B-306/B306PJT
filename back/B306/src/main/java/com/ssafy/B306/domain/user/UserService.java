@@ -100,7 +100,7 @@ public class UserService {
 
         findUser.modifyUser(
                 UserModifyRequestDto.builder()
-                .userProfile(userModifyDto.getUserProfile())
+//                .userProfile(userModifyDto.getUserProfile())
                 .userPassword(bCryptPasswordEncoder.encode(userModifyDto.getUserPassword()))
                 .userName(userModifyDto.getUserName())
                 .build());

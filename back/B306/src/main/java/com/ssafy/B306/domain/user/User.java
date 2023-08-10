@@ -83,7 +83,7 @@ public class User {
     public void modifyUser(UserModifyRequestDto userModifyDto) {
         userName = userModifyDto.getUserName();
         userPassword = userModifyDto.getUserPassword();
-        userProfile = userModifyDto.getUserProfile();
+//        userProfile = userModifyDto.getUserProfile();
         userModifyDate = LocalDateTime.now();
     }
 
