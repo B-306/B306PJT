@@ -5,9 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class AppException extends RuntimeException{
-
+public class AccessTokenExpiredException extends RuntimeException {
     private ErrorCode errorCode;
-    private String message; // 어떤 상황인지
-
+    private String message;
 }

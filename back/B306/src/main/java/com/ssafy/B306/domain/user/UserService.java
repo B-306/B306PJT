@@ -1,7 +1,7 @@
 package com.ssafy.B306.domain.user;
 
 import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
-import com.ssafy.B306.domain.exception.AppException;
+import com.ssafy.B306.domain.exception.UserEmailDuplicatedException;
 import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtUtil;
@@ -63,7 +63,7 @@ public class UserService {
 
         // userEmail 중복 검증
         if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
-            throw new AppException(ErrorCode.USERNAME_DUPLICATED, "이미 가입된 이메일입니다.");
+            throw new UserEmailDuplicatedException(ErrorCode.USEREMAIL_DUPLICATED, "이미 가입된 이메일입니다.");
         }
 
         // 비밀번호 암호화
@@ -112,7 +112,7 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyUserImage(MultipartFile file, HttpServletRequest request) {
+    public void modifyUserImage(String url, HttpServletRequest request) {
 
         Long userPk = jwtUtil.extractUserPkFromToken(request);
         if (userPk == null) return;
@@ -120,9 +120,7 @@ public class UserService {
         User findUser = userRepository.findByUserId(userPk)
                 .orElseThrow(()-> new RuntimeException("유저 없는데?"));
 
-        String savePath = imageUploadService.makeImagePath(file, "profile");
-
-        findUser.modifyUserImage(savePath);
+        findUser.modifyUserImage(url);
     }
 
     @Transactional
