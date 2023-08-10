@@ -11,7 +11,7 @@ import Check from './game/Check';
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-import { v4 } from 'uuid';
+// import { v4 } from 'uuid';
 
 
 var localUser = new UserModel();
@@ -26,11 +26,10 @@ class VideoRoomComponent extends Component {
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
+        let sessionName = this.props.sessionName ? this.props.sessionName : 'roomCode'; // 'sessionA' 대신 방 코드 
         let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
-        this.isNewSession = false; // 새로운 세션인지 여부
         this.state = {
             mySessionId: sessionName,
             myUserName: userName,
@@ -92,59 +91,22 @@ class VideoRoomComponent extends Component {
         this.leaveSession();
     }
 
-    async joinSession() {
+    joinSession() {
         this.OV = new OpenVidu();
-    
+
         this.setState(
             {
                 session: this.OV.initSession(),
             },
             async () => {
                 this.subscribeToStreamCreated();
-                
-                const roomCode = localStorage.getItem('roomCode'); // roomCode를 로컬 스토리지에서 가져옴
-                
-                if (roomCode) {
-                    await this.handleJoinWithSessionId(roomCode); // 기존 세션에 접속 시도
-                } else {
-                    const newRoomCode = v4(); // 새로운 방 코드 생성
-                    localStorage.setItem('roomCode', newRoomCode); // 생성한 방 코드를 로컬 스토리지에 저장
-                    await this.connectToSession(newRoomCode); // 새로운 세션 생성 및 접속
-                }
+                await this.connectToSession();
             },
         );
     }
-    async handleJoinWithSessionId(sessionId) {
-        try {
-            const response = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${sessionId}`, {
-                headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },
-            });
-            console.log('-----------handlejoinwithsessionid 확인---------------');
-            console.log(response.data);
-    
-            // 세션 정보가 있는 경우 isNewSession을 false로 설정
-            this.isNewSession = !!response.data.id;
-    
-            // 세션 ID 업데이트 및 연결 처리
-            this.setState({ mySessionId: sessionId });
-            this.connectToSession(false); // false: 기존 세션에 참여하는 경우
-        } catch (error) {
-            // 세션 정보를 가져오는 데 실패한 경우 isNewSession을 true로 설정
-            this.isNewSession = true;
-    
-            // 세션 ID 업데이트 및 연결 처리
-            this.setState({ mySessionId: sessionId });
-            this.connectToSession(true); // true: 새로운 세션을 생성하는 경우
-        }
-    }
-    
-    async connectToSesssion(isNewSession) {
-        console.log('뉴 세션인가? : ' + isNewSession);
-        console.dir(this.state);
-        
-        // 세션 연결 처리
-        this.OV = new OpenVidu();
-    
+
+    async connectToSession() {
+        console.log(this.props)
         if (this.props.token !== undefined) {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
@@ -155,8 +117,8 @@ class VideoRoomComponent extends Component {
                 this.connect(token);
             } catch (error) {
                 console.error('There was an error getting the token:', error.code, error.message);
-                if (this.props.error) {
-                    this.props.error({ error: error.error, message: error.message, code: error.code, status: error.status });
+                if(this.props.error){
+                    this.props.error({ error: error.error, messgae: error.message, code: error.code, status: error.status });
                 }
                 alert('There was an error getting the token:', error.message);
             }
@@ -256,7 +218,7 @@ class VideoRoomComponent extends Component {
         this.setState({
             session: undefined,
             subscribers: [],
-            mySessionId: 'sessionA',
+            mySessionId: 'ses_MBQXIRXOvg',
             myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
             localUser: undefined,
         });
@@ -554,6 +516,7 @@ class VideoRoomComponent extends Component {
         
         return (
             <div className="container" id="container">
+                
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
@@ -646,18 +609,24 @@ class VideoRoomComponent extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        let sessionId = this.state.mySessionId;
-        console.log('getToken 함수에서 isNewSession 값은? : ' + this.isNewSession)
-        if (this.isNewSession) {
-            const sessionData = await this.createSession(sessionId);
-            sessionId = sessionData.sessionId;
-            console.log('새로운 세션 ID 생성: ' + sessionId);
-        } else {
-            console.log('기존 세션 ID 사용: ' + sessionId);
+        const response = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
+            headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },
+        });
+        if (response.status === 404){
+            const sessionData = await this.createSession(this.state.mySessionId);
+            const sessionId = sessionData.sessionId;
+            console.log('제발 나와라이' + sessionId);
+            return await this.createToken(sessionId);
+        }
+        else{
+            const sessionData = await axios.get(APPLICATION_SERVER_URL + '/openvidu/api/sessions' + this.state.mySessionId, {
+                headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
+            });
+            const sessionId = sessionData.sessionId;
+            console.log('제발 나와라이' + sessionId);
+            return await this.createToken(sessionId);
         }
         
-        const token = await this.createToken(sessionId);
-        return token;
     }
 
     async createSession(sessionId) {
