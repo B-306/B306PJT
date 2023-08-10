@@ -389,7 +389,7 @@ class VideoRoomComponent extends Component {
 
     sendSignal = () => {
         // UserModel의 setShowCounter 메서드를 호출하여 showCounter 값을 변경합니다.
-        this.state.localUser.setShowCounter();
+        // this.setState('')
         
         const signalOptions = {
             data: localStorage.getItem('selectedQuizes'),
@@ -403,6 +403,7 @@ class VideoRoomComponent extends Component {
             // data: JSON.stringify({ showCounter: this.state.localUser.isShowCounter() }),
             data: JSON.stringify({ showCounter: true }),
         };
+        this.subscribeToUserChanged();
         this.state.session.signal(userChangedSignal);
     };
     
