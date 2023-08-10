@@ -22,7 +22,7 @@ import GetDecodedState from '../components/common/CodedState';
 const MypageH1 = styled.h1`
   text-align: center;
   color: white;
-  font-family: 'JSArirang'
+  font-family: 'Ftstardust'
 `;
 
 // const StyledInput = styled(Input)``;

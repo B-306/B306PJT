@@ -41,7 +41,7 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
-            showCounter: true, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
+            showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
         };
 
@@ -316,6 +316,11 @@ class VideoRoomComponent extends Component {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
                 }
+                if (JSON.parse(event.data).type === 'gameStart') {
+                    this.setState({
+                        showCounter: true,
+                    })
+                }
             });
             this.setState(
                 {
@@ -343,7 +348,8 @@ class VideoRoomComponent extends Component {
 
     sendSignal = () => {
         const signalOptions ={
-            data: '이거 되면 개 히트다',
+            data: localStorage.getItem('selectedQuizes'),
+            type: 'gameStart',
         }
         this.state.session.signal(signalOptions);
     }
@@ -524,7 +530,7 @@ class VideoRoomComponent extends Component {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-        const { capturedImage } = this.state;
+        const { showCounter, capturedImage } = this.state;
 
 
         return (
@@ -549,7 +555,7 @@ class VideoRoomComponent extends Component {
                     </div>
                 )}
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
-                {this.state.showCounter && (
+                {showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
                         <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
@@ -565,8 +571,10 @@ class VideoRoomComponent extends Component {
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
                 <div id="layout" className="bounds">
-                    
-                    <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                    {/* 시그널 보내는 버튼 */}
+                    {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
+                        <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                    )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
