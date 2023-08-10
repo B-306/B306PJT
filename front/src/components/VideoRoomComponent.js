@@ -186,7 +186,7 @@ class VideoRoomComponent extends Component {
         localUser.setConnectionId(this.state.session.connection.connectionId);
         localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
-        // this.receiveGameSignal();
+        this.receiveGameSignal();
         this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
@@ -352,10 +352,7 @@ class VideoRoomComponent extends Component {
     
 
 // Start Game
-    sendGameSignal () {
-        console.log(this.state)
-    }
-
+    
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
             this.setState(
@@ -585,7 +582,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.sendGameSignal({mySessionId})} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
@@ -691,6 +688,18 @@ class VideoRoomComponent extends Component {
         console.log(response.data)
         return response.data; // The sessionId
     }
+
+    async sendGameSignal(sessionId) {
+        console.log('게임 신호 보내기')
+        console.log(APPLICATION_SERVER_URL + '/openvidu/api/signal')
+        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { sessionId: sessionId , type:gameStart}, {
+            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
+        });
+        return
+    }
+
+
+
 
     async createToken(sessionId) {
         
