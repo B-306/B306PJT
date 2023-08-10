@@ -60,6 +60,7 @@ class VideoRoomComponent extends Component {
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
+        this.sendGameSignal = this.sendGameSignal.bind(this);
         // this.handleSignalReceived = this.handleSignalReceived.bind(this);
     }
 
@@ -352,7 +353,17 @@ class VideoRoomComponent extends Component {
     
 
 // Start Game
-    
+
+    sendGameSignal() {
+        const signalOptions = {
+            type: 'gameStart',
+        };
+        this.state.session.signal(signalOptions);
+    }    
+
+
+
+
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
             this.setState(
@@ -582,7 +593,7 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={() => {this.sendGameSignal({mySessionId})}} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
@@ -689,15 +700,15 @@ class VideoRoomComponent extends Component {
         return response.data; // The sessionId
     }
 
-    async sendGameSignal(sessionId) {
-        console.log('게임 신호 보내기')
-        console.log(sessionId.mySessionId)
-        const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { 
-            session: sessionId.mySessionId , type: 'signal:gameStart',}, {
-            headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
-        });
-        return response.data;
-    }
+    // async sendGameSignal(sessionId) {
+    //     console.log('게임 신호 보내기')
+    //     console.log(sessionId.mySessionId)
+    //     const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { 
+    //         session: sessionId.mySessionId , type: 'signal:gameStart',}, {
+    //         headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
+    //     });
+    //     return response.data;
+    // }
 
 
 
