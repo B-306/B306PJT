@@ -1,6 +1,8 @@
 package com.ssafy.B306.domain.user;
 
 import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
+import com.ssafy.B306.domain.exception.AppException;
+import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.security.JwtToken;
@@ -61,7 +63,7 @@ public class UserService {
 
         // userEmail 중복 검증
         if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
-            throw new RuntimeException("이미 가입된 이메일입니다.");
+            throw new AppException(ErrorCode.USERNAME_DUPLICATED, "이미 가입된 이메일입니다.");
         }
 
         // 비밀번호 암호화
@@ -98,7 +100,7 @@ public class UserService {
 
         findUser.modifyUser(
                 UserModifyRequestDto.builder()
-                .userProfile(userModifyDto.getUserProfile())
+//                .userProfile(userModifyDto.getUserProfile())
                 .userPassword(bCryptPasswordEncoder.encode(userModifyDto.getUserPassword()))
                 .userName(userModifyDto.getUserName())
                 .build());
