@@ -81,12 +81,6 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
-        // 게임시작 버튼을 누르면 이벤트리스너가 발동될까?
-        this.state.session.on('signal:gameStart', (event) => {
-            // gameStart 시그널을 수신했을 때 실행될 로직을 작성
-            console.log('게임시작 시그널 수신')
-            this.startCounter(); // 예시로 Counter를 시작하는 함수를 호출
-        });
     }
 
     componentWillUnmount() {
@@ -100,15 +94,18 @@ class VideoRoomComponent extends Component {
         this.leaveSession();
     }
 
-    startCounter() {
-        this.setState(
-            {
-            showCounter:true,
-        }
-        )
+    startGameSignalRecieved() {
+        this.state.session.on('signal:startGame', (event) => {
+            console.log('Received signal:startGame');
+            this.startCounter();
+        });
     }
 
-
+    startCounter() {
+        this.setState({
+            showCounter: true,
+        });
+    }
 
     joinSession() {
         this.OV = new OpenVidu();
