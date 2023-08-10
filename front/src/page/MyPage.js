@@ -10,10 +10,10 @@ import axios from 'axios';
 import PhotoUpload from '../components/auth/PhotoUpload'
 import AuthForm from '../components/auth/AuthForm';
 import GetDecodedState from '../components/common/CodedState';
-import {
-  // useDispatch,
-  useSelector
-} from 'react-redux';
+// import {
+//   // useDispatch,
+//   useSelector
+// } from 'react-redux';
 
 // const ButtonWithMargin = styled(Button)`
 //   margin-top: 1rem;
