@@ -7,6 +7,7 @@ import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
 import Check from './game/Check';
+import Button from './common/Button';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
@@ -541,7 +542,7 @@ class VideoRoomComponent extends Component {
                     toggleChat={this.toggleChat}
                 />
                 
-                <button onClick={this.sendSignal}></button>
+                <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}></Button>
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
