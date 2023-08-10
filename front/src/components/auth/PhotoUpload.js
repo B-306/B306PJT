@@ -41,13 +41,13 @@ function PhotoUpload() {
       console.error('Invalid file');
       return;
     }
-    setSelectedFile(URL.createObjectURL(file));
-    console.log(URL.createObjectURL(file))
+    // setSelectedFile(URL.createObjectURL(file));
+    // console.log(URL.createObjectURL(file))
     // 파일을 미리 보기 위해 FileReader를 사용
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewUrl(reader.result);
-      setImageUrl(reader.result);
+      setImageUrl(URL.createObjectURL(file));
     };
     reader.readAsDataURL(file);
   };

@@ -339,6 +339,15 @@ class VideoRoomComponent extends Component {
         this.state.session.signal(signalOptions);
     }
     
+    sendSignal() {
+        const signalOptions ={
+            data: '이거 되면 개 히트다',
+        }
+        this.state.session.signal(signalOptions);
+    }
+
+
+
     toggleFullscreen() {
         const document = window.document;
         const fs = document.getElementById('container');
@@ -513,13 +522,11 @@ class VideoRoomComponent extends Component {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-        
         const { capturedImage } = this.state;
 
 
         return (
             <div className="container" id="container">
-                
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
@@ -533,6 +540,8 @@ class VideoRoomComponent extends Component {
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
                 />
+                
+                <button onClick={this.sendSignal}></button>
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
