@@ -30,6 +30,7 @@ class VideoRoomComponent extends Component {
         let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
+        this.isNewSession = false; // 새로운 세션인지 여부
         this.state = {
             mySessionId: sessionName,
             myUserName: userName,
@@ -57,6 +58,33 @@ class VideoRoomComponent extends Component {
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
+    }
+
+    async handleJoinWithSessionId(sessionId) {
+        try {
+            const response = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${sessionId}`, {
+                headers: { "Authorization": openvidu_key },
+            });
+
+            if (response.status === 200) {
+                // 세션 정보를 가져온 경우 이미 존재하는 세션에 참여하는 것으로 간주
+                this.isNewSession = false;
+            } else {
+                // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
+                this.isNewSession = true;
+            }
+
+            // 세션 ID 업데이트 및 연결 처리
+            this.setState({ mySessionId: sessionId });
+            this.connectToSession();
+        } catch (error) {
+            // 세션 정보를 가져오는 데 실패한 경우 새로운 세션을 생성하는 것으로 간주
+            this.isNewSession = true;
+
+            // 세션 ID 업데이트 및 연결 처리
+            this.setState({ mySessionId: sessionId });
+            this.connectToSession();
+        }
     }
 
     componentDidMount() {
@@ -106,7 +134,15 @@ class VideoRoomComponent extends Component {
     }
 
     async connectToSession() {
-        console.log(this.props)
+        if (this.isNewSession) {
+            // 새로운 세션 생성
+            const sessionId = this.state.mySessionId;
+            await this.createSession(sessionId);
+        }
+    
+        // 세션 연결 처리
+        this.OV = new OpenVidu();
+        
         if (this.props.token !== undefined) {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
