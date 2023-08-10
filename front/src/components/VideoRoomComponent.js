@@ -23,7 +23,7 @@ const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://
 const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 
 class VideoRoomComponent extends Component {
-    
+
     constructor(props) {
         // let roomCode = v4();
         super(props);
@@ -41,7 +41,7 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
-            showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
+            showCounter: true, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
         };
 
@@ -60,10 +60,7 @@ class VideoRoomComponent extends Component {
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
-        // this.handleSignalReceived = this.handleSignalReceived.bind(this);
     }
-
-    
 
     componentDidMount() {
         const openViduLayoutOptions = {
@@ -84,23 +81,18 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
-        
     }
-
-    
 
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.onbeforeunload);
         // window.removeEventListener('resize', this.updateLayout);
         window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
-        // this.OV.off('signal', this.handleSignalReceived);
     }
 
     onbeforeunload(event) {
         this.leaveSession();
     }
-
 
     joinSession() {
         this.OV = new OpenVidu();
@@ -112,8 +104,6 @@ class VideoRoomComponent extends Component {
             async () => {
                 this.subscribeToStreamCreated();
                 await this.connectToSession();
-                // this.OV.on('signal', this.handleSignalReceived);
-                
             },
         );
     }
@@ -160,6 +150,7 @@ class VideoRoomComponent extends Component {
         await this.OV.getUserMedia({ audioSource: undefined, videoSource: undefined });
         var devices = await this.OV.getDevices();
         var videoDevices = devices.filter(device => device.kind === 'videoinput');
+
         let publisher = this.OV.initPublisher(undefined, {
             audioSource: undefined,
             videoSource: videoDevices[0].deviceId,
@@ -186,7 +177,6 @@ class VideoRoomComponent extends Component {
         localUser.setConnectionId(this.state.session.connection.connectionId);
         localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
-        this.receiveGameSignal();
         this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
@@ -218,7 +208,6 @@ class VideoRoomComponent extends Component {
             },
         );
     }
-
 
     leaveSession() {
         const mySession = this.state.session;
@@ -294,9 +283,6 @@ class VideoRoomComponent extends Component {
         });
     }
 
-
-
-
     subscribeToStreamDestroyed() {
         // On every Stream destroyed...
         this.state.session.on('streamDestroyed', (event) => {
@@ -340,7 +326,11 @@ class VideoRoomComponent extends Component {
         });
     }
 
-
+    // updateLayout() {
+    //     setTimeout(() => {
+    //         this.layout.updateLayout();
+    //     }, 20);
+    // }
 
     sendSignalUserChanged(data) {
         const signalOptions = {
@@ -350,24 +340,11 @@ class VideoRoomComponent extends Component {
         this.state.session.signal(signalOptions);
     }
     
-
-// Start Game
-    sendGameSignal (session) {
-        const signalOptions = {
-            type: 'gameStart',
-            data: '제발 되자.',
-        };
-        session.signal(signalOptions);
-    }
-
-    receiveGameSignal() {
-        this.state.session.on('signal:gameStart', (event) => {
-            this.setState(
-                {
-                    showCounter: true,
-                }
-            )
-        })
+    sendSignal() {
+        const signalOptions ={
+            data: '이거 되면 개 히트다',
+        }
+        this.state.session.signal(signalOptions);
     }
 
 
@@ -546,13 +523,12 @@ class VideoRoomComponent extends Component {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage } = this.state;
-        const session = this.state.session;
+        const { capturedImage } = this.state;
 
 
         return (
             <div className="container" id="container">
-                {/* <ToolbarComponent
+                <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -564,7 +540,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                /> */}
+                />
                 
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
@@ -572,7 +548,7 @@ class VideoRoomComponent extends Component {
                     </div>
                 )}
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
-                {showCounter && (
+                {this.state.showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
                         <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
@@ -588,10 +564,8 @@ class VideoRoomComponent extends Component {
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
                 <div id="layout" className="bounds">
-                    {/* 시그널 보내는 버튼 */}
-                    {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendGameSignal(session)} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
-                    )}
+                    
+                    <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}></Button>
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
@@ -628,19 +602,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                <ToolbarComponent
-                    sessionId={mySessionId}
-                    user={localUser}
-                    showNotification={this.state.messageReceived}
-                    camStatusChanged={this.camStatusChanged}
-                    micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
-                    toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
-                    leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                />
+                
             </div>
         );
     }
