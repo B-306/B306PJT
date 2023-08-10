@@ -97,24 +97,6 @@ class VideoRoomComponent extends Component {
         // this.OV.off('signal', this.handleSignalReceived);
     }
 
-    // handleSignalReceived = (event) => {
-    //     // 시그널 데이터를 처리하고 원하는 동작을 수행합니다.
-    //     const signalType = event.type; // 시그널 타입
-    //     console.log('signalType : ' + signalType);
-    //     if (signalType === 'signal:gameStart') {
-    //         // 시그널 타입이 'signal:gameStart'일 때 실행할 코드
-    //         this.startGame(); // 예시: 게임 시작 함수 호출
-    //     }
-    // };
-
-    // startGame() {
-    //     // 게임 시작 로직을 여기에 구현합니다.
-    //     // 예시: 카운터를 시작하고 게임이 시작되었음을 상태에 업데이트합니다.
-    //     this.setState({
-    //         showCounter: true, // Counter 컴포넌트를 표시하도록 상태를 업데이트합니다.
-    //     });
-    // }
-
     onbeforeunload(event) {
         this.leaveSession();
     }
@@ -134,14 +116,6 @@ class VideoRoomComponent extends Component {
                 
             },
         );
-        // signal test
-        // const remoteUsers = this.state.subscribers;
-        // this.state.session.on('signal:gameStart', (event) => {
-        //     remoteUsers.forEach((user) => {
-        //         user.showCounter = true;
-        //     })
-        // });
-        // this.setState({ subscribers: remoteUsers });
     }
 
     async connectToSession() {
@@ -378,12 +352,12 @@ class VideoRoomComponent extends Component {
     
 
 // Start Game
-    sendGameSignal () {
-        const signalOptions = {
-            type: 'gameStart',
-        };
-        this.state.session.signal(signalOptions);
-    }
+    // sendGameSignal () {
+    //     const signalOptions = {
+    //         type: 'gameStart',
+    //     };
+    //     this.state.session.signal(signalOptions);
+    // }
 
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
