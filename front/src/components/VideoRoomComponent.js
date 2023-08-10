@@ -542,7 +542,6 @@ class VideoRoomComponent extends Component {
                     toggleChat={this.toggleChat}
                 />
                 
-                <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}></Button>
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
@@ -565,6 +564,8 @@ class VideoRoomComponent extends Component {
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
                 <div id="layout" className="bounds">
+                    
+                    <Button onClick={this.sendSignal} style={{ position: 'relative', zIndex: '999999999999'}}></Button>
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
