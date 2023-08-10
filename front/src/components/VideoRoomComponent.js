@@ -41,7 +41,7 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
-            // showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
+            showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
         };
 
@@ -353,7 +353,9 @@ class VideoRoomComponent extends Component {
                         user.setScreenShareActive(data.isScreenShareActive);
                     }
                     if (data.showCounter !== undefined) {
-                        user.setShowCounter(data.showCounter);
+                        this.setState({
+                            showCounter: true,
+                        });
                     }
                 }
             });
@@ -398,7 +400,8 @@ class VideoRoomComponent extends Component {
         // 모든 유저들에게 showCounter 값을 업데이트하도록 시그널을 보냅니다.
         const userChangedSignal = {
             type: 'userChanged',
-            data: JSON.stringify({ showCounter: this.state.localUser.isShowCounter() }),
+            // data: JSON.stringify({ showCounter: this.state.localUser.isShowCounter() }),
+            data: JSON.stringify({ showCounter: true }),
         };
         this.state.session.signal(userChangedSignal);
     };
@@ -577,12 +580,12 @@ class VideoRoomComponent extends Component {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-        const { capturedImage } = this.state;
+        const { showCounter, capturedImage } = this.state;
 
 
         return (
             <div className="container" id="container">
-                <ToolbarComponent
+                {/* <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -594,7 +597,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
+                /> */}
                 
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
@@ -602,7 +605,7 @@ class VideoRoomComponent extends Component {
                     </div>
                 )}
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
-                {localUser.showCounter && (
+                {showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
                         <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
@@ -658,7 +661,19 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                
+                <ToolbarComponent
+                    sessionId={mySessionId}
+                    user={localUser}
+                    showNotification={this.state.messageReceived}
+                    camStatusChanged={this.camStatusChanged}
+                    micStatusChanged={this.micStatusChanged}
+                    screenShare={this.screenShare}
+                    stopScreenShare={this.stopScreenShare}
+                    toggleFullscreen={this.toggleFullscreen}
+                    switchCamera={this.switchCamera}
+                    leaveSession={this.leaveSession}
+                    toggleChat={this.toggleChat}
+                />
             </div>
         );
     }
