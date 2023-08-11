@@ -366,12 +366,13 @@ class VideoRoomComponent extends Component {
 
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
+            console.log('변경 전 showCounter : ' + this.state.showCounter)
             this.setState(
                 {
-                    showCounter: !this.showCounter,
+                    showCounter: !this.state.showCounter,
                 }
             )
-            console.log('showCounter : ' + this.showCounter)
+            console.log('변경 후 showCounter : ' + this.state.showCounter)
         })
     }
 
