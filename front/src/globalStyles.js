@@ -7,7 +7,7 @@ const GlobalStyles = createGlobalStyle`
   body {
     background-image: url(${backgroundImage}), url(${backgroundImage});
     // background-size: cover;
-    background-size: 30% auto, 30% auto;
+    background-size: 30% 100%, 30% 100%;
     // background-size: contain;
     background-repeat: no-repeat, no-repeat;
     background-attachment: fixed;
@@ -21,11 +21,18 @@ const GlobalStyles = createGlobalStyle`
 
   ::placeholder {
     font-family: Ftstardust;
+    
     /* 다른 스타일 옵션 추가 가능 */
   }
 
   /* 추가: input 요소의 value 스타일 변경 */
   input {
+    font-family: Ftstardust;
+    padding-top: 8px;
+    /* 다른 스타일 옵션 추가 가능 */
+  }
+
+  button {
     font-family: Ftstardust;
     /* 다른 스타일 옵션 추가 가능 */
   }
