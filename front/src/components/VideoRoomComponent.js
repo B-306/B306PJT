@@ -358,6 +358,7 @@ class VideoRoomComponent extends Component {
         console.log(num)
         const response = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/' + num)
         console.log(response.data)
+        console.log(response.data.quizTemplateId)
         return response.data;
     }
 
@@ -372,9 +373,10 @@ class VideoRoomComponent extends Component {
         
         selectedQuizesArray.forEach((quiz, index) => {
             setTimeout(() => {
+                const quizData = this.fnc(quiz)
                 const signalOptions = {
                     type: 'gameStart',
-                    data: this.fnc(quiz).quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
+                    data: quizData.quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
                 };
                 this.state.session.signal(signalOptions);
             }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
