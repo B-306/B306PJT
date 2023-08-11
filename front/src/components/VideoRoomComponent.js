@@ -371,8 +371,8 @@ class VideoRoomComponent extends Component {
                     showCounter: !this.showCounter,
                 }
             )
+            console.log('showCounter : ' + this.showCounter)
         })
-        console.log('showCounter : ' + this.showCounter)
     }
 
 
