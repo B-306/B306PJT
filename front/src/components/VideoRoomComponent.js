@@ -354,11 +354,24 @@ class VideoRoomComponent extends Component {
 
 // Start Game
 
+    async fnc (num) {
+        const response = await axios.get(APPLICATION_SERVER_URL + '/quiz/' + {num})
+        return response.data;
+    }
+
+
+
     sendGameSignal() {
-        const signalOptions = {
-            type: 'gameStart',
-        };
-        this.state.session.signal(signalOptions);
+        const quizes = JSON.parse(localStorage.getItem('selectedQuizes')); // quizes를 JSON 배열로 파싱
+        quizes.forEach((quiz, index) => {
+            setTimeout(() => {
+                const signalOptions = {
+                    type: 'gameStart',
+                    data: this.fnc(quiz).quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
+                };
+                this.state.session.signal(signalOptions);
+            }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
+        });
     }    
 
 

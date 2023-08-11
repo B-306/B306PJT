@@ -17,7 +17,6 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
         
         if (count === 3) {
             console.log('카운트 끝');
-            clearInterval(id);
 
             if (showCounter) {
                 const streamManager = localUser.getStreamManager();
