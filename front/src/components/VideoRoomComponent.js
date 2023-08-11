@@ -364,23 +364,36 @@ class VideoRoomComponent extends Component {
 
 
 
-    sendGameSignal() {
+    async sendGameSignal() {
         const selectedQuizesString = localStorage.getItem('selectedQuizes');
-        const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
-        console.log('----------------------------------------')
-        console.log(selectedQuizesString)
-        console.log(selectedQuizesArray)
-        
-        selectedQuizesArray.forEach((quiz, index) => {
+        const selectedQuizesArray = selectedQuizesString.split(',');
+        for (let index = 0; index < selectedQuizesArray.length; index++) {
+            const quiz = selectedQuizesArray[index];
+            const quizData = await this.fnc(quiz);
+            
             setTimeout(() => {
-                const quizData = this.fnc(quiz)
                 const signalOptions = {
                     type: 'gameStart',
-                    data: quizData.quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
+                    data: quizData.quizTemplateId.templateImage,
                 };
                 this.state.session.signal(signalOptions);
-            }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
-        });
+            }, index * 20000);
+        }
+        // const selectedQuizesString = localStorage.getItem('selectedQuizes');
+        // const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
+        // console.log('----------------------------------------')
+        // console.log(selectedQuizesString)
+        // console.log(selectedQuizesArray)
+        
+        // selectedQuizesArray.forEach((quiz, index) => {
+        //     setTimeout(() => {
+        //         const signalOptions = {
+        //             type: 'gameStart',
+        //             data: quizData.quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
+        //         };
+        //         this.state.session.signal(signalOptions);
+        //     }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
+        // });
     }    
 
 
@@ -593,11 +606,11 @@ class VideoRoomComponent extends Component {
                     toggleChat={this.toggleChat}
                 /> */}
                 
-                {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                {/* {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                     </div>
-                )}
+                )} */}
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
                 {showCounter && (
                     <div className="counter-container">

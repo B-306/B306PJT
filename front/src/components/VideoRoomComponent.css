@@ -84,7 +84,7 @@
 
 
 .bounds {
-  background-color: #494949;
+  /* background-color: #494949; */
   overflow: hidden;
   position: absolute;
   left: 0;
