@@ -356,6 +356,7 @@ class VideoRoomComponent extends Component {
 
     async fnc (num) {
         const response = await axios.get(APPLICATION_SERVER_URL + '/quiz/' + {num})
+        console.log(response.data)
         return response.data;
     }
 
@@ -364,6 +365,9 @@ class VideoRoomComponent extends Component {
     sendGameSignal() {
         const selectedQuizesString = localStorage.getItem('selectedQuizes');
         const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
+        console.log('----------------------------------------')
+        console.log(selectedQuizesString)
+        console.log(selectedQuizesArray)
         
         selectedQuizesArray.forEach((quiz, index) => {
             setTimeout(() => {

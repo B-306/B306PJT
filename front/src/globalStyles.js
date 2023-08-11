@@ -18,6 +18,17 @@ const GlobalStyles = createGlobalStyle`
     font-family: Ftstardust;
     background-color: black;
   }
+
+  ::placeholder {
+    font-family: Ftstardust;
+    /* 다른 스타일 옵션 추가 가능 */
+  }
+
+  /* 추가: input 요소의 value 스타일 변경 */
+  input {
+    font-family: Ftstardust;
+    /* 다른 스타일 옵션 추가 가능 */
+  }
 `;
 
 export default GlobalStyles;

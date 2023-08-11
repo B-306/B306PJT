@@ -73,6 +73,8 @@ const UserProfile = styled.span`
   cursor: pointer;
   text-decoration: underline;
   color: white;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const DropdownMenu = styled.div`
