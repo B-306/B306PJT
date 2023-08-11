@@ -362,8 +362,10 @@ class VideoRoomComponent extends Component {
 
 
     sendGameSignal() {
-        const quizes = JSON.parse(localStorage.getItem('selectedQuizes')); // quizes를 JSON 배열로 파싱
-        quizes.forEach((quiz, index) => {
+        const selectedQuizesString = localStorage.getItem('selectedQuizes');
+        const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
+        
+        selectedQuizesArray.forEach((quiz, index) => {
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
