@@ -5,6 +5,7 @@ import com.ssafy.B306.domain.quiz.dto.QuizRequestSaveDto;
 import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
 import com.ssafy.B306.domain.quizbook.QuizBook;
 import com.ssafy.B306.domain.template.Template;
+import com.ssafy.B306.domain.template.dto.TemplateResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -75,10 +76,10 @@ public class Quiz {
         return quizRequestSaveDto;
     }
 
-    public QuizResponseDto toDto(Quiz quiz){
+    public QuizResponseDto toDto(Quiz quiz, TemplateResponseDto templateResponseDto){
         QuizResponseDto quizResponseDto = new QuizResponseDto();
         quizResponseDto.setQuizId(quiz.getQuizId());
-        quizResponseDto.setQuizTemplateId(quiz.getQuizTemplateId());
+        quizResponseDto.setQuizTemplateId(templateResponseDto);
         quizResponseDto.setQuizText(quiz.getQuizText());
         quizResponseDto.setQuizAnswer(quiz.getQuizAnswer());
 
