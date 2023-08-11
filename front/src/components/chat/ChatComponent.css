@@ -42,7 +42,7 @@
 /* 메세지 창 */
 .message-wrap {
   /* padding: 0 15px; */
-  padding: 0;
+  padding: 0 25px;
   height: calc(100% - 80px);
   overflow: auto;
 }
@@ -116,7 +116,7 @@ span.triangle {
 }
 
 .message.left .msg-detail .msg-content {
-  background-color: #10b1eb94;
+  background-color: #1a1b24;
   float: left;
 }
 .message.left .msg-detail .msg-content span.triangle {
@@ -138,9 +138,9 @@ span.triangle {
   right: -5px;
   border: 1px solid #ffffff;
 }
-/* 메세지 내용 */
+/* 메세지 말풍선 */
 .message.right .msg-detail .msg-content {
-  background-color: #ffffff;
+  background-color: #1a1b24;
   float: right;
 }
 /* 옆의 점 */
@@ -173,7 +173,11 @@ span.triangle {
   outline: none;
   font-size: 14px;
   margin-left: -6%;
-  color: #39f7f0;
+  color: #ffffff;
+}
+
+#messageInput::placeholder {
+  color: #ffffff; /* 원하는 색상으로 변경 */
 }
 
 #sendButton {
