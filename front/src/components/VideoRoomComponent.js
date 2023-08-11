@@ -368,7 +368,7 @@ class VideoRoomComponent extends Component {
         this.state.session.on('signal:gameStart', (event) => {
             this.setState(
                 {
-                    showCounter: true,
+                    showCounter: !this.showCounter,
                 }
             )
         })
