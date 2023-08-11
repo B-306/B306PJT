@@ -152,7 +152,7 @@ const MainPage = () => {
     <CenteredContainer>
       <LogoImage src={gamelogoImage} alt="Logo" />
       <UserProfile onClick={() => setView(!view)}>
-        {<img src={photoUrl} alt="Profile" width="50" height="50" shape:circle />}
+        {<img src={photoUrl} alt="Profile" width="50" height="50" shape="circle" />}
         {userName}
       </UserProfile>
       {view && (
