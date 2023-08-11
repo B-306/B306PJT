@@ -1,6 +1,6 @@
 // mainPage.js
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';
 // import Button from '../components/common/Button';
 import { Button } from 'primereact/button';
@@ -146,12 +146,15 @@ const MainPage = () => {
     }
   };
 
-
+  const photoUrl = useSelector((state) => state.photo.photoUrl);
 
   return (
     <CenteredContainer>
       <LogoImage src={gamelogoImage} alt="Logo" />
-      <UserProfile onClick={() => setView(!view)}>{userName}</UserProfile>
+      <UserProfile onClick={() => setView(!view)}>
+        {<img src={photoUrl} alt="Profile" width="50" height="50" shape:circle />}
+        {userName}
+      </UserProfile>
       {view && (
         <DropdownMenu>
           <div>

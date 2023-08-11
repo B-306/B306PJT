@@ -229,6 +229,7 @@ const textMap = {
       e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
       console.log('emailButtonClick 실행 \n')
       // type에 따라서 다른 동작 수행
+      setView(true)
       emailSubmit();
     };
 
@@ -256,20 +257,17 @@ const textMap = {
       e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
       console.log('emailcheckButtonClick 실행 \n')
       // type에 따라서 다른 동작 수행
-      setView(!view)
       emailCheck();
     };
 
-    const EmailForm = styled.form`
-     display: flex;
-    `
+    
 
     return (
       
       <AuthFormBlock>
         <h3>{text}</h3>
         <form onSubmit={handleSubmit}>
-          <EmailForm>
+          {/* <EmailForm> */}
           {type !== 'modify' && (
             <StyledInput 
               autoComplete="username"
@@ -284,7 +282,7 @@ const textMap = {
               인증
             </ButtonWithMarginTop>
           )}
-          {type !== 'login' && type !== 'modify' && view(
+          {type !== 'login' && type !== 'modify' && view &&(
                 <StyledInput
                     name="authCode"
                     placeholder="이메일 인증번호 입력"
@@ -293,12 +291,12 @@ const textMap = {
                     }
                 />
             )}
-          {type !== 'login' && type !== 'modify' && view(
+          {type !== 'login' && type !== 'modify' && view &&(
             <ButtonWithMarginTop onClick={(e) => emailCheckClick(e)}>
               인증 확인
             </ButtonWithMarginTop>
           )}
-          </EmailForm>
+          {/* </EmailForm> */}
           {type !== 'login' && (
             <StyledInput
               // autoComplete="newname"
