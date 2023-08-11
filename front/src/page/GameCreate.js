@@ -44,7 +44,8 @@ const GetQuiz = () => {
       // console.log(quizIds)
       localStorage.setItem('selectedQuizes', quizIds);
       const roomCode = uuidv4();
-      localStorage.setItem('roomCode',roomCode)
+      localStorage.setItem('roomCode',roomCode);
+      localStorage.setItem('hostOf', roomCode);
       window.location.href = `/game/${roomCode}`;
     })
     .catch(error => {

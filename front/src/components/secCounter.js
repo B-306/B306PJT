@@ -16,7 +16,7 @@ const Counter = ({ localUser, onImageCaptured }) => {
         }, 1000);
         
         // 이미지 캡처 로직 시작
-        if (count === 0) {
+        if (count === 3) {
             console.log('카운트 끝')
             clearInterval(id);
 
