@@ -52,6 +52,7 @@ const ButtonWithMarginTop = styled(Button)`
   padding: 6px 6px;
   text-align: center;
   justify-content: center;
+  font-family: 'Ftstardust';
   width : 90px;
   hight : 70px;
 `;

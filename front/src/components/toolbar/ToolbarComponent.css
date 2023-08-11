@@ -4,8 +4,8 @@
     background-color: #151516;
     padding: 0 14px 0 0;
     position: relative;
-    top: 0;
-    /* bottom: 0; */
+    /* top: 0; */
+    bottom: 0;
     left: 0;
     z-index: 999999;
     min-width: 400px !important;
