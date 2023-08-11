@@ -259,7 +259,7 @@ const AuthForm = ({ type }) => {
       });
       console.log(response.data)
       alert('Email 검증이 완료되었습니다.')
-      setEmailConfirm(!view);
+      setEmailConfirm(true);
     } catch (error) {
       console.error('실패:', error);
       alert('잘 못된 인증코드 입니다. 확인해 주세요.')
