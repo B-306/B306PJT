@@ -15,7 +15,7 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
             console.log('똑딱똑딱')
         }, 1000);
         
-        if (count === 3) {
+        if (count === 0) {
             console.log('카운트 끝');
 
             if (showCounter) {
