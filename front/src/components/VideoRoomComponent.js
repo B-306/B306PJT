@@ -354,11 +354,52 @@ class VideoRoomComponent extends Component {
 
 // Start Game
 
-    sendGameSignal() {
-        const signalOptions = {
-            type: 'gameStart',
-        };
-        this.state.session.signal(signalOptions);
+    async fnc (num) {
+        console.log(num)
+        const response = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/' + num)
+        console.log(response.data)
+        console.log(response.data.quizTemplateId)
+        return response.data;
+    }
+
+
+
+    async sendGameSignal() {
+        const selectedQuizesString = localStorage.getItem('selectedQuizes');
+        const selectedQuizesArray = selectedQuizesString.split(',');
+        for (let index = 0; index < selectedQuizesArray.length; index++) {
+            const quiz = selectedQuizesArray[index];
+            const quizData = await this.fnc(quiz);
+            
+            setTimeout(() => {
+                const signalOptions = {
+                    type: 'gameStart',
+                    data: quizData.quizTemplateId.templateImage,
+                };
+                this.state.session.signal(signalOptions);
+            }, index * 20000);
+            setTimeout(() => {
+                const signalOptions = {
+                    type: 'gameStart',
+                };
+                this.state.session.signal(signalOptions);
+            }, index * 20000 + 19000);
+        }
+        // const selectedQuizesString = localStorage.getItem('selectedQuizes');
+        // const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
+        // console.log('----------------------------------------')
+        // console.log(selectedQuizesString)
+        // console.log(selectedQuizesArray)
+        
+        // selectedQuizesArray.forEach((quiz, index) => {
+        //     setTimeout(() => {
+        //         const signalOptions = {
+        //             type: 'gameStart',
+        //             data: quizData.quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
+        //         };
+        //         this.state.session.signal(signalOptions);
+        //     }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
+        // });
     }    
 
 
@@ -366,11 +407,13 @@ class VideoRoomComponent extends Component {
 
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
+            console.log('변경 전 showCounter : ' + this.state.showCounter)
             this.setState(
                 {
-                    showCounter: !this.showCounter,
+                    showCounter: !this.state.showCounter,
                 }
             )
+            console.log('변경 후 showCounter : ' + this.state.showCounter)
         })
     }
 
@@ -544,6 +587,7 @@ class VideoRoomComponent extends Component {
         this.setState({
             capturedImage: capturedImageBlob,
         });
+        console.log('캡처된이미지 변경 : ' + this.state.capturedImage)
     }
     
     render() {
@@ -555,7 +599,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
-                <ToolbarComponent
+                {/* <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -567,24 +611,24 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
+                /> */}
                 
-                {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                {/* {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                     </div>
-                )}
+                )} */}
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
                 {showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
-                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
+                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} showCounter={showCounter} />
                     </div>
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
-                {capturedImage && (
+                {showCounter && capturedImage && (
                     <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}>
-                        <Check image={this.state.capturedImage} />
+                        <Check image={this.state.capturedImage} showCounter={showCounter} />
                     </div>
                 )}
 
@@ -631,7 +675,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                {/* <ToolbarComponent
+                <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -643,7 +687,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                /> */}
+                />
             </div>
         );
     }

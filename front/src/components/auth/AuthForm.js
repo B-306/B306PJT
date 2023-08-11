@@ -13,8 +13,7 @@ import { setPhoto } from '../../redux/modules/photoSlice';
 // import { encodeState } from "../common/CodedState";
 // import AuthMail from "./AuthMail"
 
-// const EmailForm = styled.form`
-//   display: flex;
+
 
 
 // 
@@ -66,7 +65,7 @@ const textMap = {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [authCode, setAuthCode] = useState('');
     const [emailConfirm, setEmailConfirm] = useState(false);
-    // const [view, setView] = useState(false);
+    const [view, setView] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
@@ -140,7 +139,7 @@ const textMap = {
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
           dispatch(setUserData({ userName: response.data.userName, userEmail: email }));
-          const photoUrl = response.data.userProfile
+          const photoUrl = response.data.userProfile  
           dispatch(setPhoto(photoUrl));
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");
@@ -211,6 +210,12 @@ const textMap = {
       console.log('eamilSubmit 실행 \n')
       console.log(email)
 
+      const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,3}$/;
+          if (!emailRegex.test(email)) {
+            alert('유효한 이메일 주소를 입력해주세요.');
+            return;
+          }
+
       try {
         // e메일 인증보내기
           const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email', {
@@ -230,6 +235,7 @@ const textMap = {
       e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
       console.log('emailButtonClick 실행 \n')
       // type에 따라서 다른 동작 수행
+      setView(true)
       emailSubmit();
     };
 
@@ -260,6 +266,8 @@ const textMap = {
       emailCheck();
     };
 
+    
+
     return (
       
       <AuthFormBlock>
@@ -280,7 +288,7 @@ const textMap = {
               인증
             </ButtonWithMarginTop>
           )}
-          {type !== 'login' && type !== 'modify' &&(
+          {type !== 'login' && type !== 'modify' && view &&(
                 <StyledInput
                     name="authCode"
                     placeholder="이메일 인증번호 입력"
@@ -289,7 +297,7 @@ const textMap = {
                     }
                 />
             )}
-          {type !== 'login' && type !== 'modify' && (
+          {type !== 'login' && type !== 'modify' && view &&(
             <ButtonWithMarginTop onClick={(e) => emailCheckClick(e)}>
               인증 확인
             </ButtonWithMarginTop>

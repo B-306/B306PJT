@@ -84,7 +84,7 @@
 
 
 .bounds {
-  background-color: #494949;
+  /* background-color: #494949; */
   overflow: hidden;
   position: absolute;
   left: 0;
@@ -415,7 +415,7 @@
   position: absolute;
   top: 14px;
   left: 14px;
-  background-color: #575757;
+  background-color: #211010;
   -webkit-box-shadow: 0 0 5px 1px #575757;
   box-shadow: 0 0 5px 1px #575757;
 }
