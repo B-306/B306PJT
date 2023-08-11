@@ -372,6 +372,7 @@ class VideoRoomComponent extends Component {
                 }
             )
         })
+        console.log('showCounter : ' + this.showCounter)
     }
 
 
@@ -555,7 +556,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
-                <ToolbarComponent
+                {/* <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -567,7 +568,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
+                /> */}
                 
                 {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
@@ -578,7 +579,7 @@ class VideoRoomComponent extends Component {
                 {showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
-                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
+                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} showCounter={showCounter} />
                     </div>
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
@@ -631,7 +632,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                {/* <ToolbarComponent
+                <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -643,7 +644,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                /> */}
+                />
             </div>
         );
     }

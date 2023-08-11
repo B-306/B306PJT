@@ -140,7 +140,7 @@ const textMap = {
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
           dispatch(setUserData({ userName: response.data.userName, userEmail: email }));
-          const photoUrl = response.data.userProfile
+          const photoUrl = response.data.userProfile  
           dispatch(setPhoto(photoUrl));
           // 로그인 성공 시 처리 로직
           console.log("로그인 성공!");

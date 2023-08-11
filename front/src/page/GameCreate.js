@@ -9,13 +9,11 @@ import { v4 as uuidv4 } from 'uuid';
 const QuizbookH1 = styled.h1`
   text-align: center;
   color: white;
-  font-family: 'JSArirang'
 `;
 
 const QuizbookH2 = styled.h2`
   text-align: center;
   color: white;
-  font-family: 'JSArirang'
 `;
 
 const GetQuiz = () => {
