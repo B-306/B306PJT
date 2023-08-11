@@ -7,6 +7,22 @@ import PhotoUpload from '../components/auth/PhotoUpload';
 import AuthForm from '../components/auth/AuthForm';
 import GetDecodedState from '../components/common/CodedState';
 
+const StyledButtonLink = styled(Link)`
+  display: inline-block;
+  background-color: #5ec9f2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3498db;
+  }
+`;
+
 const MypageH1 = styled.h1`
   text-align: center;
   color: white;
@@ -110,7 +126,7 @@ const MyPage = (props) => {
 
   return (
     <>
-      <Link to="/">Go to 두뇌 풀 가동 Main</Link>
+      <StyledButtonLink to="/">Go to 두뇌 풀 가동</StyledButtonLink>
       <CenteredContainer>
         <MypageH1>마이 페이지</MypageH1>
         <React.Fragment>

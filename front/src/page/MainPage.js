@@ -77,8 +77,10 @@ const UserProfile = styled.span`
   color: white;
   display: flex;
   flex-direction: column;
+  align-items: center;
   text-align: center;
   justify-content: center;
+  margin-right: 20px;
 `;
 
 const ProfileImage = styled.img`
@@ -86,6 +88,7 @@ const ProfileImage = styled.img`
   height: 75px;
   border-radius: 50%; /* 이미지를 원형으로 꾸미는 속성 */
   margin-bottom: 15px; /* 이미지 아래 여백 */
+  margin: aut
 `;
 
 const DropdownMenu = styled.div`
@@ -185,15 +188,15 @@ const MainPage = () => {
       <UserProfile>
         <ProfileImage src={photoUrl} alt="Profile" />
         <span onClick={() => setView(!view)} style={{fontSize: '35px', cursor: 'pointer', fontWeight:'bold' }}>{userName}</span>
+        {view && (
+          <DropdownMenu>
+            <div style={{display: 'flex', flexDirection: 'column' }}>
+              <StyledButtonLink to={`/${userEmail}/mypage`}>마이페이지</StyledButtonLink>
+              <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
+            </div>
+          </DropdownMenu>
+        )}
       </UserProfile>
-      {view && (
-        <DropdownMenu>
-          <div style={{display: 'flex', flexDirection: 'column' }}>
-            <StyledButtonLink to={`/${userEmail}/mypage`}>마이페이지</StyledButtonLink>
-            <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
-          </div>
-        </DropdownMenu>
-      )}
       {/* <span
         style={{ textDecoration: 'underline', cursor: 'pointer' }}
         onClick={() => setView(!view)}
