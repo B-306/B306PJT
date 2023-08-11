@@ -355,6 +355,7 @@ class VideoRoomComponent extends Component {
 // Start Game
 
     async fnc (num) {
+        console.log(num)
         const response = await axios.get(APPLICATION_SERVER_URL + '/quiz/' + {num})
         console.log(response.data)
         return response.data;
