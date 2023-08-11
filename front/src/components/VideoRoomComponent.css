@@ -92,7 +92,7 @@
   top: 40px;
   bottom: 0;
   height: inherit;
-  min-width: 720px !important;
+  min-width: 640px !important;
   width: inherit;
 }
 
@@ -415,7 +415,7 @@
   position: absolute;
   top: 14px;
   left: 14px;
-  background-color: #575757;
+  background-color: #120909;
   -webkit-box-shadow: 0 0 5px 1px #575757;
   box-shadow: 0 0 5px 1px #575757;
 }
