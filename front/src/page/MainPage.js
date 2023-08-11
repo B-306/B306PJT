@@ -67,7 +67,7 @@ const MainPageTitle = styled.h1`
   font-family: 'Ftstardust'
 `;
 
-const UserProfile = styled.span`
+const UserProfile = styled.div`
   position: absolute;
   top: 20px;
   right: 20px;
@@ -77,9 +77,9 @@ const UserProfile = styled.span`
   color: white;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   text-align: center;
-  justify-content: center;
   margin-right: 20px;
 `;
 
@@ -92,14 +92,15 @@ const ProfileImage = styled.img`
 `;
 
 const DropdownMenu = styled.div`
-  position: absolute;
+  // position: absolute;
   top: 50px;
   right: 20px;
   background-color: white;
   border-radius: 4px;
-  margin-top: 100px;
+  margin-top: 10px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space:nowrap;
 `;
 
 const rotateAnimation = keyframes`
