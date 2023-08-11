@@ -356,7 +356,7 @@ class VideoRoomComponent extends Component {
 
     async fnc (num) {
         console.log(num)
-        const response = await axios.get(APPLICATION_SERVER_URL + '/quiz/' + {num})
+        const response = await axios.get(APPLICATION_SERVER_URL + '/quiz/' + num)
         console.log(response.data)
         return response.data;
     }

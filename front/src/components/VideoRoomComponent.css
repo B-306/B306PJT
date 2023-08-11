@@ -84,7 +84,7 @@
 
 
 .bounds {
-  background-color: #494949;
+  /* background-color: #494949; */
   overflow: hidden;
   position: absolute;
   left: 0;
@@ -92,7 +92,7 @@
   top: 40px;
   bottom: 0;
   height: inherit;
-  min-width: 640px !important;
+  min-width: 720px !important;
   width: inherit;
 }
 
