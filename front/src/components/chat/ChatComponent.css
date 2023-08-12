@@ -9,7 +9,7 @@
 
 #chatToolbar {
   height: 30px;
-  background-color: #3d3d3d;
+  background-color: #1a1b24;
   box-sizing: border-box;
   font-weight: bold;
   font-size: 14px;
@@ -27,7 +27,7 @@
 }
 
 #chatComponent {
-  background-color: #1d213f;
+  background-color: #1a1b24;
   position: absolute;
   z-index: 99999;
   top: 0;
@@ -39,9 +39,10 @@
   width: calc(100% - 30px);
   border-radius: 20px;
 }
-
+/* 메세지 창 */
 .message-wrap {
-  padding: 0 15px;
+  /* padding: 0 15px; */
+  padding: 0 25px;
   height: calc(100% - 80px);
   overflow: auto;
 }
@@ -70,7 +71,7 @@
 
 .msg-info p {
   font-size: 0.8em;
-  color: #000000;
+  color: #ffffff;
   font-style: italic;
 }
 
@@ -79,7 +80,7 @@
   margin-top: 14px;
   border-radius: 5px;
   padding: 8px;
-  color: #000000;
+  color: #1a1b24;
   width: auto;
   max-width: 80%;
 }
@@ -94,9 +95,9 @@ span.triangle {
   transform: rotate(45deg);
   position: absolute;
 }
-
+/* 채팅에 나오는 글자인지 확인 */
 .text {
-  word-break: break-all;color: #39f7f0;
+  word-break: break-all;color: #ffffff;
 }
 
 /* Start message from other user */
@@ -111,15 +112,15 @@ span.triangle {
 
 .message.left .user-img {
   left: -5px;
-  border: 1px solid #f0f0f094;
+  border: 1px solid #10b1eb94;
 }
 
 .message.left .msg-detail .msg-content {
-  background-color: #f0f0f0;
+  background-color: #1a1b24;
   float: left;
 }
 .message.left .msg-detail .msg-content span.triangle {
-  background-color: #f0f0f0;
+  background-color: #1a1b24;
   border-bottom-width: 0;
   border-left-width: 0;
   left: -5px;
@@ -132,35 +133,39 @@ span.triangle {
 .message.right .msg-detail .msg-info {
   text-align: right;
 }
+/* 유저이미지 테두리? */
 .message.right .user-img {
   right: -5px;
-  border: 1px solid #c8ffe8ab;
+  border: 1px solid #ffffff;
 }
-
+/* 메세지 말풍선 */
 .message.right .msg-detail .msg-content {
-  background-color: #c8ffe8;
+  background-color: #1a1b24;
   float: right;
 }
+/* 옆의 점 */
 .message.right .msg-detail .msg-content span.triangle {
-  background-color: #c8ffe8;
+  background-color: #1a1b24;
   border-bottom-width: 0;
   border-left-width: 0;
   right: -5px;
 }
 
 /* End my messages */
-
+/* 메세지 입력 */
 #messageInput {
   position: absolute;
   bottom: 0px;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #1a1b24;
   text-align: center;
   padding: 10px 0px;
   height: 30px;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+  border-top: 1px solid #39f7f0;
 }
+/* 메세지 입력의 글자 */
 #messageInput input {
   width: 90%;
   height: 100%;
@@ -168,7 +173,11 @@ span.triangle {
   outline: none;
   font-size: 14px;
   margin-left: -6%;
-  color: #000000;
+  color: #ffffff;
+}
+
+#messageInput::placeholder {
+  color: #ffffff; /* 원하는 색상으로 변경 */
 }
 
 #sendButton {

@@ -16,6 +16,49 @@ const StyledForm = styled.form`
 ]
 `;
 
+const FileAddButton = styled.input`
+  font-family: 'Ftstardust';
+  background-color: #5ec9f2;
+  color: white;
+  border: none;
+
+  width: 100px; /* 가로 크기를 100px로 설정 */
+  height: 50px; /* 세로 크기를 50px로 설정 */
+
+  font-size: 18px;
+  font-weight: bold;
+
+  border-radius: 10px;
+
+  /* 숨겨진 input 요소를 대체하는 버튼 스타일 */
+  &:hover {
+    background-color: #3498db; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 글씨 색 변경 */
+    cursor: pointer;
+  }
+`;
+
+const UploadButton = styled.button`
+  font-family: 'Ftstardust';
+  background-color: #5ec9f2;
+  color: white;
+  border: none;
+
+  width: 100px; /* 가로 크기를 100px로 설정 */
+  height: 50px; /* 세로 크기를 50px로 설정 */
+
+  font-size: 18px;
+  font-weight: bold;
+
+  border-radius: 10px;
+
+  &:hover {
+    background-color: #3498db; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 글씨 색 변경 */
+    cursor: pointer;
+  }
+`;
+
 
 function PhotoUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -101,13 +144,13 @@ function PhotoUpload() {
       <StyledForm onSubmit={handleSubmit}>
       {/* 파일 선택 버튼 */}
       <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
-      <input type="button" value="파일추가"
+      <FileAddButton type="button" value="파일추가"
         onClick={() => {
           document.getElementById('selectedFile1').click();
         }}
       />
       {/* 업로드 버튼 */}
-      <button>업로드</button>
+      <UploadButton>업로드</UploadButton>
       </StyledForm>
       {/* {imageUrl && <img src={imageUrl} alt='Uploaded' />} */}
     </div>
