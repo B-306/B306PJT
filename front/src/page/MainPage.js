@@ -220,7 +220,8 @@ const MainPage = () => {
         {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
         <GameCreateButton onClick={()=>navigate(`/game/1`)} >게임방 테스트 방번호 1번</GameCreateButton>
         <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>
-        <GameCreateButton><Link to={`/templatecreate`}>템플릿 업로드 페이지</Link></GameCreateButton>
+        {/* <GameCreateButton><Link to={`/templatecreate`}>템플릿 업로드 페이지</Link></GameCreateButton> */}
+        <GameCreateButton onClick={()=>navigate(`/templatecreate`)} >템플릿 업로드</GameCreateButton>
       </StyledForm>
     </CenteredContainer>
   );
