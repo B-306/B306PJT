@@ -7,11 +7,14 @@ import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
 import Check from './game/Check';
+import Button from './common/Button';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 // import { v4 } from 'uuid';
+
+
 
 
 var localUser = new UserModel();
@@ -20,13 +23,13 @@ const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://
 const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 
 class VideoRoomComponent extends Component {
-
+    
     constructor(props) {
         // let roomCode = v4();
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = this.props.sessionName ? this.props.sessionName : 'roomCode'; // 'sessionA' 대신 방 코드 
+        let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
         let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
@@ -38,7 +41,7 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
-            showCounter: true, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
+            showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
         };
 
@@ -57,7 +60,11 @@ class VideoRoomComponent extends Component {
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
+        this.sendGameSignal = this.sendGameSignal.bind(this);
+        // this.handleSignalReceived = this.handleSignalReceived.bind(this);
     }
+
+    
 
     componentDidMount() {
         const openViduLayoutOptions = {
@@ -78,18 +85,23 @@ class VideoRoomComponent extends Component {
         // window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
+        
     }
+
+    
 
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.onbeforeunload);
         // window.removeEventListener('resize', this.updateLayout);
         window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
+        // this.OV.off('signal', this.handleSignalReceived);
     }
 
     onbeforeunload(event) {
         this.leaveSession();
     }
+
 
     joinSession() {
         this.OV = new OpenVidu();
@@ -101,8 +113,10 @@ class VideoRoomComponent extends Component {
             async () => {
                 this.subscribeToStreamCreated();
                 await this.connectToSession();
+                
             },
         );
+        console.log(this.state)
     }
 
     async connectToSession() {
@@ -147,7 +161,6 @@ class VideoRoomComponent extends Component {
         await this.OV.getUserMedia({ audioSource: undefined, videoSource: undefined });
         var devices = await this.OV.getDevices();
         var videoDevices = devices.filter(device => device.kind === 'videoinput');
-
         let publisher = this.OV.initPublisher(undefined, {
             audioSource: undefined,
             videoSource: videoDevices[0].deviceId,
@@ -174,6 +187,7 @@ class VideoRoomComponent extends Component {
         localUser.setConnectionId(this.state.session.connection.connectionId);
         localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
+        this.receiveGameSignal();
         this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
@@ -205,6 +219,7 @@ class VideoRoomComponent extends Component {
             },
         );
     }
+
 
     leaveSession() {
         const mySession = this.state.session;
@@ -280,6 +295,9 @@ class VideoRoomComponent extends Component {
         });
     }
 
+
+
+
     subscribeToStreamDestroyed() {
         // On every Stream destroyed...
         this.state.session.on('streamDestroyed', (event) => {
@@ -323,11 +341,7 @@ class VideoRoomComponent extends Component {
         });
     }
 
-    // updateLayout() {
-    //     setTimeout(() => {
-    //         this.layout.updateLayout();
-    //     }, 20);
-    // }
+
 
     sendSignalUserChanged(data) {
         const signalOptions = {
@@ -336,6 +350,74 @@ class VideoRoomComponent extends Component {
         };
         this.state.session.signal(signalOptions);
     }
+    
+
+// Start Game
+
+    async fnc (num) {
+        console.log(num)
+        const response = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/' + num)
+        console.log(response.data)
+        console.log(response.data.quizTemplateId)
+        return response.data;
+    }
+
+
+
+    async sendGameSignal() {
+        const selectedQuizesString = localStorage.getItem('selectedQuizes');
+        const selectedQuizesArray = selectedQuizesString.split(',');
+        for (let index = 0; index < selectedQuizesArray.length; index++) {
+            const quiz = selectedQuizesArray[index];
+            const quizData = await this.fnc(quiz);
+            
+            setTimeout(() => {
+                const signalOptions = {
+                    type: 'gameStart',
+                    data: quizData.quizTemplateId.templateImage,
+                };
+                this.state.session.signal(signalOptions);
+            }, index * 20000);
+            setTimeout(() => {
+                const signalOptions = {
+                    type: 'gameStart',
+                };
+                this.state.session.signal(signalOptions);
+            }, index * 20000 + 19000);
+        }
+        // const selectedQuizesString = localStorage.getItem('selectedQuizes');
+        // const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
+        // console.log('----------------------------------------')
+        // console.log(selectedQuizesString)
+        // console.log(selectedQuizesArray)
+        
+        // selectedQuizesArray.forEach((quiz, index) => {
+        //     setTimeout(() => {
+        //         const signalOptions = {
+        //             type: 'gameStart',
+        //             data: quizData.quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
+        //         };
+        //         this.state.session.signal(signalOptions);
+        //     }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
+        // });
+    }    
+
+
+
+
+    receiveGameSignal() {
+        this.state.session.on('signal:gameStart', (event) => {
+            console.log('변경 전 showCounter : ' + this.state.showCounter)
+            this.setState(
+                {
+                    showCounter: !this.state.showCounter,
+                }
+            )
+            console.log('변경 후 showCounter : ' + this.state.showCounter)
+        })
+    }
+
+
 
     toggleFullscreen() {
         const document = window.document;
@@ -505,19 +587,19 @@ class VideoRoomComponent extends Component {
         this.setState({
             capturedImage: capturedImageBlob,
         });
+        console.log('캡처된이미지 변경 : ' + this.state.capturedImage)
     }
     
     render() {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
+        const { showCounter, capturedImage } = this.state;
         
-        const { capturedImage } = this.state;
-        
+
         return (
             <div className="container" id="container">
-                
-                <ToolbarComponent
+                {/* <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -529,29 +611,34 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
-                {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                /> */}
+                
+                {/* {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                     </div>
-                )}
+                )} */}
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
-                {this.state.showCounter && (
+                {showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
-                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} />
+                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} showCounter={showCounter} />
                     </div>
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
-                {capturedImage && (
+                {showCounter && capturedImage && (
                     <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}>
-                        <Check image={this.state.capturedImage} />
+                        <Check image={this.state.capturedImage} showCounter={showCounter} />
                     </div>
                 )}
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
                 <div id="layout" className="bounds">
+                    {/* 시그널 보내는 버튼 */}
+                    {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
+                        <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                    )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
@@ -588,7 +675,19 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                
+                <ToolbarComponent
+                    sessionId={mySessionId}
+                    user={localUser}
+                    showNotification={this.state.messageReceived}
+                    camStatusChanged={this.camStatusChanged}
+                    micStatusChanged={this.micStatusChanged}
+                    screenShare={this.screenShare}
+                    stopScreenShare={this.stopScreenShare}
+                    toggleFullscreen={this.toggleFullscreen}
+                    switchCamera={this.switchCamera}
+                    leaveSession={this.leaveSession}
+                    toggleChat={this.toggleChat}
+                />
             </div>
         );
     }
@@ -608,11 +707,30 @@ class VideoRoomComponent extends Component {
      * Visit https://docs.openvidu.io/en/stable/application-server to learn
      * more about the integration of OpenVidu in your application server.
      */
+
+
+
     async getToken() {
-        const sessionData = await this.createSession(this.state.mySessionId);
-        const sessionId = sessionData.sessionId;
-        console.log('제발 나와라이' + sessionId);
-        return await this.createToken(sessionId);
+        try {
+            console.log('1번 후보 : ')
+            console.log(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`);
+            console.log('2번 후보 : ' + APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + this.state.mySessionId);
+            const sessionData = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
+                headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },});
+            console.log(sessionData.data);    
+            const sessionId = sessionData.data.sessionId;
+            console.log(sessionId)
+            console.log('이미 있는 방' + sessionId);
+            return await this.createToken(sessionId);
+        }
+        catch(error){
+                    
+            const sessionData = await this.createSession(this.state.mySessionId);
+            const sessionId = sessionData.sessionId;
+            console.log('새로운 방' + sessionId);
+            return await this.createToken(sessionId);
+        }
+        
     }
 
     async createSession(sessionId) {
@@ -625,6 +743,19 @@ class VideoRoomComponent extends Component {
         console.log(response.data)
         return response.data; // The sessionId
     }
+
+    // async sendGameSignal(sessionId) {
+    //     console.log('게임 신호 보내기')
+    //     console.log(sessionId.mySessionId)
+    //     const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { 
+    //         session: sessionId.mySessionId , type: 'signal:gameStart',}, {
+    //         headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
+    //     });
+    //     return response.data;
+    // }
+
+
+
 
     async createToken(sessionId) {
         

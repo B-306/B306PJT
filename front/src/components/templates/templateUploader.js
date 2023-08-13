@@ -18,7 +18,7 @@ function TemplateUploader() {
         };
 
         try {
-            await axios.post('/template/add-template', formData, {
+            await axios.post('/api1/template/add-template', formData, {
                 params: templateSaveDto,
                 headers: {
                     'Content-Type': 'multipart/form-data',
