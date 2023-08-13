@@ -1,6 +1,6 @@
 #header {
     color: #ffffff;
-    height: 50px;
+    height: 40px;
     background-color: #151516;
     padding: 0 14px 0 0;
     position: relative;
@@ -31,7 +31,8 @@
   }
   #navChatButton {
     position: absolute;
-    right: 10px;
+    /* right: 10px; */
+    right: 0px;
     top: 0;
   }
   
