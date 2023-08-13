@@ -89,6 +89,12 @@ class Check extends Component {
 
     render() {
         const { people, checkImageData, maskImageBitmap, maskImageData } = this.state;
+        const { showCounter } = this.props;
+
+        // showCounter 값에 따라 렌더링 여부 결정
+        if (!showCounter) {
+            return null;
+        }
     
         if (!people || people.length === 0) {
             return null; // 세그멘테이션 결과가 없으면 아무것도 렌더링하지 않음

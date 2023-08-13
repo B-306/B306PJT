@@ -9,13 +9,27 @@ import { v4 as uuidv4 } from 'uuid';
 const QuizbookH1 = styled.h1`
   text-align: center;
   color: white;
-  font-family: 'JSArirang'
 `;
 
 const QuizbookH2 = styled.h2`
   text-align: center;
   color: white;
-  font-family: 'JSArirang'
+`;
+
+const StyledButtonLink = styled(Link)`
+  display: inline-block;
+  background-color: #5ec9f2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3498db;
+  }
 `;
 
 const GetQuiz = () => {
@@ -44,7 +58,8 @@ const GetQuiz = () => {
       // console.log(quizIds)
       localStorage.setItem('selectedQuizes', quizIds);
       const roomCode = uuidv4();
-      localStorage.setItem('roomCode',roomCode)
+      localStorage.setItem('roomCode',roomCode);
+      localStorage.setItem('hostOf', roomCode);
       window.location.href = `/game/${roomCode}`;
     })
     .catch(error => {
@@ -81,8 +96,8 @@ const GetQuiz = () => {
 const GameCreatePage = () => {
   return (
     <div>
-      <Link to="/">두뇌 풀 가동</Link>
-      <QuizbookH1> Game제작 페이지입니다. </QuizbookH1>
+      <StyledButtonLink to="/">두뇌 풀 가동</StyledButtonLink>
+      <QuizbookH1> Game 생성 </QuizbookH1>
       <GetQuiz />
     </div>
   );

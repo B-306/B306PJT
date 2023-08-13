@@ -1,6 +1,6 @@
 // mainPage.js
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';
 // import Button from '../components/common/Button';
 import { Button } from 'primereact/button';
@@ -54,6 +54,7 @@ const CenteredContainer = styled.div`
 `;
 
 const GameCreateButton = styled(Button)`
+  font-family: Ftstardust;
   margin-top: 1rem;
   margin-right: 1rem; 
 `;
@@ -63,26 +64,43 @@ const StyledInput = styled(Input)``;
 const MainPageTitle = styled.h1`
   text-align: center;
   color: white;
-  font-family: 'JSArirang'
+  font-family: 'Ftstardust'
 `;
 
-const UserProfile = styled.span`
+const UserProfile = styled.div`
   position: absolute;
   top: 20px;
   right: 20px;
   cursor: pointer;
-  text-decoration: underline;
+  // text-decoration: underline;
+  text-decoration: none;
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-right: 20px;
+`;
+
+const ProfileImage = styled.img`
+  width: 75px;
+  height: 75px;
+  border-radius: 50%; /* 이미지를 원형으로 꾸미는 속성 */
+  margin-bottom: 15px; /* 이미지 아래 여백 */
+  margin: aut
 `;
 
 const DropdownMenu = styled.div`
-  position: absolute;
+  // position: absolute;
   top: 50px;
   right: 20px;
   background-color: white;
   border-radius: 4px;
+  margin-top: 10px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space:nowrap;
 `;
 
 const rotateAnimation = keyframes`
@@ -103,6 +121,23 @@ const LogoImage = styled.img`
   // transform: translateX(-50%);
   animation: ${rotateAnimation} 5s linear infinite; /* Apply the rotation animation */
 `;
+
+const StyledButtonLink = styled(Link)`
+  display: inline-block;
+  background-color: #5ec9f2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3498db;
+  }
+`;
+
 
 const StyledForm = styled.form`
   display: flex;
@@ -136,6 +171,7 @@ const MainPage = () => {
   const [code, setCode] = useState('');
   const handleCodeSubmit = () => {
     const url = `/game/${code}`;
+    localStorage.setItem('roomCode', code);
     navigate(url);
   };
 
@@ -145,20 +181,23 @@ const MainPage = () => {
     }
   };
 
-
+  const photoUrl = useSelector((state) => state.photo.photoUrl);
 
   return (
     <CenteredContainer>
       <LogoImage src={gamelogoImage} alt="Logo" />
-      <UserProfile onClick={() => setView(!view)}>{userName}</UserProfile>
-      {view && (
-        <DropdownMenu>
-          <div>
-            <Link to={`/${userEmail}/mypage`}>마이페이지</Link>
-          </div>
-          <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
-        </DropdownMenu>
-      )}
+      <UserProfile>
+        <ProfileImage src={photoUrl} alt="Profile" />
+        <span onClick={() => setView(!view)} style={{fontSize: '35px', cursor: 'pointer', fontWeight:'bold' }}>{userName}</span>
+        {view && (
+          <DropdownMenu>
+            <div style={{display: 'flex', flexDirection: 'column' }}>
+              <StyledButtonLink to={`/${userEmail}/mypage`}>마이페이지</StyledButtonLink>
+              <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
+            </div>
+          </DropdownMenu>
+        )}
+      </UserProfile>
       {/* <span
         style={{ textDecoration: 'underline', cursor: 'pointer' }}
         onClick={() => setView(!view)}
