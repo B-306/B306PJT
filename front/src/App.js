@@ -21,7 +21,8 @@ const App = () => {
       {/* <Route path="/game/1" element={<VideoRoomComponent />} /> */}
       {/* <Route path="/@:useremail" element={<MainPage />} /> */}
       <Route path="/" element={<MainPage />} />
-      <Route path="/:useremail/mypage" eelement={accessToken ? <MyPage /> : <Navigate to="/login" />} />
+      {/* <Route path="/:useremail/mypage" element={<MyPage />} /> */}
+      <Route path="/:useremail/mypage" element={accessToken ? <MyPage /> : <Navigate to="/login" />} />
       {/* <Route path="/mypage" element={<MyPage />} /> */}
       {/* <Route path="/gamecreate" element={<GameCreate />} /> */}
       <Route path="/:useremail/gamecreate" element={accessToken ? <GameCreate /> : <Navigate to="/login" />} />
