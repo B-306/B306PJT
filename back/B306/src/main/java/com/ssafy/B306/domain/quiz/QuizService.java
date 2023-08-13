@@ -53,7 +53,8 @@ public class QuizService {
         List<QuizResponseDto> quizResponseDtoList = new ArrayList<>();
 
         for(Quiz quiz : quizList){
-            QuizResponseDto qrd = quiz.toDto(quiz);
+            TemplateResponseDto templateResponseDto = templateService.getTemplate(quiz.getQuizTemplateId().getTemplateId());
+            QuizResponseDto qrd = quiz.toDto(quiz, templateResponseDto);
             quizResponseDtoList.add(qrd);
         }
 
@@ -64,8 +65,7 @@ public class QuizService {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(()->new RuntimeException("해당 문제는 없습니다."));
 
         TemplateResponseDto templateResponseDto = templateService.getTemplate(quiz.getQuizTemplateId().getTemplateId());
-        QuizResponseDto quizResponseDto = quiz.toDto(quiz);
-        quizResponseDto.setQuizTemplateId(templateResponseDto);
+        QuizResponseDto quizResponseDto = quiz.toDto(quiz, templateResponseDto);
 
         return quizResponseDto;
     }
