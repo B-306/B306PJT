@@ -10,6 +10,4 @@ import lombok.Getter;
 public class UserModifyRequestDto {
     private String userName;
     private String userPassword;
-//    private String userProfile;
-
 }
