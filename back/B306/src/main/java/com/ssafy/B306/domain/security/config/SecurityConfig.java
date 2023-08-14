@@ -1,13 +1,11 @@
 package com.ssafy.B306.domain.security.config;
 
-import com.ssafy.B306.domain.OAuth.CustomOAuth2UserService;
 import com.ssafy.B306.domain.security.JwtAuthenticationFilter;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,8 +20,12 @@ public class SecurityConfig  {
 
     private final JwtUtil jwtUtil;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
-    private final CustomOAuth2UserService customOAuth2UserService;
+//    private final JwtExceptionFilter jwtExceptionFilter;
 
+//    @Bean
+//    public JwtExceptionFilter jwtExceptionFilter() {
+//        return new JwtExceptionFilter();
+//    }
     // 비밀번호 암호화를 위한 빈 등록
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -43,15 +45,14 @@ public class SecurityConfig  {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-//                .antMatchers("/user/login").permitAll()
+//                .antMatchers("/**").permitAll()
+                .antMatchers("/user/login", "/user/signup").permitAll()
+                .antMatchers("/**").authenticated()
 //                .antMatchers("/user/signup").permitAll()
                 .and()
                 .authenticationProvider(jwtAuthenticationProvider)
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-//                .oauth2Login() //oauth2로그인도 추가로 진행
-//                .userInfoEndpoint() //oauth2로그인 성공 후에 사용자 정보를 바로 가져온다.
-//                .userService(customOAuth2UserService);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

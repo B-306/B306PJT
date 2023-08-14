@@ -97,15 +97,19 @@ public class UserService {
 
         findUser.modifyUser(
                 UserModifyRequestDto.builder()
-//                .userProfile(userModifyDto.getUserProfile())
                 .userPassword(bCryptPasswordEncoder.encode(userModifyDto.getUserPassword()))
                 .userName(userModifyDto.getUserName())
                 .build());
     }
 
+    @Transactional
     public void deleteUser(HttpServletRequest request) {
         Long userPk = jwtUtil.extractUserPkFromToken(request);
-        userRepository.deleteById(userPk);
+        try{
+            userRepository.deleteById(userPk);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional
@@ -129,7 +133,7 @@ public class UserService {
     }
 
     private void sendAuthEmail(String email, String authKey) {
-        String subject = "제목";
+        String subject = "두뇌 풀 가동";
         String text = "회원 가입을 위한 인증번호는 "+ authKey + "입니다.<br/>";
 
         try{
@@ -152,12 +156,5 @@ public class UserService {
         String emailFindByCode = redisUtil.getData(emailAuthRequestDto.getAuthCode());
         return emailFindByCode.equals(emailAuthRequestDto.getEmail());
     }
-
-    // request를 받으면 user를 반환하는 함수
-    public User findUserByRequest(HttpServletRequest request){
-        Long userPk = jwtUtil.extractUserPkFromToken(request);
-        return userRepository.findByUserId(userPk).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-    }
-
 }
 

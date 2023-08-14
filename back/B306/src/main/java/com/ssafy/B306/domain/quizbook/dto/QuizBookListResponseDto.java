@@ -1,14 +1,10 @@
 package com.ssafy.B306.domain.quizbook.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class QuizBookListResponseDto {
     private Long quizBookId;
     private String quizBookTitle;

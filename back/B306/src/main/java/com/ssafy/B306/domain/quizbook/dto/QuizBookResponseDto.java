@@ -1,10 +1,7 @@
 package com.ssafy.B306.domain.quizbook.dto;
 
 import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -17,7 +14,9 @@ public class QuizBookResponseDto {
     private String quizBookTitle;
     private List<QuizResponseDto> quizList;
 
+
     @Builder
+
     public QuizBookResponseDto(Long quizBookId, String quizBookTitle, List<QuizResponseDto> quizList) {
         this.quizBookId = quizBookId;
         this.quizBookTitle = quizBookTitle;
