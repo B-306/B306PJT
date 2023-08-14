@@ -156,12 +156,5 @@ public class UserService {
         String emailFindByCode = redisUtil.getData(emailAuthRequestDto.getAuthCode());
         return emailFindByCode.equals(emailAuthRequestDto.getEmail());
     }
-
-    // request를 받으면 user를 반환하는 함수
-    public User findUserByRequest(HttpServletRequest request){
-        Long userPk = jwtUtil.extractUserPkFromToken(request);
-        return userRepository.findByUserId(userPk).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-    }
-
 }
 
