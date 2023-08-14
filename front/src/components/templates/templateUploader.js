@@ -55,36 +55,35 @@ const UploadButton = styled.button`
 `;
 
 function TemplateUploader() {
-    const [templateImage, setTemplateImage] = useState(null);
+    // const [templateImage, setTemplateImage] = useState(null);
     const [templateType, setTemplateType] = useState('');
     const [templateName, setTemplateName] = useState('');
 
-    const handleImageUpload = async () => {
-        const formData = new FormData();
-        formData.append('file', templateImage);
-
-        const templateSaveDto = {
-            templateImage: templateImage.name,
-            templateType: templateType,
-            templateName: templateName,
-            // userPk: 1, // 유저 아이디 혹은 식별자
-        };
-
-        try {
-            await axios.post('/api1/template/add-template', formData, {
-                params: templateSaveDto,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'accessToken': localStorage.getItem("accessToken"),
-                },
-            });
-            console.log('이미지 업로드 성공');
-            alert('업로드 성공')
-        } catch (error) {
-            console.error('이미지 업로드 실패', error);
-            alert('업로드 실패')
-        }
-    };
+    async function handleTextUpload() {
+      const templateData = {
+          templateType: templateType,
+          templateName: templateName,
+          // 추가 필요한 데이터들...
+      };
+  
+      const textBlob = new Blob([JSON.stringify(templateData)], { type: 'text/plain' });
+      const formData = new FormData();
+      formData.append('file', textBlob, 'template_data.txt'); // 파일 이름은 마음대로 설정 가능
+  
+      try {
+          await axios.post('/api1/template/add-template', formData, {
+              headers: {
+                  'Content-Type': 'multipart/form-data',
+                  'accessToken': localStorage.getItem('accessToken'),
+              },
+          });
+          console.log('텍스트 파일 업로드 성공');
+          alert('텍스트 파일 업로드 성공');
+      } catch (error) {
+          console.error('텍스트 파일 업로드 실패', error);
+          alert('텍스트 파일 업로드 실패');
+      }
+  }
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -93,7 +92,7 @@ function TemplateUploader() {
             console.error('Invalid file');
             return;
           }
-        setTemplateImage(selectedFile);
+        // setTemplateImage(selectedFile);
     };
 
     return (
@@ -106,7 +105,7 @@ function TemplateUploader() {
             />
             <input type="text" placeholder="템플릿 유형" onChange={(e) => setTemplateType(e.target.value)} />
             <input type="text" placeholder="템플릿 이름" onChange={(e) => setTemplateName(e.target.value)} />
-            <UploadButton onClick={handleImageUpload}>템플릿 업로드</UploadButton>
+            <UploadButton onClick={handleTextUpload}>템플릿 업로드</UploadButton>
         </StyledForm>
     );
 }
