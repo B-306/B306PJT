@@ -377,7 +377,11 @@ class VideoRoomComponent extends Component {
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
-                    data: quizData.quizTemplateId.templateImage,
+                    data: JSON.stringify({
+                        templateImage: quizData.quizTemplateId.templateImage,
+                        otherInfo: 'some other data',
+                        // ... 다른 정보들
+                    }),
                 };
                 this.state.session.signal(signalOptions);
             }, index * 20000);
@@ -411,12 +415,16 @@ class VideoRoomComponent extends Component {
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
             console.log('변경 전 showCounter : ' + this.state.showCounter)
+            const data = JSON.parse(event.data);
+            console.log(data.templateImage);
+            console.log(data.otherInfo);
+            // ... 다른 정보 처리
             this.setState(
                 {
                     showCounter: !this.state.showCounter,
                 }
             )
-            localStorage.setItem('templateURL', event.data)
+            localStorage.setItem('templateURL', data.templateImage)
         })
     }
 

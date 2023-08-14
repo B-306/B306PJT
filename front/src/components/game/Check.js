@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import axios from 'axios';
 import Scoring from './Scoring';
 import * as bodySegmentation from '@tensorflow-models/body-segmentation';
 import '@tensorflow/tfjs-core';
@@ -43,6 +44,7 @@ function loadImageAndProcess(templateURL) {
         const checkImage = new Image();
         checkImage.crossOrigin = "anonymous";
         checkImage.src = templateURL;
+        // const checkImage = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/')
         await checkImage.decode();
         const canvas = document.createElement('canvas');
         canvas.width = checkImage.width;
