@@ -587,10 +587,14 @@ class VideoRoomComponent extends Component {
     }
 
     handleImageCaptured = (capturedImageBlob) => {
-        this.setState({
-            capturedImage: capturedImageBlob,
-        });
-        console.log('캡처된이미지 변경 : ' + this.state.capturedImage)
+        this.setState(
+            {
+                capturedImage: capturedImageBlob,
+            },
+            () => {
+                console.log('캡처된이미지 변경 : ' + this.state.capturedImage);
+            }
+        );
     }
     
     render() {

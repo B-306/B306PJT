@@ -44,6 +44,7 @@ class Check extends Component {
         this.state = {
             maxWidth: '100%',
             people: null, // 세그멘테이션 결과를 저장할 상태 변수
+            checkImageData: null, // 초기화
         };
     }
 
@@ -53,6 +54,7 @@ class Check extends Component {
         const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
         checkImage.src = templateURL;
+        const that = this; // 컴포넌트를 변수에 저장
         checkImage.onload = async () => {
             await checkImage.decode();
             const canvas = document.createElement('canvas');
@@ -63,7 +65,7 @@ class Check extends Component {
             
             // Canvas에서 ImageData를 추출합니다
             const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
-            this.setState({ checkImageData });
+            that.setState({ checkImageData });
             // 이미지 로드가 완료된 후 처리할 로직을 여기에 작성
             // 예: 이미지 로드 완료 후 세그멘테이션 처리 등
         };
