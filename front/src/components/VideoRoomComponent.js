@@ -41,7 +41,8 @@ class VideoRoomComponent extends Component {
             session: undefined,
             localUser: undefined,
             subscribers: [],
-            chatDisplay: 'none',
+            // chatDisplay: 'none',
+            chatDisplay: 'display',
             currentVideoDevice: undefined,
             showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
