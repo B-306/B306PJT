@@ -416,7 +416,7 @@ class VideoRoomComponent extends Component {
                     showCounter: !this.state.showCounter,
                 }
             )
-            console.log(event)
+            localStorage.setItem('templateURL', event.data)
         })
     }
 
@@ -598,6 +598,7 @@ class VideoRoomComponent extends Component {
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
         const { showCounter, capturedImage } = this.state;
+        const templateURL = localStorage.getItem('templateURL')
         
 
         return (
@@ -661,7 +662,7 @@ class VideoRoomComponent extends Component {
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                             <img
-                                src={require('../assets/images/test_sample.png')}
+                                src={require(templateURL)}
                                 alt="Sample"
                                 style={{
                                     position: 'absolute',
