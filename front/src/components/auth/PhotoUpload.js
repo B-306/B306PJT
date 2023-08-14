@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { setPhoto } from '../../redux/modules/photoSlice';
 import {
@@ -38,43 +38,43 @@ const FileAddButton = styled.input`
   }
 `;
 
-const UploadButton = styled.button`
-  font-family: 'Ftstardust';
-  background-color: #5ec9f2;
-  color: white;
-  border: none;
+// const UploadButton = styled.button`
+//   font-family: 'Ftstardust';
+//   background-color: #5ec9f2;
+//   color: white;
+//   border: none;
 
-  width: 100px; /* 가로 크기를 100px로 설정 */
-  height: 50px; /* 세로 크기를 50px로 설정 */
+//   width: 100px; /* 가로 크기를 100px로 설정 */
+//   height: 50px; /* 세로 크기를 50px로 설정 */
 
-  font-size: 18px;
-  font-weight: bold;
+//   font-size: 18px;
+//   font-weight: bold;
 
-  border-radius: 10px;
+//   border-radius: 10px;
 
-  &:hover {
-    background-color: #3498db; /* 호버 시 배경색 변경 */
-    color: #fff; /* 호버 시 글씨 색 변경 */
-    cursor: pointer;
-  }
-`;
+//   &:hover {
+//     background-color: #3498db; /* 호버 시 배경색 변경 */
+//     color: #fff; /* 호버 시 글씨 색 변경 */
+//     cursor: pointer;
+//   }
+// `;
 
 
 function PhotoUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  // const [previewUrl, setPreviewUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const dispatch = useDispatch()
   // const storedImageUrl = useSelector((state) => state.photo.photoUrl);
   
 
-  useEffect(() => {
-    // 로컬 스토리지에서 이미지 URL을 불러와서 상태로 설정
-    const storedImageUrl = localStorage.getItem('imageUrl');
-    if (storedImageUrl) {
-      setPreviewUrl(storedImageUrl);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // 로컬 스토리지에서 이미지 URL을 불러와서 상태로 설정
+  //   const storedImageUrl = localStorage.getItem('imageUrl');
+  //   if (storedImageUrl) {
+  //     setPreviewUrl(storedImageUrl);
+  //   }
+  // }, []);
   // }, [storedImageUrl]);
 
   const handleFileChange = (event) => {
@@ -89,7 +89,7 @@ function PhotoUpload() {
     // 파일을 미리 보기 위해 FileReader를 사용
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreviewUrl(reader.result);
+      // setPreviewUrl(reader.result);
       // setImageUrl(URL.createObjectURL(file));
       setImageUrl(reader.result);
     };
@@ -114,7 +114,7 @@ function PhotoUpload() {
 
       console.log("사진 업로드")
       // 업로드가 성공하면 미리보기를 감춥니다.
-      setPreviewUrl(null);
+      // setPreviewUrl(null);
       console.log(response.data)
       setImageUrl(imageUrl);
   
@@ -131,19 +131,19 @@ function PhotoUpload() {
   return (
     <div>
       {/* 이미지 미리 보기 */}
-      {previewUrl && <img src={previewUrl} alt="Preview" width="200" height="200" />}
+      {/* {previewUrl && <img src={previewUrl} alt="Preview" width="200" height="200" />} */}
       {photoUrl && <img src={photoUrl} alt="Profile" width="200" height="200" />}
       {/* <img src={imgUrl} alt="Profile" width="200" height="200" /> */}
       <StyledForm onSubmit={handleSubmit}>
       {/* 파일 선택 버튼 */}
       <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
-      <FileAddButton type="button" value="파일추가"
+      <FileAddButton type="button" value="사진변경"
         onClick={() => {
           document.getElementById('selectedFile1').click();
         }}
       />
       {/* 업로드 버튼 */}
-      <UploadButton>업로드</UploadButton>
+      {/* <UploadButton>업로드</UploadButton> */}
       </StyledForm>
       {/* {imageUrl && <img src={imageUrl} alt='Uploaded' />} */}
     </div>

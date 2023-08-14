@@ -631,7 +631,7 @@ class VideoRoomComponent extends Component {
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
                 {showCounter && capturedImage && (
-                    <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'25%'}}>
+                    <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'30%'}}>
                     {/* <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}> */}
                         <Check image={this.state.capturedImage} showCounter={showCounter} />
                     </div>
@@ -658,7 +658,7 @@ class VideoRoomComponent extends Component {
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
-                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'25%', position:'absolute'}}>
+                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'30%', position:'absolute'}}>
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                             <img

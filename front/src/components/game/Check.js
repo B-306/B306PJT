@@ -53,16 +53,21 @@ class Check extends Component {
         const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
         checkImage.src = templateURL;
-        await checkImage.decode();
+        checkImage.onload = async () => {
+            await checkImage.decode();
+            const canvas = document.createElement('canvas');
+            canvas.width = checkImage.width;
+            canvas.height = checkImage.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(checkImage, 0, 0);
+            
+            // Canvas에서 ImageData를 추출합니다
+            const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
+            this.setState({ checkImageData });
+            // 이미지 로드가 완료된 후 처리할 로직을 여기에 작성
+            // 예: 이미지 로드 완료 후 세그멘테이션 처리 등
+        };
         // Canvas를 생성하여 이미지를 그립니다
-        const canvas = document.createElement('canvas');
-        canvas.width = checkImage.width;
-        canvas.height = checkImage.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(checkImage, 0, 0);
-        
-        // Canvas에서 ImageData를 추출합니다
-        const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
 
         const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
         const segmenterConfig = {
@@ -82,7 +87,6 @@ class Check extends Component {
         
         this.setState({
             people: people,
-            checkImageData: checkImageData,
             maskImageBitmap: maskImageBitmap,
             maskImageData: maskImageData,
         });
