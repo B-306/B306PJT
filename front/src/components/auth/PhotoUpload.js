@@ -10,8 +10,8 @@ import styled from 'styled-components';
 
 const StyledForm = styled.form`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
 ]
 `;
@@ -134,7 +134,8 @@ function PhotoUpload() {
       {/* {previewUrl && <img src={previewUrl} alt="Preview" width="200" height="200" />} */}
       {photoUrl && <img src={photoUrl} alt="Profile" width="200" height="200" />}
       {/* <img src={imgUrl} alt="Profile" width="200" height="200" /> */}
-      <StyledForm onSubmit={handleSubmit}>
+      {/* <StyledForm onSubmit={handleSubmit}> */}
+      <StyledForm>
       {/* 파일 선택 버튼 */}
       <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
       {/* <FileAddButton type="button" value="사진변경"
@@ -143,7 +144,7 @@ function PhotoUpload() {
         }}
       /> */}
       {/* 업로드 버튼 */}
-      <UploadButton type="submit">업로드</UploadButton>
+      <UploadButton type="submit" onSubmit={handleSubmit}>업로드</UploadButton>
       </StyledForm>
       {/* {imageUrl && <img src={imageUrl} alt='Uploaded' />} */}
     </div>

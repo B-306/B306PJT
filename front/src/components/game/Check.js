@@ -40,6 +40,7 @@ async function imageBitmapToImageData(imageBitmap) {
 function loadImageAndProcess(templateURL) {
     return new Promise(async (resolve) => {
         const checkImage = new Image();
+        checkImage.crossOrigin = "Anonymous";
         checkImage.src = templateURL;
         await checkImage.decode();
         const canvas = document.createElement('canvas');
