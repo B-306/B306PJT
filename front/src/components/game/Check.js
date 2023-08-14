@@ -39,6 +39,7 @@ async function imageBitmapToImageData(imageBitmap) {
   
 function loadImageAndProcess(templateURL) {
     return new Promise(async (resolve) => {
+        console.log('templateURL : ', templateURL)
         const checkImage = new Image();
         checkImage.crossOrigin = "anonymous";
         checkImage.src = templateURL;
@@ -68,7 +69,6 @@ class Check extends Component {
         // body-segmentation 관련 코드 실행
         const templateURL = localStorage.getItem('templateURL');
         const checkImageData = await loadImageAndProcess(templateURL);
-        this.setState({ checkImageData });
         const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
         const segmenterConfig = {
           runtime: 'mediapipe',
@@ -80,6 +80,7 @@ class Check extends Component {
     
         // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
         const imageElement = await convertBlobToImageData(this.props.image);
+        imageElement.crossOrigin = "anonymous";
         const people = await segmenter.segmentPeople(imageElement, segmentationConfig);
 
         const maskImageBitmap = people[0].mask.mask;
@@ -89,6 +90,7 @@ class Check extends Component {
             people: people,
             maskImageBitmap: maskImageBitmap,
             maskImageData: maskImageData,
+            checkImageData: checkImageData,
         });
     }
 
