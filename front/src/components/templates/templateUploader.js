@@ -55,29 +55,32 @@ const UploadButton = styled.button`
 `;
 
 function TemplateUploader() {
-    const [templateImageUrl, setTemplateImageUrl] = useState(null);
-    const [templateType, setTemplateType] = useState(''); // templateType 상태 변수 추가
-    const [templateName, setTemplateName] = useState(''); // templateName 상태 변수 추가
+    const [templateImage, setTemplateImage] = useState(null);
+    const [templateType, setTemplateType] = useState('');
+    const [templateName, setTemplateName] = useState('');
   
     const handleImageUpload = async () => {
-      // 이미지 URL 업로드 요청을 보내고, 업로드 성공 시 이미지 URL 반환
+      if (!templateImage) {
+        alert('이미지를 선택하세요.');
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append('file', templateImage);
+  
       try {
-        const response = await axios.post('/api1/template/add-template-url', {
-          templateImageUrl: templateImageUrl, // 이미지 URL을 전송
-          templateType: templateType,
-          templateName: templateName,
-          // userPk: 1, // 유저 아이디 혹은 식별자
-        }, {
+        await axios.post('/api1/template/add-template', formData, {
+          params: {
+            templateType: templateType,
+            templateName: templateName,
+          },
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             'accessToken': localStorage.getItem("accessToken"),
           },
         });
   
-        // 이미지 저장이 성공하면 응답에서 이미지 URL 받아와서 활용
-        const imageUrl = response.data.imageUrl;
         console.log('이미지 업로드 성공');
-        console.log('이미지 URL:', imageUrl);
         alert('업로드 성공');
       } catch (error) {
         console.error('이미지 업로드 실패', error);
@@ -85,11 +88,20 @@ function TemplateUploader() {
       }
     };
   
+    const handleFileChange = (event) => {
+      const selectedFile = event.target.files[0];
+      if (!selectedFile || !(selectedFile instanceof Blob)) {
+        // 파일이 선택되지 않았거나 Blob 형식이 아닌 경우 처리
+        console.error('Invalid file');
+        return;
+      }
+      setTemplateImage(selectedFile);
+    };
+  
     return (
       <StyledForm>
-        {/* 이미지 URL 입력란 */}
-        <input type="text" placeholder="이미지 URL" onChange={(e) => setTemplateImageUrl(e.target.value)} />
-  
+        <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden />
+        <label htmlFor="selectedFile1">이미지 선택</label>
         <input type="text" placeholder="템플릿 유형" onChange={(e) => setTemplateType(e.target.value)} />
         <input type="text" placeholder="템플릿 이름" onChange={(e) => setTemplateName(e.target.value)} />
         <UploadButton onClick={handleImageUpload}>템플릿 업로드</UploadButton>
