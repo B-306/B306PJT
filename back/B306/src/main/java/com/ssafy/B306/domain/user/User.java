@@ -37,7 +37,7 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Column(name = "user_profile", columnDefinition = "VARCHAR(255) DEFAULT 'https://b306-brain-full-operating.s3.ap-northeast-2.amazonaws.com/neo.png'")
+    @Column(name = "user_profile")
     private String userProfile;
 
     @CreationTimestamp
