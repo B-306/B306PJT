@@ -153,9 +153,9 @@ const MyPage = (props) => {
   const decodedState = GetDecodedState();
   const { userName, userEmail } = decodedState;
 
-  const deleteAccount = async () => {
-    // ... (deleteAccount function code)
-  };
+  // const deleteAccount = async () => {
+  //   // ... (deleteAccount function code)
+  // };
 
   return (
     <>
