@@ -662,7 +662,7 @@ class VideoRoomComponent extends Component {
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                             <img
-                                src={require(templateURL)}
+                                src={templateURL}
                                 alt="Sample"
                                 style={{
                                     position: 'absolute',
