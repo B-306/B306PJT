@@ -7,8 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class QuizBookResponseDto {
 
@@ -16,4 +14,12 @@ public class QuizBookResponseDto {
     private String quizBookTitle;
     private List<QuizResponseDto> quizList;
 
+
+    @Builder
+
+    public QuizBookResponseDto(Long quizBookId, String quizBookTitle, List<QuizResponseDto> quizList) {
+        this.quizBookId = quizBookId;
+        this.quizBookTitle = quizBookTitle;
+        this.quizList = quizList;
+    }
 }

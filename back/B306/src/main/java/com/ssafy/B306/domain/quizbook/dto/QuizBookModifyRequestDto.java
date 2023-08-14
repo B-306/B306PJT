@@ -11,8 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class QuizBookModifyRequestDto {
 
@@ -22,6 +20,15 @@ public class QuizBookModifyRequestDto {
     private List<Quiz> quizzes = new ArrayList<>();
 
     private User userPk;
+
+    public QuizBookModifyRequestDto(String quizBookTitle, List<Quiz> quizzes, User userPk) {
+        this.quizBookTitle = quizBookTitle;
+        this.quizzes = quizzes;
+        this.userPk = userPk;
+    }
+
+    @Builder
+
 
     /*
     userId가 null인 이유 -> userId를 안넣어서
