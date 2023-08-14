@@ -112,18 +112,12 @@ function PhotoUpload() {
         }
       })
 
-      // console.log(response)
       console.log("사진 업로드")
       // 업로드가 성공하면 미리보기를 감춥니다.
       setPreviewUrl(null);
       console.log(response.data)
       setImageUrl(imageUrl);
-      // console.log(imageUrl)
-      // localStorage.setItem('imageUrl', imageUrl);
-      // const imageUrl = response.data.imageUrl;
-      // response.data가 formdata {}로 빈 값이 출력 
-      // setPreviewUrl(imageUrl);
-      // console.log("나는 너의~~~~~~~~~~~~~~~~~~" + formData.get('accessToken'));
+  
       alert('사진 업로드가 완료되었습니다.');
       dispatch(setPhoto(imageUrl))
     } catch (error) {
@@ -133,8 +127,7 @@ function PhotoUpload() {
   };
 
   const photoUrl = useSelector((state) => state.photo.photoUrl);
-  // console.log("photoUrl : ", photoUrl);
-  // const imgUrl = 'https://i9b306.q.ssafy.io/'+ photoUrl;
+  
   return (
     <div>
       {/* 이미지 미리 보기 */}
