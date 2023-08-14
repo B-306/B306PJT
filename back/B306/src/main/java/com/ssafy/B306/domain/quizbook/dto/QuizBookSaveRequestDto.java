@@ -11,8 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class QuizBookSaveRequestDto {
     @NotNull(message = "문제집 제목을 입력해주세요")
@@ -21,6 +19,15 @@ public class QuizBookSaveRequestDto {
     private List<QuizRequestSaveDto> quizzes = new ArrayList<>();
 
     private User userPk;
+
+    public QuizBookSaveRequestDto(String quizBookTitle, List<QuizRequestSaveDto> quizzes, User userPk) {
+        this.quizBookTitle = quizBookTitle;
+        this.quizzes = quizzes;
+        this.userPk = userPk;
+    }
+
+    @Builder
+
 
     /*
     userId가 null인 이유 -> userId를 안넣어서
