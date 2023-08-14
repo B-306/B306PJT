@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import axios from 'axios';
 import Scoring from './Scoring';
 import * as bodySegmentation from '@tensorflow-models/body-segmentation';
 import '@tensorflow/tfjs-core';
@@ -37,6 +38,23 @@ async function imageBitmapToImageData(imageBitmap) {
     return context.getImageData(0, 0, imageBitmap.width, imageBitmap.height);
   }
   
+function loadImageAndProcess(templateURL) {
+    return new Promise(async (resolve) => {
+        console.log('templateURL : ', templateURL)
+        const checkImage = new Image();
+        checkImage.crossOrigin = "anonymous";
+        checkImage.src = templateURL;
+        // const checkImage = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/')
+        await checkImage.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = checkImage.width;
+        canvas.height = checkImage.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(checkImage, 0, 0);
+        const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
+        resolve(checkImageData);
+    });
+}
 
 class Check extends Component {
     constructor(props) {
@@ -44,25 +62,15 @@ class Check extends Component {
         this.state = {
             maxWidth: '100%',
             people: null, // 세그멘테이션 결과를 저장할 상태 변수
+            checkImageData: null, // 초기화
         };
     }
 
     
     async componentDidMount() {
         // body-segmentation 관련 코드 실행
-        const checkImage = new Image();
-        checkImage.src = require('../../assets/images/test_sample.png');
-        await checkImage.decode();
-        // Canvas를 생성하여 이미지를 그립니다
-        const canvas = document.createElement('canvas');
-        canvas.width = checkImage.width;
-        canvas.height = checkImage.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(checkImage, 0, 0);
-        
-        // Canvas에서 ImageData를 추출합니다
-        const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
-
+        const templateURL = localStorage.getItem('templateURL');
+        const checkImageData = await loadImageAndProcess(templateURL);
         const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
         const segmenterConfig = {
           runtime: 'mediapipe',
@@ -74,6 +82,7 @@ class Check extends Component {
     
         // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
         const imageElement = await convertBlobToImageData(this.props.image);
+        imageElement.crossOrigin = "anonymous";
         const people = await segmenter.segmentPeople(imageElement, segmentationConfig);
 
         const maskImageBitmap = people[0].mask.mask;
@@ -81,9 +90,9 @@ class Check extends Component {
         
         this.setState({
             people: people,
-            checkImageData: checkImageData,
             maskImageBitmap: maskImageBitmap,
             maskImageData: maskImageData,
+            checkImageData: checkImageData,
         });
     }
 

@@ -357,6 +357,7 @@ class VideoRoomComponent extends Component {
 // Start Game
 
     async fnc (num) {
+        console.log('num, response.data, response.data.quizTemplateId')
         console.log(num)
         const response = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/' + num)
         console.log(response.data)
@@ -376,7 +377,11 @@ class VideoRoomComponent extends Component {
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
-                    data: quizData.quizTemplateId.templateImage,
+                    data: JSON.stringify({
+                        templateImage: quizData.quizTemplateId.templateImage,
+                        otherInfo: 'some other data',
+                        // ... 다른 정보들
+                    }),
                 };
                 this.state.session.signal(signalOptions);
             }, index * 20000);
@@ -385,7 +390,7 @@ class VideoRoomComponent extends Component {
                     type: 'gameStart',
                 };
                 this.state.session.signal(signalOptions);
-            }, index * 20000 + 19000);
+            }, index * 20000 + 17000);
         }
         // const selectedQuizesString = localStorage.getItem('selectedQuizes');
         // const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
@@ -410,12 +415,16 @@ class VideoRoomComponent extends Component {
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
             console.log('변경 전 showCounter : ' + this.state.showCounter)
+            const data = JSON.parse(event.data);
+            console.log(data.templateImage);
+            console.log(data.otherInfo);
+            // ... 다른 정보 처리
             this.setState(
                 {
                     showCounter: !this.state.showCounter,
                 }
             )
-            console.log('변경 후 showCounter : ' + this.state.showCounter)
+            localStorage.setItem('templateURL', data.templateImage)
         })
     }
 
@@ -586,10 +595,14 @@ class VideoRoomComponent extends Component {
     }
 
     handleImageCaptured = (capturedImageBlob) => {
-        this.setState({
-            capturedImage: capturedImageBlob,
-        });
-        console.log('캡처된이미지 변경 : ' + this.state.capturedImage)
+        this.setState(
+            {
+                capturedImage: capturedImageBlob,
+            },
+            () => {
+                console.log('캡처된이미지 변경 : ' + this.state.capturedImage);
+            }
+        );
     }
     
     render() {
@@ -597,6 +610,7 @@ class VideoRoomComponent extends Component {
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
         const { showCounter, capturedImage } = this.state;
+        const templateURL = localStorage.getItem('templateURL')
         
 
         return (
@@ -629,7 +643,7 @@ class VideoRoomComponent extends Component {
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
                 {showCounter && capturedImage && (
-                    <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'25%'}}>
+                    <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'35%'}}>
                     {/* <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}> */}
                         <Check image={this.state.capturedImage} showCounter={showCounter} />
                     </div>
@@ -656,11 +670,11 @@ class VideoRoomComponent extends Component {
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
-                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'25%', position:'absolute'}}>
+                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                             <img
-                                src={require('../assets/images/test_sample.png')}
+                                src={templateURL}
                                 alt="Sample"
                                 style={{
                                     position: 'absolute',

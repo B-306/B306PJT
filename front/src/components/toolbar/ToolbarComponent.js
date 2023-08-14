@@ -10,10 +10,10 @@ import Videocam from '@material-ui/icons/Videocam';
 import VideocamOff from '@material-ui/icons/VideocamOff';
 import Fullscreen from '@material-ui/icons/Fullscreen';
 import FullscreenExit from '@material-ui/icons/FullscreenExit';
-import SwitchVideoIcon from '@material-ui/icons/SwitchVideo';
-import PictureInPicture from '@material-ui/icons/PictureInPicture';
-import ScreenShare from '@material-ui/icons/ScreenShare';
-import StopScreenShare from '@material-ui/icons/StopScreenShare';
+// import SwitchVideoIcon from '@material-ui/icons/SwitchVideo';
+// import PictureInPicture from '@material-ui/icons/PictureInPicture';
+// import ScreenShare from '@material-ui/icons/ScreenShare';
+// import StopScreenShare from '@material-ui/icons/StopScreenShare';
 import Tooltip from '@material-ui/core/Tooltip';
 import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
 import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
@@ -28,10 +28,10 @@ export default class ToolbarComponent extends Component {
         this.state = { fullscreen: false };
         this.camStatusChanged = this.camStatusChanged.bind(this);
         this.micStatusChanged = this.micStatusChanged.bind(this);
-        this.screenShare = this.screenShare.bind(this);
-        this.stopScreenShare = this.stopScreenShare.bind(this);
+        // this.screenShare = this.screenShare.bind(this);
+        // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
-        this.switchCamera = this.switchCamera.bind(this);
+        // this.switchCamera = this.switchCamera.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
         this.toggleChat = this.toggleChat.bind(this);
     }
@@ -45,25 +45,26 @@ export default class ToolbarComponent extends Component {
         this.props.camStatusChanged();
     }
 
-    screenShare() {
-        this.props.screenShare();
-    }
+    // screenShare() {
+    //     this.props.screenShare();
+    // }
 
-    stopScreenShare() {
-        this.props.stopScreenShare();
-    }
+    // stopScreenShare() {
+    //     this.props.stopScreenShare();
+    // }
 
     toggleFullscreen() {
         this.setState({ fullscreen: !this.state.fullscreen });
         this.props.toggleFullscreen();
     }
 
-    switchCamera() {
-        this.props.switchCamera();
-    }
+    // switchCamera() {
+    //     this.props.switchCamera();
+    // }
 
     leaveSession() {
         this.props.leaveSession();
+        window.location.href = '/'; // 메인 페이지로 리디렉션
     }
 
     toggleChat() {
@@ -101,7 +102,7 @@ export default class ToolbarComponent extends Component {
                             )}
                         </IconButton>
 
-                        <IconButton color="inherit" className="navButton" onClick={this.screenShare}>
+                        {/* <IconButton color="inherit" className="navButton" onClick={this.screenShare}>
                             {localUser !== undefined && localUser.isScreenShareActive() ? <PictureInPicture /> : <ScreenShare />}
                         </IconButton>
 
@@ -110,11 +111,11 @@ export default class ToolbarComponent extends Component {
                                 <IconButton onClick={this.stopScreenShare} id="navScreenButton">
                                     <StopScreenShare color="secondary" />
                                 </IconButton>
-                            )}
+                            )} */}
 
-                        <IconButton color="inherit" className="navButton" onClick={this.switchCamera}>
+                        {/* <IconButton color="inherit" className="navButton" onClick={this.switchCamera}>
                             <SwitchVideoIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton color="inherit" className="navButton" onClick={this.toggleFullscreen}>
                             {localUser !== undefined && this.state.fullscreen ? <FullscreenExit /> : <Fullscreen />}
                         </IconButton>
