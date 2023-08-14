@@ -15,6 +15,10 @@ public enum ErrorCode {
 
     TEMPLATE_NOT_FOUND(HttpStatus.BAD_REQUEST, "템플릿이 없습니다."),
     TEMPLATE_NOT_FOUND_OR_UNAUTHORIZED(HttpStatus.BAD_REQUEST, "존재하지 않거나 변경 권한이 없는 템플릿입니다."),
+
+    QUIZBOOK_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 문제집이 없습니다."),
+
+    QUIZ_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 문제가 없습니다."),
     ;
 
     private HttpStatus httpStatus;

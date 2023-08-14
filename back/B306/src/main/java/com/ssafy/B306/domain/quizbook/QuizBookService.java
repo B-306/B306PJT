@@ -1,5 +1,7 @@
 package com.ssafy.B306.domain.quizbook;
 
+import com.ssafy.B306.domain.exception.CustomException;
+import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.quiz.Quiz;
 import com.ssafy.B306.domain.quiz.QuizService;
 import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
@@ -65,8 +67,7 @@ public class QuizBookService {
 
         List<QuizResponseDto> quizList = quizService.getQuizList(quizBook);
 
-        QuizBookResponseDto quizBookResponseDto = new QuizBookResponseDto();
-        quizBookResponseDto = quizBook.toDto(quizBook, quizList);
+        QuizBookResponseDto quizBookResponseDto = quizBook.toDto(quizBook, quizList);
 
         return quizBookResponseDto;
     }
@@ -107,7 +108,7 @@ public class QuizBookService {
 
     private QuizBook getQuizBookIfMine(Long quizBookId, Long quizBookUserId) {
         return quizBookRepository.findByQuizBookIdAndQuizBookUserId(quizBookId, User.builder().userId(quizBookUserId).build())
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.QUIZBOOK_NOT_FOUND));
     }
 
 }
