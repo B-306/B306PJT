@@ -29,7 +29,7 @@ export default class ToolbarComponent extends Component {
         this.camStatusChanged = this.camStatusChanged.bind(this);
         this.micStatusChanged = this.micStatusChanged.bind(this);
         // this.screenShare = this.screenShare.bind(this);
-        this.stopScreenShare = this.stopScreenShare.bind(this);
+        // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
         // this.switchCamera = this.switchCamera.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
