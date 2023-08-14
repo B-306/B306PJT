@@ -37,6 +37,20 @@ async function imageBitmapToImageData(imageBitmap) {
     return context.getImageData(0, 0, imageBitmap.width, imageBitmap.height);
   }
   
+function loadImageAndProcess(templateURL) {
+    return new Promise(async (resolve) => {
+        const checkImage = new Image();
+        checkImage.src = templateURL;
+        await checkImage.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = checkImage.width;
+        canvas.height = checkImage.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(checkImage, 0, 0);
+        const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
+        resolve(checkImageData);
+    });
+}
 
 class Check extends Component {
     constructor(props) {
@@ -51,26 +65,9 @@ class Check extends Component {
     
     async componentDidMount() {
         // body-segmentation 관련 코드 실행
-        const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
-        checkImage.src = templateURL;
-        const that = this; // 컴포넌트를 변수에 저장
-        checkImage.onload = async () => {
-            await checkImage.decode();
-            const canvas = document.createElement('canvas');
-            canvas.width = checkImage.width;
-            canvas.height = checkImage.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(checkImage, 0, 0);
-            
-            // Canvas에서 ImageData를 추출합니다
-            const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
-            that.setState({ checkImageData });
-            // 이미지 로드가 완료된 후 처리할 로직을 여기에 작성
-            // 예: 이미지 로드 완료 후 세그멘테이션 처리 등
-        };
-        // Canvas를 생성하여 이미지를 그립니다
-
+        const checkImageData = await loadImageAndProcess(templateURL);
+        this.setState({ checkImageData });
         const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
         const segmenterConfig = {
           runtime: 'mediapipe',
