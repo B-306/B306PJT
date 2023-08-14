@@ -1,7 +1,6 @@
 package com.ssafy.B306.domain.template;
 
 
-import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
 import com.ssafy.B306.domain.s3.S3Service;
 import com.ssafy.B306.domain.template.dto.TemplateResponseDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
@@ -25,16 +24,12 @@ public class TemplateController {
 
     @GetMapping("/get")
     public ResponseEntity<List<TemplateResponseDto>> getTemplateList(HttpServletRequest request) {
-        List<TemplateResponseDto> templateList = templateService.getTemplateList(request);
-        return new ResponseEntity<>(templateList, HttpStatus.OK);
+        return new ResponseEntity<>(templateService.getTemplateList(request), HttpStatus.OK);
     }
 
     @GetMapping("/get/{templateId}")
     public ResponseEntity<TemplateResponseDto> getTemplate(@PathVariable Long templateId) {
-
-        TemplateResponseDto template = templateService.getTemplate(templateId);
-
-        return new ResponseEntity<>(template, HttpStatus.OK);
+        return new ResponseEntity<>(templateService.getTemplate(templateId), HttpStatus.OK);
     }
 
     @PostMapping("/add-template")

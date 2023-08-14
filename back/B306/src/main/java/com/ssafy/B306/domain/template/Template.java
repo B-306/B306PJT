@@ -79,12 +79,11 @@ public class Template {
     }
 
     public static TemplateResponseDto makeTemplateDto(Template template){
-        TemplateResponseDto templateResponseDto = new TemplateResponseDto();
-        templateResponseDto.setTemplateId(template.templateId);
-        templateResponseDto.setTemplateImage(template.getTemplateImage());
-        templateResponseDto.setTemplateType(template.getTemplateType());
-        templateResponseDto.setTemplateName(template.getTemplateName());
-        return templateResponseDto;
+        return TemplateResponseDto.builder()
+                .templateId(template.templateId)
+                .templateImage(template.getTemplateImage())
+                .templateType(template.getTemplateType())
+                .templateName(template.getTemplateName())
+                .build();
     }
-
 }
