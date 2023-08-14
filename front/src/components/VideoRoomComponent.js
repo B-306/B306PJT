@@ -355,6 +355,7 @@ class VideoRoomComponent extends Component {
 // Start Game
 
     async fnc (num) {
+        console.log('num, response.data, response.data.quizTemplateId')
         console.log(num)
         const response = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/' + num)
         console.log(response.data)
@@ -413,7 +414,7 @@ class VideoRoomComponent extends Component {
                     showCounter: !this.state.showCounter,
                 }
             )
-            console.log('변경 후 showCounter : ' + this.state.showCounter)
+            console.log(event)
         })
     }
 
