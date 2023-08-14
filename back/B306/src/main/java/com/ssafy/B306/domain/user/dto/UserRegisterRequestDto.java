@@ -3,15 +3,21 @@ package com.ssafy.B306.domain.user.dto;
 import com.ssafy.B306.domain.user.User;
 import lombok.*;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Builder
 public class UserRegisterRequestDto {
     private String userEmail;
     private String userName;
     private String userPassword;
     private String userProfile;
+
+    @Builder
+    public UserRegisterRequestDto(String userEmail, String userName, String userPassword, String userProfile) {
+        this.userEmail = userEmail;
+        this.userName = userName;
+        this.userPassword = userPassword;
+        this.userProfile = userProfile;
+    }
 
     public User toEntity(String password){
         return User.builder()
