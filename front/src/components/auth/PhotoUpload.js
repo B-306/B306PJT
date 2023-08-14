@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { setPhoto } from '../../redux/modules/photoSlice';
 import {
@@ -66,7 +66,7 @@ function PhotoUpload() {
   const [imageUrl, setImageUrl] = useState('');
   const dispatch = useDispatch()
   // const storedImageUrl = useSelector((state) => state.photo.photoUrl);
-  
+  const fileInput = useRef(null)
 
   // useEffect(() => {
   //   // 로컬 스토리지에서 이미지 URL을 불러와서 상태로 설정
@@ -79,12 +79,12 @@ function PhotoUpload() {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (!file || !(file instanceof Blob)) {
-      // 파일이 선택되지 않았거나 Blob 형식이 아닌 경우 처리
-      console.error('Invalid file');
-      return;
+    if (file) {
+      setSelectedFile(file);
+    } else { // 업로드 취소 시
+      setImageUrl(photoUrl)
+      return
     }
-    setSelectedFile(file);
 
     // 파일을 미리 보기 위해 FileReader를 사용
     const reader = new FileReader();
@@ -135,18 +135,17 @@ function PhotoUpload() {
       {photoUrl && <img src={photoUrl} alt="Profile" width="200" height="200" />}
       {/* <img src={imgUrl} alt="Profile" width="200" height="200" /> */}
       {/* <StyledForm onSubmit={handleSubmit}> */}
-      <StyledForm>
+      <StyledForm onSubmit={handleSubmit}>
       {/* 파일 선택 버튼 */}
-      <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
+      <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInput} id="selectedFile1" />
       {/* <FileAddButton type="button" value="사진변경"
         onClick={() => {
           document.getElementById('selectedFile1').click();
         }}
       /> */}
       {/* 업로드 버튼 */}
-      <UploadButton type="submit" onSubmit={handleSubmit}>업로드</UploadButton>
+      {/* <UploadButton type="submit" onSubmit={handleSubmit}>업로드</UploadButton> */}
       </StyledForm>
-      {/* {imageUrl && <img src={imageUrl} alt='Uploaded' />} */}
     </div>
   );
 }
