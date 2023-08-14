@@ -13,8 +13,8 @@ public class CustomException extends RuntimeException {
     }
 
     // 에러 발생 시 Stack Trace의 생성 비용 감소
-    @Override
-    public synchronized Throwable fillInStackTrace() {
-        return this;
-    }
+//    @Override
+//    public synchronized Throwable fillInStackTrace() {
+//        return this;
+//    }
 }
