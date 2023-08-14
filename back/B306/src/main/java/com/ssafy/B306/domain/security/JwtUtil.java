@@ -106,8 +106,9 @@ public class JwtUtil {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
-            throw new CustomException(ErrorCode.ACCESSTOKEN_EXPIRED);
-//            log.info("Expired JWT Token", e);
+//            throw new CustomException(ErrorCode.ACCESSTOKEN_EXPIRED);
+            log.info("Expired JWT Token", e);
+            throw new JwtException("토큰 기간 만료");
         } catch (UnsupportedJwtException e) {
             log.info("Unsurported JWT Token", e);
         } catch (IllegalArgumentException e) {
@@ -118,13 +119,13 @@ public class JwtUtil {
 
     // token 내용 parsing하는 함수
     public Claims parseClaims(String token) {
-        try {
+//        try {
             return Jwts.parser().setSigningKey(key)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
+//        } catch (ExpiredJwtException e) {
+//            return e.getClaims();
+//        }
     }
 
     public boolean isExpired(String token) {
@@ -151,12 +152,7 @@ public class JwtUtil {
     }
 
     public Long extractUserPkFromToken(HttpServletRequest request) {
-        try {
-            String token = request.getHeader("accessToken");
-            return Long.parseLong(parseClaims(token).get("userPk").toString());
-        } catch (Exception e) {
-            log.info("null일껄~");
-            return null;
-        }
+        String token = request.getHeader("accessToken");
+        return Long.parseLong(parseClaims(token).get("userPk").toString());
     }
 }

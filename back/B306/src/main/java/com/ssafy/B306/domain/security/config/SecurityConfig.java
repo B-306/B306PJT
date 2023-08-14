@@ -20,7 +20,12 @@ public class SecurityConfig  {
 
     private final JwtUtil jwtUtil;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+//    private final JwtExceptionFilter jwtExceptionFilter;
 
+//    @Bean
+//    public JwtExceptionFilter jwtExceptionFilter() {
+//        return new JwtExceptionFilter();
+//    }
     // 비밀번호 암호화를 위한 빈 등록
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -40,12 +45,14 @@ public class SecurityConfig  {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-//                .antMatchers("/user/login").permitAll()
+//                .antMatchers("/**").permitAll()
+                .antMatchers("/user/login", "/user/signup").permitAll()
+                .antMatchers("/**").authenticated()
 //                .antMatchers("/user/signup").permitAll()
                 .and()
                 .authenticationProvider(jwtAuthenticationProvider)
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
