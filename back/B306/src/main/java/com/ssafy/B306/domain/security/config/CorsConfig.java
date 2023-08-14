@@ -16,11 +16,10 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-//        config.setAllowedOrigins();
         config.setAllowedOrigins(List.of("http://localhost:3000", "https://i9b306.q.ssafy.io"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("**"));
+        config.setExposedHeaders(List.of("**"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

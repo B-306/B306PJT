@@ -1,6 +1,5 @@
 package com.ssafy.B306.domain.quiz.dto;
 
-import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.template.dto.TemplateResponseDto;
 import lombok.Builder;
 import lombok.Getter;

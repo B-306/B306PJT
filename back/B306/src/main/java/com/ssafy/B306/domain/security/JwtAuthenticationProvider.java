@@ -22,7 +22,6 @@ import java.util.Collection;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
-    // 이거 왜 final 붙으면 안되는지 아는 사람있나?
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -34,8 +33,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         // DB에 있는 유저 가져오기 => 근데 DTO로 받아야하나?
         // 그냥 값만 가져오면 Entity
         // 수정한 값을 변경하먄 DTO
-//        User findUser = userRepository.findByUserEmail(authentication.getName())
-//                                        .orElseThrow(()-> new RuntimeException("유저 없어"));
 
         User findUser = userRepository.findByUserEmail(authentication.getName())
                                         .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));

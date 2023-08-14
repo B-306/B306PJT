@@ -1,6 +1,5 @@
 package com.ssafy.B306.domain.user;
 
-import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,18 +20,13 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserRegisterResponseDto> signUp(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
-        return new ResponseEntity<>(new UserRegisterResponseDto(userService
-                        .signUp(userRegisterRequestDto)
-                        .getUserName()),
+    public ResponseEntity<UserSignUpResponseDto> signUp(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
+        return new ResponseEntity<>(new UserSignUpResponseDto(
+                userService.signUp(userRegisterRequestDto)
+                           .getUserName()),
                 HttpStatus.OK);
     }
 
-    /*
-    이거 구현하려면 refresh token을 DB에 저장을 해야할듯한데
-    1. user table에 저장하는 방식
-    2. refresh token table을 만들어 저장 (user_id, refresh token, delete_date)
-     */
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
         // 여기는 access token만 있음
