@@ -1,19 +1,14 @@
 package com.ssafy.B306.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ssafy.B306.domain.quizbook.QuizBook;
-import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor

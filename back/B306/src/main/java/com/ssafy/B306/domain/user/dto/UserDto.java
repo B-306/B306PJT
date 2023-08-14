@@ -1,7 +1,6 @@
 package com.ssafy.B306.domain.user.dto;
 
 import com.ssafy.B306.domain.quizbook.QuizBook;
-import com.ssafy.B306.domain.user.User;
 import lombok.*;
 
 import java.time.LocalDateTime;

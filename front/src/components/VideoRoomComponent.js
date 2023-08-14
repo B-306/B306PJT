@@ -9,6 +9,8 @@ import Counter from './secCounter';
 import Check from './game/Check';
 import Button from './common/Button';
 
+// import { Carousel } from 'primereact/carousel';
+
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
@@ -627,7 +629,8 @@ class VideoRoomComponent extends Component {
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
                 {showCounter && capturedImage && (
-                    <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}>
+                    <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'25%'}}>
+                    {/* <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}> */}
                         <Check image={this.state.capturedImage} showCounter={showCounter} />
                     </div>
                 )}
@@ -640,12 +643,21 @@ class VideoRoomComponent extends Component {
                         <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
-                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ display:'inline-block', width:'20%', height:'20%', position:'relative'}}>
+                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ 
+                            display:'inline-block',
+                            width:'20%',
+                            height:'20%',
+                            position:'relative',
+                            margin: '0 5px', // 스트림 간격 조절
+                            transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
+                            }}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                         </div>
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
+                        // 화면 위치 및 크기 조정
+                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'25%', position:'absolute'}}>
+                        {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                             <img
                                 src={require('../assets/images/test_sample.png')}

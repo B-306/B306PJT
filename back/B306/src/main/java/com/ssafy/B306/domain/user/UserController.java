@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -19,20 +17,15 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto userLoginRequest) {
-        Map<String, String> resultMap = new HashMap<>();
-        try{
-            resultMap = userService.login(userLoginRequest);
-            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(userService.login(userLoginRequest), HttpStatus.OK);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<UserRegisterResponseDto> signUp(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
-        UserDto userDto = userService.signUp(userRegisterRequestDto);
-        return new ResponseEntity<>(new UserRegisterResponseDto(userDto.getUserName()), HttpStatus.OK);
+        return new ResponseEntity<>(new UserRegisterResponseDto(userService
+                        .signUp(userRegisterRequestDto)
+                        .getUserName()),
+                HttpStatus.OK);
     }
 
     /*
@@ -42,25 +35,14 @@ public class UserController {
      */
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-        try {
-            // 여기는 access token만 있음
-            JwtToken token = userService.refreshToken(request);
-            return new ResponseEntity<>(token, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        // 여기는 access token만 있음
+        return new ResponseEntity<>(userService.refreshToken(request), HttpStatus.OK);
     }
 
     @PatchMapping("/modify")
     public ResponseEntity<?> modifyUser(@RequestBody UserModifyRequestDto userModifyRequestDto, HttpServletRequest request) {
-        try {
-            userService.modify(userModifyRequestDto, request);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.modify(userModifyRequestDto, request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/delete")
