@@ -1,7 +1,6 @@
 package com.ssafy.B306.domain.user;
 
-import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
-import com.ssafy.B306.domain.exception.UserEmailDuplicatedException;
+import com.ssafy.B306.domain.exception.CustomException;
 import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtUtil;
@@ -15,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -34,7 +32,6 @@ public class UserService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
-    private final ImageUploadService imageUploadService;
 
 
     public Map<String, String> login(UserLoginRequestDto userLoginRequest){
@@ -48,7 +45,7 @@ public class UserService {
 
         // DB에 있는 User 정보에서 userName 가져오기
         User findUser = userRepository.findByUserEmail(userLoginRequest.getUserEmail())
-                .orElseThrow(()-> new RuntimeException("유저 없엉ㅜㅜ"));
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         Map<String, String> result = new HashMap<>();
         result.put("accessToken", token.getAccessToken());
         result.put("refreshToken", token.getRefreshToken());
@@ -63,7 +60,7 @@ public class UserService {
 
         // userEmail 중복 검증
         if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
-            throw new UserEmailDuplicatedException(ErrorCode.USEREMAIL_DUPLICATED, "이미 가입된 이메일입니다.");
+            throw new CustomException(ErrorCode.USEREMAIL_DUPLICATED);
         }
 
         // 비밀번호 암호화
@@ -82,7 +79,7 @@ public class UserService {
         String accessToken = request.getHeader("accessToken");
 
         if (jwtUtil.isExpired(refreshToken)) { // DB에 있는 토큰이 만료가 된거면
-            throw new RuntimeException("refresh까지 만료");
+            throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
 
         return jwtUtil.refreshToken(accessToken);
@@ -96,7 +93,7 @@ public class UserService {
         if (userPk == null) return;
 
         User findUser = userRepository.findByUserId(userPk)
-                .orElseThrow(()-> new RuntimeException("유저 없는데?"));
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         findUser.modifyUser(
                 UserModifyRequestDto.builder()
@@ -118,7 +115,7 @@ public class UserService {
         if (userPk == null) return;
 
         User findUser = userRepository.findByUserId(userPk)
-                .orElseThrow(()-> new RuntimeException("유저 없는데?"));
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         findUser.modifyUserImage(url);
     }
@@ -159,7 +156,7 @@ public class UserService {
     // request를 받으면 user를 반환하는 함수
     public User findUserByRequest(HttpServletRequest request){
         Long userPk = jwtUtil.extractUserPkFromToken(request);
-        return userRepository.findByUserId(userPk).orElseThrow(()-> new RuntimeException("유저 없음"));
+        return userRepository.findByUserId(userPk).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
 }

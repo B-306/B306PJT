@@ -1,6 +1,8 @@
 package com.ssafy.B306.domain.security;
 
 
+import com.ssafy.B306.domain.exception.CustomException;
+import com.ssafy.B306.domain.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,7 +106,8 @@ public class JwtUtil {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
+            throw new CustomException(ErrorCode.ACCESSTOKEN_EXPIRED);
+//            log.info("Expired JWT Token", e);
         } catch (UnsupportedJwtException e) {
             log.info("Unsurported JWT Token", e);
         } catch (IllegalArgumentException e) {

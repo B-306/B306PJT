@@ -1,13 +1,13 @@
 package com.ssafy.B306.domain.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ErrorResponseDto {
-    private String errorCode;
-    private String errorMessage;
+    private final ErrorCode errorCode;
+    private final String errorMessage;
 }
