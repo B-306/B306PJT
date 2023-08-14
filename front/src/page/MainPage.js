@@ -54,6 +54,7 @@ const CenteredContainer = styled.div`
 `;
 
 const GameCreateButton = styled(Button)`
+  font-family: Ftstardust;
   margin-top: 1rem;
   margin-right: 1rem; 
 `;
@@ -66,25 +67,40 @@ const MainPageTitle = styled.h1`
   font-family: 'Ftstardust'
 `;
 
-const UserProfile = styled.span`
+const UserProfile = styled.div`
   position: absolute;
   top: 20px;
   right: 20px;
   cursor: pointer;
-  text-decoration: underline;
+  // text-decoration: underline;
+  text-decoration: none;
   color: white;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-right: 20px;
+`;
+
+const ProfileImage = styled.img`
+  width: 75px;
+  height: 75px;
+  border-radius: 50%; /* 이미지를 원형으로 꾸미는 속성 */
+  margin-bottom: 15px; /* 이미지 아래 여백 */
+  margin: aut
 `;
 
 const DropdownMenu = styled.div`
-  position: absolute;
+  // position: absolute;
   top: 50px;
   right: 20px;
   background-color: white;
   border-radius: 4px;
+  margin-top: 10px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space:nowrap;
 `;
 
 const rotateAnimation = keyframes`
@@ -105,6 +121,23 @@ const LogoImage = styled.img`
   // transform: translateX(-50%);
   animation: ${rotateAnimation} 5s linear infinite; /* Apply the rotation animation */
 `;
+
+const StyledButtonLink = styled(Link)`
+  display: inline-block;
+  background-color: #5ec9f2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3498db;
+  }
+`;
+
 
 const StyledForm = styled.form`
   display: flex;
@@ -153,18 +186,18 @@ const MainPage = () => {
   return (
     <CenteredContainer>
       <LogoImage src={gamelogoImage} alt="Logo" />
-      <UserProfile onClick={() => setView(!view)}>
-        {<img src={photoUrl} alt="Profile" width="50" height="50" shape="circle" border-radius= "45px"/>}
-        {userName}
+      <UserProfile>
+        <ProfileImage src={photoUrl} alt="Profile" />
+        <span onClick={() => setView(!view)} style={{fontSize: '35px', cursor: 'pointer', fontWeight:'bold' }}>{userName}</span>
+        {view && (
+          <DropdownMenu>
+            <div style={{display: 'flex', flexDirection: 'column' }}>
+              <StyledButtonLink to={`/${userEmail}/mypage`}>마이페이지</StyledButtonLink>
+              <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
+            </div>
+          </DropdownMenu>
+        )}
       </UserProfile>
-      {view && (
-        <DropdownMenu>
-          <div>
-            <Link to={`/${userEmail}/mypage`}>마이페이지</Link>
-          </div>
-          <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
-        </DropdownMenu>
-      )}
       {/* <span
         style={{ textDecoration: 'underline', cursor: 'pointer' }}
         onClick={() => setView(!view)}
@@ -187,7 +220,8 @@ const MainPage = () => {
         {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
         <GameCreateButton onClick={()=>navigate(`/game/1`)} >게임방 테스트 방번호 1번</GameCreateButton>
         <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>
-        <GameCreateButton><Link to={`/templatecreate`}>템플릿 업로드 페이지</Link></GameCreateButton>
+        {/* <GameCreateButton><Link to={`/templatecreate`}>템플릿 업로드 페이지</Link></GameCreateButton> */}
+        <GameCreateButton onClick={()=>navigate(`/templatecreate`)} >템플릿 업로드</GameCreateButton>
       </StyledForm>
     </CenteredContainer>
   );

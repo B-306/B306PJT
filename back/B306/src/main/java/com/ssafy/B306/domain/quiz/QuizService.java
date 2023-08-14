@@ -62,7 +62,10 @@ public class QuizService {
 
     public QuizResponseDto getQuiz(Long quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(()->new RuntimeException("해당 문제는 없습니다."));
+
+        TemplateResponseDto templateResponseDto = templateService.getTemplate(quiz.getQuizTemplateId().getTemplateId());
         QuizResponseDto quizResponseDto = quiz.toDto(quiz);
+        quizResponseDto.setQuizTemplateId(templateResponseDto);
 
         return quizResponseDto;
     }

@@ -9,19 +9,6 @@
   min-width: 400px !important;
 } */
 
-#header {
-  color: #ffffff;
-  height: 40px;
-  background-color: #140c70;
-  padding: 0 14px 0 0;
-  position: absolute;
-  /* top: 0; */
-  bottom: 0;
-  left: 0;
-  z-index: 999999;
-  min-width: 400px !important;
-}
-
 .counter-container {
   display: flex;
   justify-content: center;
@@ -76,7 +63,7 @@
 
 #navChatButton{
   position: absolute;
-  right: 0;
+  /* right: 0; */
 }
 .stream-container {
     padding: 0;
@@ -92,7 +79,8 @@
   top: 40px;
   bottom: 0;
   height: inherit;
-  min-width: 640px !important;
+  /* min-width: 640px !important; */
+  min-width: 720px !important;
   width: inherit;
 }
 
@@ -118,7 +106,8 @@
   padding: 0;
   border: 0;
   font-size: 100%;
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: Ftstardust;
   vertical-align: baseline;
 }
 

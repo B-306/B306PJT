@@ -20,7 +20,7 @@ import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
 
 import IconButton from '@material-ui/core/IconButton';
 
-const logo = require('../../assets/images/openvidu_logo.png');
+// const logo = require('../../assets/images/openvidu_logo.png');
 
 export default class ToolbarComponent extends Component {
     constructor(props) {
@@ -77,11 +77,11 @@ export default class ToolbarComponent extends Component {
             <AppBar className="toolbar" id="header">
                 <Toolbar className="toolbar">
                     <div id="navSessionInfo">
-                        <img
+                        {/* <img
                             id="header_img"
                             alt="OpenVidu Logo"
                             src={logo}
-                        />
+                        /> */}
 
                         {this.props.sessionId && <div id="titleContent">
                             <span id="session-title">{mySessionId}</span>
