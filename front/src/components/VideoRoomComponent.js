@@ -386,7 +386,7 @@ class VideoRoomComponent extends Component {
                     type: 'gameStart',
                 };
                 this.state.session.signal(signalOptions);
-            }, index * 20000 + 19000);
+            }, index * 20000 + 17000);
         }
         // const selectedQuizesString = localStorage.getItem('selectedQuizes');
         // const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
