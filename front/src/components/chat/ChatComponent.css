@@ -21,11 +21,11 @@
   color: #ffffff;
 }
 
-#closeButton {
+/* #closeButton {
   position: absolute;
   right: 0;
   top: -8px;
-}
+} */
 
 #chatComponent {
   background-color: #1a1b24;
