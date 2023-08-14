@@ -51,7 +51,8 @@ class Check extends Component {
     async componentDidMount() {
         // body-segmentation 관련 코드 실행
         const checkImage = new Image();
-        checkImage.src = require(localStorage.getItem('templateURL'));
+        const templateURL = localStorage.getItem('templateURL');
+        checkImage.src = templateURL;
         await checkImage.decode();
         // Canvas를 생성하여 이미지를 그립니다
         const canvas = document.createElement('canvas');
