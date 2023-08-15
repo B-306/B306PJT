@@ -41,7 +41,8 @@ class VideoRoomComponent extends Component {
             session: undefined,
             localUser: undefined,
             subscribers: [],
-            chatDisplay: 'none',
+            // chatDisplay: 'none',
+            chatDisplay: 'display',
             currentVideoDevice: undefined,
             showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
@@ -59,7 +60,7 @@ class VideoRoomComponent extends Component {
         this.screenShare = this.screenShare.bind(this);
         this.stopScreenShare = this.stopScreenShare.bind(this);
         this.closeDialogExtension = this.closeDialogExtension.bind(this);
-        this.toggleChat = this.toggleChat.bind(this);
+        // this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
         this.sendGameSignal = this.sendGameSignal.bind(this);
@@ -359,7 +360,7 @@ class VideoRoomComponent extends Component {
     async fnc (num) {
         console.log('num, response.data, response.data.quizTemplateId')
         console.log(num)
-        const response = await axios.get('https://i9b306.q.ssafy.io/api1/quiz/' + num)
+        const response = await axios.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
         console.log(response.data)
         console.log(response.data.quizTemplateId)
         return response.data;
@@ -388,6 +389,7 @@ class VideoRoomComponent extends Component {
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
+                    data: JSON.stringify({})
                 };
                 this.state.session.signal(signalOptions);
             }, index * 20000 + 17000);
@@ -564,20 +566,20 @@ class VideoRoomComponent extends Component {
         // this.updateLayout();
     }
 
-    toggleChat(property) {
-        let display = property;
+    // toggleChat(property) {
+    //     let display = property;
 
-        if (display === undefined) {
-            display = this.state.chatDisplay === 'none' ? 'block' : 'none';
-        }
-        if (display === 'block') {
-            this.setState({ chatDisplay: display, messageReceived: false });
-        } else {
-            console.log('chat', display);
-            this.setState({ chatDisplay: display });
-        }
-        // this.updateLayout();
-    }
+    //     if (display === undefined) {
+    //         display = this.state.chatDisplay === 'none' ? 'block' : 'none';
+    //     }
+    //     if (display === 'block') {
+    //         this.setState({ chatDisplay: display, messageReceived: false });
+    //     } else {
+    //         console.log('chat', display);
+    //         this.setState({ chatDisplay: display });
+    //     }
+    //     // this.updateLayout();
+    // }
 
     checkNotification(event) {
         this.setState({
@@ -615,7 +617,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
-                {/* <ToolbarComponent
+                <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -626,8 +628,8 @@ class VideoRoomComponent extends Component {
                     toggleFullscreen={this.toggleFullscreen}
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                /> */}
+                    // toggleChat={this.toggleChat}
+                />
                 
                 {/* {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
@@ -695,13 +697,13 @@ class VideoRoomComponent extends Component {
                             <ChatComponent
                                 user={localUser}
                                 chatDisplay={this.state.chatDisplay}
-                                close={this.toggleChat}
+                                // close={this.toggleChat}
                                 messageReceived={this.checkNotification}
                             />
                         </div>
                     )}
                 </div>
-                <ToolbarComponent
+                {/* <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
                     showNotification={this.state.messageReceived}
@@ -713,7 +715,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
+                /> */}
             </div>
         );
     }

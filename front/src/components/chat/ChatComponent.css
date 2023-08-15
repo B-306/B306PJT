@@ -3,7 +3,7 @@
   z-index: 9999;
   width: 25%;
   height: 80%;
-  margin-top: 7%;
+  margin-top: 0%;
   margin-left:72%;
 }
 
@@ -21,11 +21,11 @@
   color: #ffffff;
 }
 
-#closeButton {
+/* #closeButton {
   position: absolute;
   right: 0;
   top: -8px;
-}
+} */
 
 #chatComponent {
   background-color: #1a1b24;

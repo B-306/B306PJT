@@ -61,6 +61,12 @@ const GameCreateButton = styled(Button)`
 
 const StyledInput = styled(Input)``;
 
+const StyledButton = styled(Button)`
+  font-family: Ftstardust;
+  text-align: center;
+  border-radius: 5px;
+`;
+
 const MainPageTitle = styled.h1`
   text-align: center;
   color: white;
@@ -81,6 +87,7 @@ const UserProfile = styled.div`
   align-items: center;
   text-align: center;
   margin-right: 20px;
+  min-width: 130px !important;
 `;
 
 const ProfileImage = styled.img`
@@ -193,7 +200,7 @@ const MainPage = () => {
           <DropdownMenu>
             <div style={{display: 'flex', flexDirection: 'column' }}>
               <StyledButtonLink to={`/${userEmail}/mypage`}>마이페이지</StyledButtonLink>
-              <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
+              <StyledButton onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</StyledButton>
             </div>
           </DropdownMenu>
         )}
