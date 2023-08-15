@@ -196,7 +196,7 @@ const MyPage = (props) => {
             }}
             style={{ marginRight: '10px' }}
           >
-            정보 수정
+            수정 취소
           </ModifyButton>
           ) : (
           <ModifyButton
@@ -206,7 +206,7 @@ const MyPage = (props) => {
             }}
             style={{ marginRight: '10px' }}
           >
-            수정 취소
+            정보 수정
           </ModifyButton>
           )}
 

@@ -61,6 +61,8 @@ const GameCreateButton = styled(Button)`
 
 const StyledInput = styled(Input)``;
 
+const StyledButton = styled(Button)``;
+
 const MainPageTitle = styled.h1`
   text-align: center;
   color: white;
@@ -194,7 +196,7 @@ const MainPage = () => {
           <DropdownMenu>
             <div style={{display: 'flex', flexDirection: 'column' }}>
               <StyledButtonLink to={`/${userEmail}/mypage`}>마이페이지</StyledButtonLink>
-              <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
+              <StyledButton onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</StyledButton>
             </div>
           </DropdownMenu>
         )}
