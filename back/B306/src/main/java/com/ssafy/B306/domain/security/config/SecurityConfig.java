@@ -2,6 +2,7 @@ package com.ssafy.B306.domain.security.config;
 
 import com.ssafy.B306.domain.security.JwtAuthenticationFilter;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
+import com.ssafy.B306.domain.security.JwtExceptionFilter;
 import com.ssafy.B306.domain.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -45,9 +46,9 @@ public class SecurityConfig  {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-//                .antMatchers("/**").permitAll()
-                .antMatchers("/user/login", "/user/signup").permitAll()
-                .antMatchers("/**").authenticated()
+                .antMatchers("/**").permitAll()
+//                .antMatchers("/user/login", "/user/signup").permitAll()
+//                .antMatchers("/**").authenticated()
 //                .antMatchers("/user/signup").permitAll()
                 .and()
                 .authenticationProvider(jwtAuthenticationProvider)
