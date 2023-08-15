@@ -58,7 +58,7 @@ class VideoRoomComponent extends Component {
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
         // this.switchCamera = this.switchCamera.bind(this);
         // this.screenShare = this.screenShare.bind(this);
-        this.stopScreenShare = this.stopScreenShare.bind(this);
+        // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.closeDialogExtension = this.closeDialogExtension.bind(this);
         // this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
@@ -188,12 +188,12 @@ class VideoRoomComponent extends Component {
         }
         localUser.setNickname(this.state.myUserName);
         localUser.setConnectionId(this.state.session.connection.connectionId);
-        localUser.setScreenShareActive(false);
+        // localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
         this.receiveGameSignal();
-        this.subscribeToUserChanged();
-        this.subscribeToStreamDestroyed();
-        this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
+        // this.subscribeToUserChanged();
+        // this.subscribeToStreamDestroyed();
+        // this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
 
         this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
             this.state.localUser.getStreamManager().on('streamPlaying', (e) => {
@@ -215,7 +215,7 @@ class VideoRoomComponent extends Component {
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
                         nickname: this.state.localUser.getNickname(),
-                        isScreenShareActive: this.state.localUser.isScreenShareActive(),
+                        // isScreenShareActive: this.state.localUser.isScreenShareActive(),
                     });
                 }
                 // this.updateLayout();
@@ -277,42 +277,42 @@ class VideoRoomComponent extends Component {
         }
     }
 
-    subscribeToStreamCreated() {
-        this.state.session.on('streamCreated', (event) => {
-            const subscriber = this.state.session.subscribe(event.stream, undefined);
-            // var subscribers = this.state.subscribers;
-            subscriber.on('streamPlaying', (e) => {
-                this.checkSomeoneShareScreen();
-                subscriber.videos[0].video.parentElement.classList.remove('custom-class');
-            });
-            const newUser = new UserModel();
-            newUser.setStreamManager(subscriber);
-            newUser.setConnectionId(event.stream.connection.connectionId);
-            newUser.setType('remote');
-            const nickname = event.stream.connection.data.split('%')[0];
-            newUser.setNickname(JSON.parse(nickname).clientData);
-            this.remotes.push(newUser);
-            if(this.localUserAccessAllowed) {
-                this.updateSubscribers();
-            }
-        });
-    }
+    // subscribeToStreamCreated() {
+    //     this.state.session.on('streamCreated', (event) => {
+    //         const subscriber = this.state.session.subscribe(event.stream, undefined);
+    //         // var subscribers = this.state.subscribers;
+    //         subscriber.on('streamPlaying', (e) => {
+    //             // this.checkSomeoneShareScreen();
+    //             subscriber.videos[0].video.parentElement.classList.remove('custom-class');
+    //         });
+    //         const newUser = new UserModel();
+    //         newUser.setStreamManager(subscriber);
+    //         newUser.setConnectionId(event.stream.connection.connectionId);
+    //         newUser.setType('remote');
+    //         const nickname = event.stream.connection.data.split('%')[0];
+    //         newUser.setNickname(JSON.parse(nickname).clientData);
+    //         this.remotes.push(newUser);
+    //         if(this.localUserAccessAllowed) {
+    //             this.updateSubscribers();
+    //         }
+    //     });
+    // }
 
 
 
 
-    subscribeToStreamDestroyed() {
-        // On every Stream destroyed...
-        this.state.session.on('streamDestroyed', (event) => {
-            // Remove the stream from 'subscribers' array
-            this.deleteSubscriber(event.stream);
-            setTimeout(() => {
-                this.checkSomeoneShareScreen();
-            }, 20);
-            event.preventDefault();
-            // this.updateLayout();
-        });
-    }
+    // subscribeToStreamDestroyed() {
+    //     // On every Stream destroyed...
+    //     this.state.session.on('streamDestroyed', (event) => {
+    //         // Remove the stream from 'subscribers' array
+    //         this.deleteSubscriber(event.stream);
+    //         setTimeout(() => {
+    //             this.checkSomeoneShareScreen();
+    //         }, 20);
+    //         event.preventDefault();
+    //         // this.updateLayout();
+    //     });
+    // }
 
     subscribeToUserChanged() {
         this.state.session.on('signal:userChanged', (event) => {
@@ -330,16 +330,16 @@ class VideoRoomComponent extends Component {
                     if (data.nickname !== undefined) {
                         user.setNickname(data.nickname);
                     }
-                    if (data.isScreenShareActive !== undefined) {
-                        user.setScreenShareActive(data.isScreenShareActive);
-                    }
+                    // if (data.isScreenShareActive !== undefined) {
+                    //     user.setScreenShareActive(data.isScreenShareActive);
+                    // }
                 }
             });
             this.setState(
                 {
                     subscribers: remoteUsers,
                 },
-                () => this.checkSomeoneShareScreen(),
+                // () => this.checkSomeoneShareScreen(),
             );
         });
     }
@@ -608,8 +608,8 @@ class VideoRoomComponent extends Component {
                     showNotification={this.state.messageReceived}
                     camStatusChanged={this.camStatusChanged}
                     micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
+                    // screenShare={this.screenShare}
+                    // stopScreenShare={this.stopScreenShare}
                     toggleFullscreen={this.toggleFullscreen}
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
