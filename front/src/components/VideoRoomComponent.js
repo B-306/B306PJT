@@ -448,40 +448,40 @@ class VideoRoomComponent extends Component {
         }
     }
 
-    async switchCamera() {
-        try{
-            const devices = await this.OV.getDevices()
-            var videoDevices = devices.filter(device => device.kind === 'videoinput');
+    // async switchCamera() {
+    //     try{
+    //         const devices = await this.OV.getDevices()
+    //         var videoDevices = devices.filter(device => device.kind === 'videoinput');
 
-            if(videoDevices && videoDevices.length > 1) {
+    //         if(videoDevices && videoDevices.length > 1) {
 
-                var newVideoDevice = videoDevices.filter(device => device.deviceId !== this.state.currentVideoDevice.deviceId)
+    //             var newVideoDevice = videoDevices.filter(device => device.deviceId !== this.state.currentVideoDevice.deviceId)
 
-                if (newVideoDevice.length > 0) {
-                    // Creating a new publisher with specific videoSource
-                    // In mobile devices the default and first camera is the front one
-                    var newPublisher = this.OV.initPublisher(undefined, {
-                        audioSource: undefined,
-                        videoSource: newVideoDevice[0].deviceId,
-                        publishAudio: localUser.isAudioActive(),
-                        publishVideo: localUser.isVideoActive(),
-                        mirror: true
-                    });
+    //             if (newVideoDevice.length > 0) {
+    //                 // Creating a new publisher with specific videoSource
+    //                 // In mobile devices the default and first camera is the front one
+    //                 var newPublisher = this.OV.initPublisher(undefined, {
+    //                     audioSource: undefined,
+    //                     videoSource: newVideoDevice[0].deviceId,
+    //                     publishAudio: localUser.isAudioActive(),
+    //                     publishVideo: localUser.isVideoActive(),
+    //                     mirror: true
+    //                 });
 
-                    //newPublisher.once("accessAllowed", () => {
-                    await this.state.session.unpublish(this.state.localUser.getStreamManager());
-                    await this.state.session.publish(newPublisher)
-                    this.state.localUser.setStreamManager(newPublisher);
-                    this.setState({
-                        currentVideoDevice: newVideoDevice,
-                        localUser: localUser,
-                    });
-                }
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
+    //                 //newPublisher.once("accessAllowed", () => {
+    //                 await this.state.session.unpublish(this.state.localUser.getStreamManager());
+    //                 await this.state.session.publish(newPublisher)
+    //                 this.state.localUser.setStreamManager(newPublisher);
+    //                 this.setState({
+    //                     currentVideoDevice: newVideoDevice,
+    //                     localUser: localUser,
+    //                 });
+    //             }
+    //         }
+    //     } catch (e) {
+    //         console.error(e);
+    //     }
+    // }
 
     // screenShare() {
     //     const videoSource = navigator.userAgent.indexOf('Firefox') !== -1 ? 'window' : 'screen';
@@ -611,7 +611,7 @@ class VideoRoomComponent extends Component {
                     // screenShare={this.screenShare}
                     // stopScreenShare={this.stopScreenShare}
                     toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
+                    // switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     // toggleChat={this.toggleChat}
                 />
@@ -638,13 +638,15 @@ class VideoRoomComponent extends Component {
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
-                <div id="layout" className="bounds">
+                {/* <div id="layout" className="bounds"> */}
+                <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                         <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
                     {this.state.subscribers.map((sub, i) => (
-                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ 
+                        // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
+                        <div key={i} id="remoteUsers" style={{ 
                             display:'inline-block',
                             width:'20%',
                             height:'20%',
@@ -657,7 +659,8 @@ class VideoRoomComponent extends Component {
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
-                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
+                        <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
+                        {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}> */}
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                             <img
@@ -678,7 +681,8 @@ class VideoRoomComponent extends Component {
                     
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 채팅 컴포넌트
-                        <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
+                        // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
+                        <div style={chatDisplay}>
                             <ChatComponent
                                 user={localUser}
                                 chatDisplay={this.state.chatDisplay}
