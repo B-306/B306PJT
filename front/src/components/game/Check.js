@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Scoring from './Scoring';
+import axios from 'axios';
 import * as bodySegmentation from '@tensorflow-models/body-segmentation';
 import '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-converter';
@@ -52,7 +53,20 @@ class Check extends Component {
         // body-segmentation 관련 코드 실행
         const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
-        checkImage.src = templateURL;
+        // checkImage.src = templateURL;
+        try {
+            const response = await axios.get('https://i9b306.q.ssafy.io/api1/getimage', {
+                params: {
+                    imageUrl: templateURL
+                }
+            });
+            console.log('templateURL get 요청')
+            console.log(response)
+            // response 처리
+        } catch (error) {
+            console.error('Error:', error);
+        };
+
         await checkImage.decode();
         // Canvas를 생성하여 이미지를 그립니다
         const canvas = document.createElement('canvas');
