@@ -114,7 +114,7 @@ class VideoRoomComponent extends Component {
                 session: this.OV.initSession(),
             },
             async () => {
-                // this.subscribeToStreamCreated();
+                this.subscribeToStreamCreated();
                 await this.connectToSession();
                 
             },
@@ -192,7 +192,7 @@ class VideoRoomComponent extends Component {
         localUser.setStreamManager(publisher);
         this.receiveGameSignal();
         // this.subscribeToUserChanged();
-        // this.subscribeToStreamDestroyed();
+        this.subscribeToStreamDestroyed();
         // this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
 
         this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
@@ -277,42 +277,42 @@ class VideoRoomComponent extends Component {
         }
     }
 
-    // subscribeToStreamCreated() {
-    //     this.state.session.on('streamCreated', (event) => {
-    //         const subscriber = this.state.session.subscribe(event.stream, undefined);
-    //         // var subscribers = this.state.subscribers;
-    //         subscriber.on('streamPlaying', (e) => {
-    //             // this.checkSomeoneShareScreen();
-    //             subscriber.videos[0].video.parentElement.classList.remove('custom-class');
-    //         });
-    //         const newUser = new UserModel();
-    //         newUser.setStreamManager(subscriber);
-    //         newUser.setConnectionId(event.stream.connection.connectionId);
-    //         newUser.setType('remote');
-    //         const nickname = event.stream.connection.data.split('%')[0];
-    //         newUser.setNickname(JSON.parse(nickname).clientData);
-    //         this.remotes.push(newUser);
-    //         if(this.localUserAccessAllowed) {
-    //             this.updateSubscribers();
-    //         }
-    //     });
-    // }
+    subscribeToStreamCreated() {
+        this.state.session.on('streamCreated', (event) => {
+            const subscriber = this.state.session.subscribe(event.stream, undefined);
+            // var subscribers = this.state.subscribers;
+            subscriber.on('streamPlaying', (e) => {
+                // this.checkSomeoneShareScreen();
+                subscriber.videos[0].video.parentElement.classList.remove('custom-class');
+            });
+            const newUser = new UserModel();
+            newUser.setStreamManager(subscriber);
+            newUser.setConnectionId(event.stream.connection.connectionId);
+            newUser.setType('remote');
+            const nickname = event.stream.connection.data.split('%')[0];
+            newUser.setNickname(JSON.parse(nickname).clientData);
+            this.remotes.push(newUser);
+            if(this.localUserAccessAllowed) {
+                this.updateSubscribers();
+            }
+        });
+    }
 
 
 
 
-    // subscribeToStreamDestroyed() {
-    //     // On every Stream destroyed...
-    //     this.state.session.on('streamDestroyed', (event) => {
-    //         // Remove the stream from 'subscribers' array
-    //         this.deleteSubscriber(event.stream);
-    //         setTimeout(() => {
-    //             this.checkSomeoneShareScreen();
-    //         }, 20);
-    //         event.preventDefault();
-    //         // this.updateLayout();
-    //     });
-    // }
+    subscribeToStreamDestroyed() {
+        // On every Stream destroyed...
+        this.state.session.on('streamDestroyed', (event) => {
+            // Remove the stream from 'subscribers' array
+            this.deleteSubscriber(event.stream);
+            // setTimeout(() => {
+            //     this.checkSomeoneShareScreen();
+            // }, 20);
+            event.preventDefault();
+            // this.updateLayout();
+        });
+    }
 
     subscribeToUserChanged() {
         this.state.session.on('signal:userChanged', (event) => {
