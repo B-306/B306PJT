@@ -61,11 +61,20 @@ const GameCreateButton = styled(Button)`
 
 const StyledInput = styled(Input)``;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled.button`
   font-family: Ftstardust;
-  text-align: center;
-  padding-left: 10px
+  background-color: #ff5733;
+  color: white;
+  padding: 10px 20px;
+  border: none;
   border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #d63031; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 글씨 색 변경 */
+  }
 `;
 
 const MainPageTitle = styled.h1`
