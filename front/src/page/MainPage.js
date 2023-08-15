@@ -81,6 +81,7 @@ const UserProfile = styled.div`
   align-items: center;
   text-align: center;
   margin-right: 20px;
+  min-width: 130px !important;
 `;
 
 const ProfileImage = styled.img`
