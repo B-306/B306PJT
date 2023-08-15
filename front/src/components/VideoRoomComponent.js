@@ -644,6 +644,7 @@ class VideoRoomComponent extends Component {
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                         <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
+                    <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap' }}>
                     {this.state.subscribers.map((sub, i) => (
                         // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
                         <div key={i} id="remoteUsers" style={{ 
@@ -653,10 +654,12 @@ class VideoRoomComponent extends Component {
                             position:'relative',
                             margin: '20px 2px 0px', // 스트림 간격 조절
                             transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
+                            top: '40px',
                             }}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                         </div>
                     ))}
+                    </div>
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
                         <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
