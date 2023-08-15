@@ -45,11 +45,26 @@ class Check extends Component {
         this.state = {
             maxWidth: '100%',
             people: null, // 세그멘테이션 결과를 저장할 상태 변수
+            checkImageData: null,
+            maskImageBitmap: null,
+            maskImageData: null,
         };
     }
 
+    async componentDidUpdate(prevProps) {
+        const { showCounter } = this.props;
+        if (showCounter !== prevProps.showCounter) {
+            this.setState({
+                people: null,
+                checkImageData: null,
+                maskImageBitmap: null,
+                maskImageData: null,
+            });
+        }
+    }
     
     async componentDidMount() {
+        // 새로운 이미지가 들어올 때 이전 데이터와 상태 초기화
         // body-segmentation 관련 코드 실행
         // const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
@@ -162,11 +177,19 @@ class Check extends Component {
         }
         console.log('srgb', srgb)
         console.log('마스크데이터', maskImageData)
+
+        const checkStyle = {
+            width: '720px',
+            height: '540px',
+            overflow: 'hidden',
+        };
+
         return (
             <div>
                 <div className="check-container">
                     <div style={{ overflowX: 'auto' }}>
                         <canvas
+                            style={checkStyle}
                             ref={canvasRef => {
                                 if (canvasRef) {
                                     const ctx = canvasRef.getContext('2d');

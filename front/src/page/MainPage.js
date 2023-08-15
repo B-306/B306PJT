@@ -64,6 +64,7 @@ const StyledInput = styled(Input)``;
 const StyledButton = styled(Button)`
   font-family: Ftstardust;
   text-align: center;
+  padding-left: 10px
   border-radius: 5px;
 `;
 
