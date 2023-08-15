@@ -389,6 +389,7 @@ class VideoRoomComponent extends Component {
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
+                    data: JSON.stringify({})
                 };
                 this.state.session.signal(signalOptions);
             }, index * 20000 + 17000);

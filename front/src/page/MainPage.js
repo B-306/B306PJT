@@ -61,7 +61,11 @@ const GameCreateButton = styled(Button)`
 
 const StyledInput = styled(Input)``;
 
-const StyledButton = styled(Button)``;
+const StyledButton = styled(Button)`
+  font-family: Ftstardust;
+  text-align: center;
+  border-radius: 5px;
+`;
 
 const MainPageTitle = styled.h1`
   text-align: center;
