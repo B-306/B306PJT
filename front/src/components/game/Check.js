@@ -50,6 +50,13 @@ class Check extends Component {
 
     
     async componentDidMount() {
+        // 새로운 이미지가 들어올 때 이전 데이터와 상태 초기화
+        this.setState({
+            people: null,
+            checkImageData: null,
+            maskImageBitmap: null,
+            maskImageData: null,
+        });
         // body-segmentation 관련 코드 실행
         // const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
