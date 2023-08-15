@@ -28,7 +28,7 @@ const FileAddButton = styled.input`
   font-size: 18px;
   font-weight: bold;
 
-  line-height: 15px;
+  line-height: 13px;
 
   border-radius: 5px;
 
