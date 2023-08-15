@@ -649,7 +649,7 @@ class VideoRoomComponent extends Component {
                             width:'20%',
                             height:'20%',
                             position:'relative',
-                            margin: '0 5px', // 스트림 간격 조절
+                            margin: '20px 2px 0px', // 스트림 간격 조절
                             transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
                             }}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
