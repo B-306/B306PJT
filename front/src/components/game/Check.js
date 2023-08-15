@@ -51,10 +51,12 @@ class Check extends Component {
     
     async componentDidMount() {
         // body-segmentation 관련 코드 실행
-        // const checkImage = new Image();
+        const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         // checkImage.src = templateURL;
-        let checkImageData;
+        let imageData;
         try {
             const response = await axios.get('https://i9b306.q.ssafy.io/api1/getimage', {
                 params: {
@@ -63,10 +65,18 @@ class Check extends Component {
             });
             console.log('templateURL get 요청')
             console.log(response)
-            checkImageData = response.data
+            imageData = response.data
             // response 처리
         } catch (error) {
             console.error('Error:', error);
+        };
+
+        const img = new Image();
+        img.src = 'data:image/png;base64,' + imageData; // 이미지 데이터를 base64 형태로 지정
+        img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
         };
         // if (checkImageData) {
             
@@ -80,7 +90,7 @@ class Check extends Component {
         // ctx.drawImage(checkImage, 0, 0);
         
         // Canvas에서 ImageData를 추출합니다
-        // const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
+        const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
 
         const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
         const segmenterConfig = {

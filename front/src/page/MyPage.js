@@ -188,6 +188,7 @@ const MyPage = (props) => {
         </React.Fragment>
 
         <ButtonContainer>
+        {view ? (
           <ModifyButton
             type="button"
             onClick={() => {
@@ -197,6 +198,17 @@ const MyPage = (props) => {
           >
             정보 수정
           </ModifyButton>
+          ) : (
+          <ModifyButton
+            type="button"
+            onClick={() => {
+              setView(!view);
+            }}
+            style={{ marginRight: '10px' }}
+          >
+            수정 취소
+          </ModifyButton>
+          )}
 
           <DeleteButton type="button" onClick={deleteAccount}>
             회원 탈퇴
