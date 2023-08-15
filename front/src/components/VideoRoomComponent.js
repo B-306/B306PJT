@@ -360,7 +360,7 @@ class VideoRoomComponent extends Component {
     async fnc (num) {
         console.log('num, response.data, response.data.quizTemplateId')
         console.log(num)
-        const response = localStorage.getItem('templateURL')
+        const response = await axios.get(`https://i9b306.q.ssafy.io/api1/` + num)
         console.log(response.data)
         console.log(response.data.quizTemplateId)
         return response.data;
