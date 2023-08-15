@@ -28,7 +28,7 @@ const FileAddButton = styled.input`
   font-size: 18px;
   font-weight: bold;
 
-  text-align: center;
+  line-height: 40px;
 
   border-radius: 5px;
 
@@ -52,7 +52,7 @@ const UploadButton = styled.button`
   font-size: 18px;
   font-weight: bold;
 
-  text-align: center;
+  line-height: 40px;
 
   border-radius: 5px;
 
