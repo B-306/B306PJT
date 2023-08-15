@@ -1,8 +1,6 @@
 package com.ssafy.B306.domain.security;
 
 
-import com.ssafy.B306.domain.exception.CustomException;
-import com.ssafy.B306.domain.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
@@ -50,8 +49,9 @@ public class JwtUtil {
                 .collect(Collectors.joining(","));
 
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName()) // 토큰의 이름 설정
-                .claim("auth", authorities) // 권한 넣기
+//                .setSubject(authentication.getName()) // 토큰의 이름 설정
+//                .claim("auth", authorities) // 권한 넣기
+                .claim("type", "ACCESS")
                 .claim("userPk", authentication.getCredentials()) // pk 값 넣기
                 .claim("userEmail", authentication.getName()) // email 값 넣기
                 .setExpiration(new Date(System.currentTimeMillis() + accessExpired)) // 만료기간 30분 설정
@@ -59,6 +59,8 @@ public class JwtUtil {
                 .compact();
 
         String refreshToken = Jwts.builder()
+                .claim("type", "REFRESH")
+                .claim("userPk", authentication.getCredentials()) // pk 값 넣기
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpired))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
@@ -68,6 +70,19 @@ public class JwtUtil {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    // 헤더에서 토큰 추출
+    public String resolveToken(HttpServletRequest httpServletRequest){
+        String bearerToken = httpServletRequest.getHeader("Authorization");
+
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")){
+            // "Bearer" 다음에 오는 부분 문자열 추출 = token
+            return bearerToken.substring(7);
+        }
+
+        // 조건에 부합하지 않으면 그냥 return null
+        return null;
     }
 
     // 토큰 복호화
@@ -106,8 +121,8 @@ public class JwtUtil {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
-            throw new CustomException(ErrorCode.ACCESSTOKEN_EXPIRED);
-//            log.info("Expired JWT Token", e);
+            log.info("Expired JWT Token", e);
+//            throw new JwtException("ACCESSTOKEN_EXPIRED");
         } catch (UnsupportedJwtException e) {
             log.info("Unsurported JWT Token", e);
         } catch (IllegalArgumentException e) {
@@ -118,28 +133,26 @@ public class JwtUtil {
 
     // token 내용 parsing하는 함수
     public Claims parseClaims(String token) {
-        try {
-            return Jwts.parser().setSigningKey(key)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
+        return Jwts.parser().setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
-    public boolean isExpired(String token) {
-        // new Date() : 지금
-        // 즉, 만료 시간이 지금보다 전인가?를 판단하고 결과를 반환
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token)
-                .getBody().getExpiration().before(new Date());
-    }
+//    public boolean isExpired(String token) {
+//        // new Date() : 지금
+//        // 즉, 만료 시간이 지금보다 전인가?를 판단하고 결과를 반환
+//        return Jwts.parser().setSigningKey(key).parseClaimsJws(token)
+//                .getBody().getExpiration().before(new Date());
+//    }
 
-    public JwtToken refreshToken(String accessToken) {
-        Claims token = parseClaims(accessToken);
+    public JwtToken refreshToken(String refreshToken, String userEmail) {
+
+        Claims token = parseClaims(refreshToken);
+
         String newToken = Jwts.builder()
-                .setSubject(token.getSubject()) // 토큰의 이름 설정
-                .claim("auth", token.getAudience()) // 권한 넣기
+                .claim("type", "ACCESS")
                 .claim("userPk", token.get("userPk")) // pk 값 넣기
+                .claim("userEmail", userEmail)
                 .setExpiration(new Date(System.currentTimeMillis() + accessExpired)) // 만료기간 30분 설정
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
@@ -151,12 +164,7 @@ public class JwtUtil {
     }
 
     public Long extractUserPkFromToken(HttpServletRequest request) {
-        try {
-            String token = request.getHeader("accessToken");
-            return Long.parseLong(parseClaims(token).get("userPk").toString());
-        } catch (Exception e) {
-            log.info("null일껄~");
-            return null;
-        }
+        String token = request.getHeader("accessToken");
+        return Long.parseLong(parseClaims(token).get("userPk").toString());
     }
 }

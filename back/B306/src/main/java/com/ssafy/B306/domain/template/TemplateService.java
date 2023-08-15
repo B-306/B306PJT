@@ -1,7 +1,8 @@
 package com.ssafy.B306.domain.template;
 
 
-import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
+import com.ssafy.B306.domain.exception.CustomException;
+import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.template.dto.TemplateResponseDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
@@ -9,7 +10,6 @@ import com.ssafy.B306.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -21,17 +21,16 @@ import java.util.List;
 public class TemplateService {
 
     private final TemplateRepository templateRepository;
-    private final ImageUploadService imageUploadService;
     private final JwtUtil jwtUtil;
 
     // template 낱개 조회
     public TemplateResponseDto getTemplate(Long templateId){
 
         Template template = templateRepository.findByTemplateId(templateId)
-                .orElseThrow(() -> new RuntimeException("no template"));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
 
         if(template.getTemplateDeleteDate() != null) {
-            throw new IllegalStateException("이미 삭제된 템플릿입니다.");
+            throw new CustomException(ErrorCode.TEMPLATE_NOT_FOUND);
         }
 
         TemplateResponseDto templateResponseDto = template.makeTemplateDto(template);
@@ -75,9 +74,9 @@ public class TemplateService {
 
         //예외 확인
         Template template = templateRepository.findByTemplateIdAndTemplateUserId(templateId, User.builder().userId(templateUserId).build())
-                .orElseThrow(() -> new IllegalArgumentException("해당 템플릿이 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
         if(template.getTemplateDeleteDate() != null) {
-            throw new IllegalStateException("이미 삭제된 템플릿입니다.");
+            throw new CustomException(ErrorCode.TEMPLATE_NOT_FOUND);
         }
 
         templateRepository.deleteById(template.getTemplateId());
@@ -91,10 +90,10 @@ public class TemplateService {
 
         // 예외 확인
         Template originalTemplate = templateRepository.findByTemplateIdAndTemplateUserId(templateId, User.builder().userId(templateUserId).build())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않거나 변경 권한이 없는 템플릿입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND_OR_UNAUTHORIZED));
 
         if(originalTemplate.getTemplateDeleteDate() != null) {
-            throw new IllegalStateException("이미 삭제된 템플릿입니다.");
+            throw new CustomException(ErrorCode.TEMPLATE_NOT_FOUND);
         }
 
         templateSaveDto.setTemplateImage(originalTemplate.getTemplateImage());
@@ -108,9 +107,9 @@ public class TemplateService {
 
         // 예외 확인
         Template originalTemplate = templateRepository.findByTemplateIdAndTemplateUserId(templateId, User.builder().userId(templateUserId).build())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않거나 변경 권한이 없는 템플릿입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND_OR_UNAUTHORIZED));
         if(originalTemplate.getTemplateDeleteDate() != null) {
-            throw new IllegalStateException("이미 삭제된 템플릿입니다.");
+            throw new CustomException(ErrorCode.TEMPLATE_NOT_FOUND);
         }
 
         originalTemplate.modifyTemplateImage(url);

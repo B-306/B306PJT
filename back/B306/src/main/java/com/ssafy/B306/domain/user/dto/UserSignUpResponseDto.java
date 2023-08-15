@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserRegisterResponseDto {
+public class UserSignUpResponseDto {
     private String userName;
 }
