@@ -56,9 +56,9 @@ class VideoRoomComponent extends Component {
         this.micStatusChanged = this.micStatusChanged.bind(this);
         this.nicknameChanged = this.nicknameChanged.bind(this);
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
-        this.switchCamera = this.switchCamera.bind(this);
-        this.screenShare = this.screenShare.bind(this);
-        this.stopScreenShare = this.stopScreenShare.bind(this);
+        // this.switchCamera = this.switchCamera.bind(this);
+        // this.screenShare = this.screenShare.bind(this);
+        // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.closeDialogExtension = this.closeDialogExtension.bind(this);
         // this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
@@ -188,12 +188,12 @@ class VideoRoomComponent extends Component {
         }
         localUser.setNickname(this.state.myUserName);
         localUser.setConnectionId(this.state.session.connection.connectionId);
-        localUser.setScreenShareActive(false);
+        // localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
         this.receiveGameSignal();
-        this.subscribeToUserChanged();
+        // this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
-        this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
+        // this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
 
         this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
             this.state.localUser.getStreamManager().on('streamPlaying', (e) => {
@@ -215,7 +215,7 @@ class VideoRoomComponent extends Component {
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
                         nickname: this.state.localUser.getNickname(),
-                        isScreenShareActive: this.state.localUser.isScreenShareActive(),
+                        // isScreenShareActive: this.state.localUser.isScreenShareActive(),
                     });
                 }
                 // this.updateLayout();
@@ -282,7 +282,7 @@ class VideoRoomComponent extends Component {
             const subscriber = this.state.session.subscribe(event.stream, undefined);
             // var subscribers = this.state.subscribers;
             subscriber.on('streamPlaying', (e) => {
-                this.checkSomeoneShareScreen();
+                // this.checkSomeoneShareScreen();
                 subscriber.videos[0].video.parentElement.classList.remove('custom-class');
             });
             const newUser = new UserModel();
@@ -306,9 +306,9 @@ class VideoRoomComponent extends Component {
         this.state.session.on('streamDestroyed', (event) => {
             // Remove the stream from 'subscribers' array
             this.deleteSubscriber(event.stream);
-            setTimeout(() => {
-                this.checkSomeoneShareScreen();
-            }, 20);
+            // setTimeout(() => {
+            //     this.checkSomeoneShareScreen();
+            // }, 20);
             event.preventDefault();
             // this.updateLayout();
         });
@@ -330,16 +330,16 @@ class VideoRoomComponent extends Component {
                     if (data.nickname !== undefined) {
                         user.setNickname(data.nickname);
                     }
-                    if (data.isScreenShareActive !== undefined) {
-                        user.setScreenShareActive(data.isScreenShareActive);
-                    }
+                    // if (data.isScreenShareActive !== undefined) {
+                    //     user.setScreenShareActive(data.isScreenShareActive);
+                    // }
                 }
             });
             this.setState(
                 {
                     subscribers: remoteUsers,
                 },
-                () => this.checkSomeoneShareScreen(),
+                // () => this.checkSomeoneShareScreen(),
             );
         });
     }
@@ -394,21 +394,6 @@ class VideoRoomComponent extends Component {
                 this.state.session.signal(signalOptions);
             }, index * 20000 + 17000);
         }
-        // const selectedQuizesString = localStorage.getItem('selectedQuizes');
-        // const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
-        // console.log('----------------------------------------')
-        // console.log(selectedQuizesString)
-        // console.log(selectedQuizesArray)
-        
-        // selectedQuizesArray.forEach((quiz, index) => {
-        //     setTimeout(() => {
-        //         const signalOptions = {
-        //             type: 'gameStart',
-        //             data: quizData.quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
-        //         };
-        //         this.state.session.signal(signalOptions);
-        //     }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
-        // });
     }    
 
 
@@ -463,108 +448,108 @@ class VideoRoomComponent extends Component {
         }
     }
 
-    async switchCamera() {
-        try{
-            const devices = await this.OV.getDevices()
-            var videoDevices = devices.filter(device => device.kind === 'videoinput');
+    // async switchCamera() {
+    //     try{
+    //         const devices = await this.OV.getDevices()
+    //         var videoDevices = devices.filter(device => device.kind === 'videoinput');
 
-            if(videoDevices && videoDevices.length > 1) {
+    //         if(videoDevices && videoDevices.length > 1) {
 
-                var newVideoDevice = videoDevices.filter(device => device.deviceId !== this.state.currentVideoDevice.deviceId)
+    //             var newVideoDevice = videoDevices.filter(device => device.deviceId !== this.state.currentVideoDevice.deviceId)
 
-                if (newVideoDevice.length > 0) {
-                    // Creating a new publisher with specific videoSource
-                    // In mobile devices the default and first camera is the front one
-                    var newPublisher = this.OV.initPublisher(undefined, {
-                        audioSource: undefined,
-                        videoSource: newVideoDevice[0].deviceId,
-                        publishAudio: localUser.isAudioActive(),
-                        publishVideo: localUser.isVideoActive(),
-                        mirror: true
-                    });
+    //             if (newVideoDevice.length > 0) {
+    //                 // Creating a new publisher with specific videoSource
+    //                 // In mobile devices the default and first camera is the front one
+    //                 var newPublisher = this.OV.initPublisher(undefined, {
+    //                     audioSource: undefined,
+    //                     videoSource: newVideoDevice[0].deviceId,
+    //                     publishAudio: localUser.isAudioActive(),
+    //                     publishVideo: localUser.isVideoActive(),
+    //                     mirror: true
+    //                 });
 
-                    //newPublisher.once("accessAllowed", () => {
-                    await this.state.session.unpublish(this.state.localUser.getStreamManager());
-                    await this.state.session.publish(newPublisher)
-                    this.state.localUser.setStreamManager(newPublisher);
-                    this.setState({
-                        currentVideoDevice: newVideoDevice,
-                        localUser: localUser,
-                    });
-                }
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
+    //                 //newPublisher.once("accessAllowed", () => {
+    //                 await this.state.session.unpublish(this.state.localUser.getStreamManager());
+    //                 await this.state.session.publish(newPublisher)
+    //                 this.state.localUser.setStreamManager(newPublisher);
+    //                 this.setState({
+    //                     currentVideoDevice: newVideoDevice,
+    //                     localUser: localUser,
+    //                 });
+    //             }
+    //         }
+    //     } catch (e) {
+    //         console.error(e);
+    //     }
+    // }
 
-    screenShare() {
-        const videoSource = navigator.userAgent.indexOf('Firefox') !== -1 ? 'window' : 'screen';
-        const publisher = this.OV.initPublisher(
-            undefined,
-            {
-                videoSource: videoSource,
-                publishAudio: localUser.isAudioActive(),
-                publishVideo: localUser.isVideoActive(),
-                mirror: false,
-            },
-            (error) => {
-                if (error && error.name === 'SCREEN_EXTENSION_NOT_INSTALLED') {
-                    this.setState({ showExtensionDialog: true });
-                } else if (error && error.name === 'SCREEN_SHARING_NOT_SUPPORTED') {
-                    alert('Your browser does not support screen sharing');
-                } else if (error && error.name === 'SCREEN_EXTENSION_DISABLED') {
-                    alert('You need to enable screen sharing extension');
-                } else if (error && error.name === 'SCREEN_CAPTURE_DENIED') {
-                    alert('You need to choose a window or application to share');
-                }
-            },
-        );
+    // screenShare() {
+    //     const videoSource = navigator.userAgent.indexOf('Firefox') !== -1 ? 'window' : 'screen';
+    //     const publisher = this.OV.initPublisher(
+    //         undefined,
+    //         {
+    //             videoSource: videoSource,
+    //             publishAudio: localUser.isAudioActive(),
+    //             publishVideo: localUser.isVideoActive(),
+    //             mirror: false,
+    //         },
+    //         (error) => {
+    //             if (error && error.name === 'SCREEN_EXTENSION_NOT_INSTALLED') {
+    //                 this.setState({ showExtensionDialog: true });
+    //             } else if (error && error.name === 'SCREEN_SHARING_NOT_SUPPORTED') {
+    //                 alert('Your browser does not support screen sharing');
+    //             } else if (error && error.name === 'SCREEN_EXTENSION_DISABLED') {
+    //                 alert('You need to enable screen sharing extension');
+    //             } else if (error && error.name === 'SCREEN_CAPTURE_DENIED') {
+    //                 alert('You need to choose a window or application to share');
+    //             }
+    //         },
+    //     );
 
-        publisher.once('accessAllowed', () => {
-            this.state.session.unpublish(localUser.getStreamManager());
-            localUser.setStreamManager(publisher);
-            this.state.session.publish(localUser.getStreamManager()).then(() => {
-                localUser.setScreenShareActive(true);
-                this.setState({ localUser: localUser }, () => {
-                    this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
-                });
-            });
-        });
-        publisher.on('streamPlaying', () => {
-            // this.updateLayout();
-            publisher.videos[0].video.parentElement.classList.remove('custom-class');
-        });
-    }
+    //     publisher.once('accessAllowed', () => {
+    //         this.state.session.unpublish(localUser.getStreamManager());
+    //         localUser.setStreamManager(publisher);
+    //         this.state.session.publish(localUser.getStreamManager()).then(() => {
+    //             localUser.setScreenShareActive(true);
+    //             this.setState({ localUser: localUser }, () => {
+    //                 this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
+    //             });
+    //         });
+    //     });
+    //     publisher.on('streamPlaying', () => {
+    //         // this.updateLayout();
+    //         publisher.videos[0].video.parentElement.classList.remove('custom-class');
+    //     });
+    // }
 
     closeDialogExtension() {
         this.setState({ showExtensionDialog: false });
     }
 
-    stopScreenShare() {
-        this.state.session.unpublish(localUser.getStreamManager());
-        this.connectWebCam();
-    }
+    // stopScreenShare() {
+    //     this.state.session.unpublish(localUser.getStreamManager());
+    //     this.connectWebCam();
+    // }
 
-    checkSomeoneShareScreen() {
-        let isScreenShared;
-        // return true if at least one passes the test
-        isScreenShared = this.state.subscribers.some((user) => user.isScreenShareActive()) || localUser.isScreenShareActive();
-        const openviduLayoutOptions = {
-            maxRatio: 3 / 2,
-            minRatio: 9 / 16,
-            fixedRatio: isScreenShared,
-            bigClass: 'OV_big',
-            bigPercentage: 0.8,
-            bigFixedRatio: false,
-            bigMaxRatio: 3 / 2,
-            bigMinRatio: 9 / 16,
-            bigFirst: true,
-            animate: true,
-        };
-        this.layout.setLayoutOptions(openviduLayoutOptions);
-        // this.updateLayout();
-    }
+    // checkSomeoneShareScreen() {
+    //     let isScreenShared;
+    //     // return true if at least one passes the test
+    //     isScreenShared = this.state.subscribers.some((user) => user.isScreenShareActive()) || localUser.isScreenShareActive();
+    //     const openviduLayoutOptions = {
+    //         maxRatio: 3 / 2,
+    //         minRatio: 9 / 16,
+    //         fixedRatio: isScreenShared,
+    //         bigClass: 'OV_big',
+    //         bigPercentage: 0.8,
+    //         bigFixedRatio: false,
+    //         bigMaxRatio: 3 / 2,
+    //         bigMinRatio: 9 / 16,
+    //         bigFirst: true,
+    //         animate: true,
+    //     };
+    //     this.layout.setLayoutOptions(openviduLayoutOptions);
+    //     // this.updateLayout();
+    // }
 
     // toggleChat(property) {
     //     let display = property;
@@ -623,10 +608,10 @@ class VideoRoomComponent extends Component {
                     showNotification={this.state.messageReceived}
                     camStatusChanged={this.camStatusChanged}
                     micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
+                    // screenShare={this.screenShare}
+                    // stopScreenShare={this.stopScreenShare}
                     toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
+                    // switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     // toggleChat={this.toggleChat}
                 />
@@ -653,26 +638,33 @@ class VideoRoomComponent extends Component {
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
-                <div id="layout" className="bounds">
+                {/* <div id="layout" className="bounds"> */}
+                <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                         <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
+                    {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap' }}> */}
                     {this.state.subscribers.map((sub, i) => (
-                        <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{ 
+                        // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
+                        <div key={i} id="remoteUsers" style={{ 
                             display:'inline-block',
                             width:'20%',
                             height:'20%',
                             position:'relative',
-                            margin: '0 5px', // 스트림 간격 조절
+                            margin: '0px 2px 0px', // 스트림 간격 조절
                             transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
+                            top: '75px',
+                            left: '100px',
                             }}>
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                         </div>
                     ))}
+                    {/* </div> */}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
-                        <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
+                        <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
+                        {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}> */}
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
                             <img
@@ -693,7 +685,8 @@ class VideoRoomComponent extends Component {
                     
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 채팅 컴포넌트
-                        <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
+                        // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
+                        <div style={chatDisplay}>
                             <ChatComponent
                                 user={localUser}
                                 chatDisplay={this.state.chatDisplay}
@@ -703,19 +696,6 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                {/* <ToolbarComponent
-                    sessionId={mySessionId}
-                    user={localUser}
-                    showNotification={this.state.messageReceived}
-                    camStatusChanged={this.camStatusChanged}
-                    micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
-                    toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
-                    leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                /> */}
             </div>
         );
     }
@@ -771,16 +751,6 @@ class VideoRoomComponent extends Component {
         console.log(response.data)
         return response.data; // The sessionId
     }
-
-    // async sendGameSignal(sessionId) {
-    //     console.log('게임 신호 보내기')
-    //     console.log(sessionId.mySessionId)
-    //     const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { 
-    //         session: sessionId.mySessionId , type: 'signal:gameStart',}, {
-    //         headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
-    //     });
-    //     return response.data;
-    // }
 
 
 
