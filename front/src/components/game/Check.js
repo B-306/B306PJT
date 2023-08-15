@@ -48,97 +48,105 @@ class Check extends Component {
         };
     }
 
-    
-    async componentDidUpdate(prevProps) {
-        const { showCounter, image } = this.props;
-        // 새로운 이미지가 들어올 때 이전 데이터와 상태 초기화
-        if (showCounter && image !== prevProps.image) {
+    async componentDidUpdate(props) {
+        const { showCounter } = this.props;
+        if (showCounter) {
             this.setState({
                 people: null,
                 checkImageData: null,
                 maskImageBitmap: null,
                 maskImageData: null,
             });
-            // body-segmentation 관련 코드 실행
-            // const checkImage = new Image();
-            const templateURL = localStorage.getItem('templateURL');
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            // checkImage.src = templateURL;
-            let checkImageData;
-            try {
-                const response = await axios.get('https://i9b306.q.ssafy.io/api1/getimage', {
-                    params: {
-                        imageUrl: templateURL
-                    },
-                    responseType: 'arraybuffer' // 이 부분을 추가하여 이미지 데이터를 ArrayBuffer로 받아옴
-                });
-            
-                console.log('templateURL get 요청');
-                console.log(response.data); // 이미지 데이터 ArrayBuffer 확인
-            
-                const img = new Image();
-            
-                img.onload = function () {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
-            
-                    checkImageData = ctx.getImageData(0, 0, img.width, img.height);
-                    // checkImageData를 사용하여 이미지 처리를 계속 진행하세요.
-                };
-            
-                // ArrayBuffer를 Blob으로 변환하여 src에 할당
-                const blob = new Blob([response.data], { type: 'image/png' });
-                img.src = URL.createObjectURL(blob);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-
-            // const img = new Image();
-            // img.onload = function () {
-            //     canvas.width = img.width;
-            //     canvas.height = img.height;
-            //     ctx.drawImage(img, 0, 0);
-            // };
-            // img.src = 'data:image/png;base64,' + imageData;
-            // if (checkImageData) {
-                
-            // }
-            // await checkImage.decode();
-            // Canvas를 생성하여 이미지를 그립니다
-            // const canvas = document.createElement('canvas');
-            // canvas.width = checkImage.width;
-            // canvas.height = checkImage.height;
-            // const ctx = canvas.getContext('2d');
-            // ctx.drawImage(checkImage, 0, 0);
-            
-            // Canvas에서 ImageData를 추출합니다
-            // const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
-
-            const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
-            const segmenterConfig = {
-            runtime: 'mediapipe',
-            solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation'
-                            // or 'base/node_modules/@mediapipe/selfie_segmentation' in npm.
-            };
-            const segmenter = await bodySegmentation.createSegmenter(model, segmenterConfig);
-            const segmentationConfig = { flipHorizontal: true };
-        
-            // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
-            const imageElement = await convertBlobToImageData(this.props.image);
-            const people = await segmenter.segmentPeople(imageElement, segmentationConfig);
-
-            const maskImageBitmap = people[0].mask.mask;
-            const maskImageData = await imageBitmapToImageData(maskImageBitmap);
-            
-            this.setState({
-                people: people,
-                checkImageData: checkImageData,
-                maskImageBitmap: maskImageBitmap,
-                maskImageData: maskImageData,
-            });
         }
+    }
+    
+    async componentDidMount() {
+        // 새로운 이미지가 들어올 때 이전 데이터와 상태 초기화
+        this.setState({
+            people: null,
+            checkImageData: null,
+            maskImageBitmap: null,
+            maskImageData: null,
+        });
+        // body-segmentation 관련 코드 실행
+        // const checkImage = new Image();
+        const templateURL = localStorage.getItem('templateURL');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        // checkImage.src = templateURL;
+        let checkImageData;
+        try {
+            const response = await axios.get('https://i9b306.q.ssafy.io/api1/getimage', {
+                params: {
+                    imageUrl: templateURL
+                },
+                responseType: 'arraybuffer' // 이 부분을 추가하여 이미지 데이터를 ArrayBuffer로 받아옴
+            });
+        
+            console.log('templateURL get 요청');
+            console.log(response.data); // 이미지 데이터 ArrayBuffer 확인
+        
+            const img = new Image();
+        
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+        
+                checkImageData = ctx.getImageData(0, 0, img.width, img.height);
+                // checkImageData를 사용하여 이미지 처리를 계속 진행하세요.
+            };
+        
+            // ArrayBuffer를 Blob으로 변환하여 src에 할당
+            const blob = new Blob([response.data], { type: 'image/png' });
+            img.src = URL.createObjectURL(blob);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+        // const img = new Image();
+        // img.onload = function () {
+        //     canvas.width = img.width;
+        //     canvas.height = img.height;
+        //     ctx.drawImage(img, 0, 0);
+        // };
+        // img.src = 'data:image/png;base64,' + imageData;
+        // if (checkImageData) {
+            
+        // }
+        // await checkImage.decode();
+        // Canvas를 생성하여 이미지를 그립니다
+        // const canvas = document.createElement('canvas');
+        // canvas.width = checkImage.width;
+        // canvas.height = checkImage.height;
+        // const ctx = canvas.getContext('2d');
+        // ctx.drawImage(checkImage, 0, 0);
+        
+        // Canvas에서 ImageData를 추출합니다
+        // const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
+
+        const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
+        const segmenterConfig = {
+          runtime: 'mediapipe',
+          solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation'
+                        // or 'base/node_modules/@mediapipe/selfie_segmentation' in npm.
+        };
+        const segmenter = await bodySegmentation.createSegmenter(model, segmenterConfig);
+        const segmentationConfig = { flipHorizontal: true };
+    
+        // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
+        const imageElement = await convertBlobToImageData(this.props.image);
+        const people = await segmenter.segmentPeople(imageElement, segmentationConfig);
+
+        const maskImageBitmap = people[0].mask.mask;
+        const maskImageData = await imageBitmapToImageData(maskImageBitmap);
+        
+        this.setState({
+            people: people,
+            checkImageData: checkImageData,
+            maskImageBitmap: maskImageBitmap,
+            maskImageData: maskImageData,
+        });
     }
 
     render() {
@@ -172,11 +180,19 @@ class Check extends Component {
         }
         console.log('srgb', srgb)
         console.log('마스크데이터', maskImageData)
+
+        const checkStyle = {
+            width: '720px',
+            height: '540px',
+            overflow: 'hidden',
+        };
+        
         return (
             <div>
                 <div className="check-container">
                     <div style={{ overflowX: 'auto' }}>
                         <canvas
+                            style={checkStyle}
                             ref={canvasRef => {
                                 if (canvasRef) {
                                     const ctx = canvasRef.getContext('2d');
