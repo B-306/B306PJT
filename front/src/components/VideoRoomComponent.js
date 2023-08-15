@@ -682,7 +682,8 @@ class VideoRoomComponent extends Component {
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 채팅 컴포넌트
                         // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
-                        <div style={chatDisplay}>
+                        // <div style={chatDisplay}>
+                        <div style={Object.assign({}, chatDisplay, {position: 'absolute' })}>
                             <ChatComponent
                                 user={localUser}
                                 chatDisplay={this.state.chatDisplay}
