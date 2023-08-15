@@ -1,4 +1,4 @@
-package com.ssafy.B306.domain.security.config;
+package com.ssafy.B306.domain.security;
 
 import com.ssafy.B306.domain.exception.JwtExceptionResponse;
 import io.jsonwebtoken.JwtException;
@@ -15,11 +15,11 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            try {
-                filterChain.doFilter(request, response);
-            } catch (JwtException e) {
-                setErrorResponse(HttpStatus.UNAUTHORIZED, response, e);
-            }
+        try {
+            filterChain.doFilter(request, response);
+        } catch (JwtException e) {
+            setErrorResponse(HttpStatus.UNAUTHORIZED, response, e);
+        }
     }
 
     private void setErrorResponse(HttpStatus httpStatus, HttpServletResponse response, JwtException e) throws IOException {
