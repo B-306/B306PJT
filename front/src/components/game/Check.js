@@ -45,12 +45,15 @@ class Check extends Component {
         this.state = {
             maxWidth: '100%',
             people: null, // 세그멘테이션 결과를 저장할 상태 변수
+            checkImageData: null,
+            maskImageBitmap: null,
+            maskImageData: null,
         };
     }
 
-    async componentDidUpdate(props) {
+    async componentDidUpdate(prevProps) {
         const { showCounter } = this.props;
-        if (showCounter) {
+        if (showCounter !== prevProps.showCounter) {
             this.setState({
                 people: null,
                 checkImageData: null,
@@ -62,12 +65,6 @@ class Check extends Component {
     
     async componentDidMount() {
         // 새로운 이미지가 들어올 때 이전 데이터와 상태 초기화
-        this.setState({
-            people: null,
-            checkImageData: null,
-            maskImageBitmap: null,
-            maskImageData: null,
-        });
         // body-segmentation 관련 코드 실행
         // const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
@@ -186,7 +183,7 @@ class Check extends Component {
             height: '540px',
             overflow: 'hidden',
         };
-        
+
         return (
             <div>
                 <div className="check-container">
