@@ -114,7 +114,7 @@ class VideoRoomComponent extends Component {
                 session: this.OV.initSession(),
             },
             async () => {
-                this.subscribeToStreamCreated();
+                // this.subscribeToStreamCreated();
                 await this.connectToSession();
                 
             },
