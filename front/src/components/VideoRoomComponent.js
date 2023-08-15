@@ -683,7 +683,7 @@ class VideoRoomComponent extends Component {
                         // 채팅 컴포넌트
                         // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
                         // <div style={chatDisplay}>
-                        <div style={{ position: 'absolute', bottom: '20px', right: '20px'}}>
+                        <div style={{ ...chatDisplay, position: 'absolute' }}>
                             <ChatComponent
                                 user={localUser}
                                 chatDisplay={this.state.chatDisplay}
