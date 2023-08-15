@@ -56,8 +56,8 @@ class VideoRoomComponent extends Component {
         this.micStatusChanged = this.micStatusChanged.bind(this);
         this.nicknameChanged = this.nicknameChanged.bind(this);
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
-        this.switchCamera = this.switchCamera.bind(this);
-        this.screenShare = this.screenShare.bind(this);
+        // this.switchCamera = this.switchCamera.bind(this);
+        // this.screenShare = this.screenShare.bind(this);
         this.stopScreenShare = this.stopScreenShare.bind(this);
         this.closeDialogExtension = this.closeDialogExtension.bind(this);
         // this.toggleChat = this.toggleChat.bind(this);
@@ -483,73 +483,73 @@ class VideoRoomComponent extends Component {
         }
     }
 
-    screenShare() {
-        const videoSource = navigator.userAgent.indexOf('Firefox') !== -1 ? 'window' : 'screen';
-        const publisher = this.OV.initPublisher(
-            undefined,
-            {
-                videoSource: videoSource,
-                publishAudio: localUser.isAudioActive(),
-                publishVideo: localUser.isVideoActive(),
-                mirror: false,
-            },
-            (error) => {
-                if (error && error.name === 'SCREEN_EXTENSION_NOT_INSTALLED') {
-                    this.setState({ showExtensionDialog: true });
-                } else if (error && error.name === 'SCREEN_SHARING_NOT_SUPPORTED') {
-                    alert('Your browser does not support screen sharing');
-                } else if (error && error.name === 'SCREEN_EXTENSION_DISABLED') {
-                    alert('You need to enable screen sharing extension');
-                } else if (error && error.name === 'SCREEN_CAPTURE_DENIED') {
-                    alert('You need to choose a window or application to share');
-                }
-            },
-        );
+    // screenShare() {
+    //     const videoSource = navigator.userAgent.indexOf('Firefox') !== -1 ? 'window' : 'screen';
+    //     const publisher = this.OV.initPublisher(
+    //         undefined,
+    //         {
+    //             videoSource: videoSource,
+    //             publishAudio: localUser.isAudioActive(),
+    //             publishVideo: localUser.isVideoActive(),
+    //             mirror: false,
+    //         },
+    //         (error) => {
+    //             if (error && error.name === 'SCREEN_EXTENSION_NOT_INSTALLED') {
+    //                 this.setState({ showExtensionDialog: true });
+    //             } else if (error && error.name === 'SCREEN_SHARING_NOT_SUPPORTED') {
+    //                 alert('Your browser does not support screen sharing');
+    //             } else if (error && error.name === 'SCREEN_EXTENSION_DISABLED') {
+    //                 alert('You need to enable screen sharing extension');
+    //             } else if (error && error.name === 'SCREEN_CAPTURE_DENIED') {
+    //                 alert('You need to choose a window or application to share');
+    //             }
+    //         },
+    //     );
 
-        publisher.once('accessAllowed', () => {
-            this.state.session.unpublish(localUser.getStreamManager());
-            localUser.setStreamManager(publisher);
-            this.state.session.publish(localUser.getStreamManager()).then(() => {
-                localUser.setScreenShareActive(true);
-                this.setState({ localUser: localUser }, () => {
-                    this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
-                });
-            });
-        });
-        publisher.on('streamPlaying', () => {
-            // this.updateLayout();
-            publisher.videos[0].video.parentElement.classList.remove('custom-class');
-        });
-    }
+    //     publisher.once('accessAllowed', () => {
+    //         this.state.session.unpublish(localUser.getStreamManager());
+    //         localUser.setStreamManager(publisher);
+    //         this.state.session.publish(localUser.getStreamManager()).then(() => {
+    //             localUser.setScreenShareActive(true);
+    //             this.setState({ localUser: localUser }, () => {
+    //                 this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
+    //             });
+    //         });
+    //     });
+    //     publisher.on('streamPlaying', () => {
+    //         // this.updateLayout();
+    //         publisher.videos[0].video.parentElement.classList.remove('custom-class');
+    //     });
+    // }
 
     closeDialogExtension() {
         this.setState({ showExtensionDialog: false });
     }
 
-    stopScreenShare() {
-        this.state.session.unpublish(localUser.getStreamManager());
-        this.connectWebCam();
-    }
+    // stopScreenShare() {
+    //     this.state.session.unpublish(localUser.getStreamManager());
+    //     this.connectWebCam();
+    // }
 
-    checkSomeoneShareScreen() {
-        let isScreenShared;
-        // return true if at least one passes the test
-        isScreenShared = this.state.subscribers.some((user) => user.isScreenShareActive()) || localUser.isScreenShareActive();
-        const openviduLayoutOptions = {
-            maxRatio: 3 / 2,
-            minRatio: 9 / 16,
-            fixedRatio: isScreenShared,
-            bigClass: 'OV_big',
-            bigPercentage: 0.8,
-            bigFixedRatio: false,
-            bigMaxRatio: 3 / 2,
-            bigMinRatio: 9 / 16,
-            bigFirst: true,
-            animate: true,
-        };
-        this.layout.setLayoutOptions(openviduLayoutOptions);
-        // this.updateLayout();
-    }
+    // checkSomeoneShareScreen() {
+    //     let isScreenShared;
+    //     // return true if at least one passes the test
+    //     isScreenShared = this.state.subscribers.some((user) => user.isScreenShareActive()) || localUser.isScreenShareActive();
+    //     const openviduLayoutOptions = {
+    //         maxRatio: 3 / 2,
+    //         minRatio: 9 / 16,
+    //         fixedRatio: isScreenShared,
+    //         bigClass: 'OV_big',
+    //         bigPercentage: 0.8,
+    //         bigFixedRatio: false,
+    //         bigMaxRatio: 3 / 2,
+    //         bigMinRatio: 9 / 16,
+    //         bigFirst: true,
+    //         animate: true,
+    //     };
+    //     this.layout.setLayoutOptions(openviduLayoutOptions);
+    //     // this.updateLayout();
+    // }
 
     // toggleChat(property) {
     //     let display = property;
