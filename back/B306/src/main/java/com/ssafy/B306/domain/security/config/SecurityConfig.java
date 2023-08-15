@@ -2,7 +2,7 @@ package com.ssafy.B306.domain.security.config;
 
 import com.ssafy.B306.domain.security.JwtAuthenticationFilter;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
-import com.ssafy.B306.domain.security.JwtExceptionFilter;
+//import com.ssafy.B306.domain.security.JwtExceptionFilter;
 import com.ssafy.B306.domain.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -52,8 +52,8 @@ public class SecurityConfig  {
 //                .antMatchers("/user/signup").permitAll()
                 .and()
                 .authenticationProvider(jwtAuthenticationProvider)
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+//                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

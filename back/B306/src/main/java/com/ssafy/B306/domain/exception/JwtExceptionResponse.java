@@ -9,18 +9,15 @@ import org.springframework.http.HttpStatus;
 public class JwtExceptionResponse {
 
     private final String message;
-    private final HttpStatus httpStatus;
 
     @Builder
-    public JwtExceptionResponse(String message, HttpStatus httpStatus) {
+    public JwtExceptionResponse(String message) {
         this.message = message;
-        this.httpStatus = httpStatus;
     }
 
     public String convertToJson() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message", message);
-        jsonObject.put("HttpStatus", httpStatus);
 
         return jsonObject.toString();
     }
