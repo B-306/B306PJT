@@ -394,21 +394,6 @@ class VideoRoomComponent extends Component {
                 this.state.session.signal(signalOptions);
             }, index * 20000 + 17000);
         }
-        // const selectedQuizesString = localStorage.getItem('selectedQuizes');
-        // const selectedQuizesArray = selectedQuizesString.split(','); // 쉼표를 기준으로 문자열을 배열로 분리
-        // console.log('----------------------------------------')
-        // console.log(selectedQuizesString)
-        // console.log(selectedQuizesArray)
-        
-        // selectedQuizesArray.forEach((quiz, index) => {
-        //     setTimeout(() => {
-        //         const signalOptions = {
-        //             type: 'gameStart',
-        //             data: quizData.quizTemplateId.templateImage, // 각 퀴즈의 정보를 시그널 데이터로 사용
-        //         };
-        //         this.state.session.signal(signalOptions);
-        //     }, index * 20000); // 20초 간격으로 시그널 보내기 (인덱스에 따라 시간 간격 설정)
-        // });
     }    
 
 
@@ -703,19 +688,6 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                 </div>
-                {/* <ToolbarComponent
-                    sessionId={mySessionId}
-                    user={localUser}
-                    showNotification={this.state.messageReceived}
-                    camStatusChanged={this.camStatusChanged}
-                    micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
-                    toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
-                    leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                /> */}
             </div>
         );
     }
@@ -771,16 +743,6 @@ class VideoRoomComponent extends Component {
         console.log(response.data)
         return response.data; // The sessionId
     }
-
-    // async sendGameSignal(sessionId) {
-    //     console.log('게임 신호 보내기')
-    //     console.log(sessionId.mySessionId)
-    //     const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/signal', { 
-    //         session: sessionId.mySessionId , type: 'signal:gameStart',}, {
-    //         headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
-    //     });
-    //     return response.data;
-    // }
 
 
 
