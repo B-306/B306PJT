@@ -20,18 +20,19 @@ class Scoring extends Component {
         let totalPixels = 0;
         let differentPixels = 0;
         console.log('정답 : ' + answer);
-        console.log(0+answer);
+        const ansNum = Number(answer);
+        console.log(0+ansNum);
         for (let i = 0; i < checkImageData.data.length; i += 4) {
             if (
-                (checkImageData.data[i+answer] !== maskImageData.data[i])
+                (checkImageData.data[i+ansNum] !== maskImageData.data[i])
             ) {
-                if (checkImageData.data[i+answer]===255){
+                if (checkImageData.data[i+ansNum]===255){
                     differentPixels++;
                 } else if ((maskImageData.data[i+3]>100)) {
                     differentPixels++;
                 }
             }
-            if (checkImageData.data[i+answer] === 255) {
+            if (checkImageData.data[i+ansNum] === 255) {
                 totalPixels++;
             }
         }
