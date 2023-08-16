@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import tokenHttp from '../api/tokenHttp';
 import styled from 'styled-components';
 
 const StyledForm = styled.div`
@@ -72,7 +73,8 @@ function TemplateUploader() {
     formData.append('templateSaveDto', templateSaveDto)
 
     try {
-      const response = await axios.post('https://i9b306.q.ssafy.io/api1/template/add-template', formData, {
+      // const response = await axios.post('https://i9b306.q.ssafy.io/api1/template/add-template', formData, {
+      const response = await tokenHttp.post('https://i9b306.q.ssafy.io/api1/template/add-template', formData, {
         // params: templateSaveDto,
         headers: {
           'Content-Type': 'multipart/form-data',

@@ -20,6 +20,7 @@ class Scoring extends Component {
         let totalPixels = 0;
         let differentPixels = 0;
         console.log('정답 : ' + answer);
+        console.log(0+answer);
         for (let i = 0; i < checkImageData.data.length; i += 4) {
             if (
                 (checkImageData.data[i+answer] !== maskImageData.data[i])

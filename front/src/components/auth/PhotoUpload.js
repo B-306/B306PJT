@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import tokenHttp from '../api/tokenHttp';
 import { setPhoto } from '../../redux/modules/photoSlice';
 import {
   useDispatch,
@@ -109,7 +110,8 @@ function PhotoUpload() {
       
       
       // 서버로 업로드하는 API 호출
-      const response = await axios.post("https://i9b306.q.ssafy.io/api1/image/profile", formData, {
+      // const response = await axios.post("https://i9b306.q.ssafy.io/api1/image/profile", formData, {
+      const response = await tokenHttp.post("https://i9b306.q.ssafy.io/api1/image/profile", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           // 토큰 수정

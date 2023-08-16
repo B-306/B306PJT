@@ -1,4 +1,5 @@
 import axios from 'axios';
+import tokenHttp from './api/tokenHttp';
 import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
 import ChatComponent from './chat/ChatComponent';
@@ -391,7 +392,8 @@ class VideoRoomComponent extends Component {
     async fnc (num) {
         console.log('num, response.data, response.data.quizTemplateId')
         console.log(num)
-        const response = await axios.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
+        // const response = await axios.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
+        const response = await tokenHttp.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
         console.log(response.data)
         console.log(response.data.quizTemplateId)
         return response.data;
@@ -746,15 +748,19 @@ class VideoRoomComponent extends Component {
                     </WhiteBox>
                     {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}> */}
                         {showCounter && (
-                            <Card title="Title" 
-                            pt={{
-                                body: { className: 'bg-primary border-round-md' }
-                            }}>
-                            <p className="m-0">
-                                <p>{gameText}</p>
-                                <p>유사도 점수: {myScore.toFixed(2)}%</p>
-                            </p>
-                        </Card>
+                            <Card
+                                title="Title"
+                                pt={{
+                                    body: { className: 'bg-primary border-round-md' }
+                                }}
+                                style={{ whiteSpace: 'pre-line' }}
+                                >
+                                <p className="m-0">
+                                    {gameText}
+                                    <br />
+                                    유사도 점수: {myScore.toFixed(2)}%
+                                </p>
+                            </Card>
                         )}
                         {!showCounter && this.state.subscribers.map((sub, i) => (
                             // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
