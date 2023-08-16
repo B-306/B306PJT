@@ -1,6 +1,5 @@
 package com.ssafy.B306.domain.security;
 
-
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,8 +48,8 @@ public class JwtUtil {
                 .collect(Collectors.joining(","));
 
         String accessToken = Jwts.builder()
-//                .setSubject(authentication.getName()) // 토큰의 이름 설정
-//                .claim("auth", authorities) // 권한 넣기
+                .setSubject(authentication.getName()) // 토큰의 이름 설정
+                .claim("auth", authorities) // 권한 넣기
                 .claim("type", "ACCESS")
                 .claim("userPk", authentication.getCredentials()) // pk 값 넣기
                 .claim("userEmail", authentication.getName()) // email 값 넣기
@@ -59,6 +58,8 @@ public class JwtUtil {
                 .compact();
 
         String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName()) // 토큰의 이름 설정
+                .claim("auth", authorities) // 권한 넣기
                 .claim("type", "REFRESH")
                 .claim("userPk", authentication.getCredentials()) // pk 값 넣기
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpired))
@@ -146,10 +147,11 @@ public class JwtUtil {
 //    }
 
     public JwtToken refreshToken(String refreshToken, String userEmail) {
-
         Claims token = parseClaims(refreshToken);
 
         String newToken = Jwts.builder()
+                .setSubject(token.getSubject()) // 토큰의 이름 설정
+                .claim("auth", token) // 권한 넣기
                 .claim("type", "ACCESS")
                 .claim("userPk", token.get("userPk")) // pk 값 넣기
                 .claim("userEmail", userEmail)
@@ -164,7 +166,9 @@ public class JwtUtil {
     }
 
     public Long extractUserPkFromToken(HttpServletRequest request) {
-        String token = request.getHeader("accessToken");
+        String bearerToken = request.getHeader("Authorization");
+        String token = bearerToken.substring(7);
+
         return Long.parseLong(parseClaims(token).get("userPk").toString());
     }
 }

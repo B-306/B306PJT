@@ -49,11 +49,11 @@ public class UserService {
         User findUser = userRepository.findByUserEmail(userLoginRequest.getUserEmail())
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         Map<String, Object> result = new HashMap<>();
-        result.put("accessToken", token.getAccessToken());
-        result.put("refreshToken", token.getRefreshToken());
+        String type = token.getGrantType();
+        result.put("accessToken", type + " " + token.getAccessToken());
+        result.put("refreshToken", type + " " + token.getRefreshToken());
         result.put("userName", findUser.getUserName());
         result.put("userProfile", findUser.getUserProfile());
-//        result.put("token", token);
 
         return result;
     }
@@ -88,8 +88,9 @@ public class UserService {
             User findUser = userRepository.findByUserId(Long.parseLong(jwtUtil.parseClaims(refreshToken).get("userPk").toString()))
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-            result.put("accessToken", jwtUtil.refreshToken(refreshToken, findUser.getUserEmail()));
+            result.put("accessToken", "Bearer " + jwtUtil.refreshToken(refreshToken, findUser.getUserEmail()).getAccessToken());
             result.put("message", "success");
+
             return new ResponseEntity(result, HttpStatus.OK);
         }
 
@@ -99,7 +100,6 @@ public class UserService {
 
     @Transactional
     public void modify(UserModifyRequestDto userModifyDto, HttpServletRequest request) {
-
         Long userPk = jwtUtil.extractUserPkFromToken(request);
 
         if (userPk == null) return;
