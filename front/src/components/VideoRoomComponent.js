@@ -450,11 +450,11 @@ class VideoRoomComponent extends Component {
 
 
     async sendScoreSignal() {
-        const { userName, myScore } = this.state;
+        const { myUserName, myScore } = this.state;
         const signalOptions = {
             type: 'scoreUpdate',
             data: JSON.stringify({
-                userName: userName,
+                userName: myUserName,
                 userScore: myScore,
                 otherInfo: 'some other data',
                 // ... 다른 정보들
@@ -467,13 +467,19 @@ class VideoRoomComponent extends Component {
         this.state.session.on('signal:scoreUpdate', (event) => {
             const data = JSON.parse(event.data);
             const { userName, userScore } = data;
+            let score;
+            if (userScore < 0) {
+                score = 0;
+            } else {
+                score = userScore;
+            }
             // ... 다른 정보 처리
             this.setState((prevState) => {
                 const updatedScores = { ...prevState.scores };
                 if (updatedScores[userName] === undefined) {
-                  updatedScores[userName] = userScore;
+                  updatedScores[userName] = score;
                 } else {
-                  updatedScores[userName] += userScore;
+                  updatedScores[userName] += score;
                 }
                 return { scores: updatedScores };
             });
@@ -728,11 +734,11 @@ class VideoRoomComponent extends Component {
                     <WhiteBox>
                         <h1>Scoreboard</h1>
                         <ul>
-                        {sortedScores.map(([nickName, totalScore]) => (
-                            <li key={nickName}>
-                            {nickName}: {totalScore}
-                            </li>
-                        ))}
+                            {sortedScores.map(([nickName, totalScore], index) => (
+                                <li key={nickName}>
+                                {index + 1}. {nickName}: {totalScore}
+                                </li>
+                            ))}
                         </ul>
                         {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                             <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'30%', top:'85%',}}> 이 버튼 누르기 </Button>
