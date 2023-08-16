@@ -61,6 +61,22 @@ const GameCreateButton = styled(Button)`
 
 const StyledInput = styled(Input)``;
 
+const StyledButton = styled.button`
+  font-family: Ftstardust;
+  background-color: #ff5733;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #d63031; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 글씨 색 변경 */
+  }
+`;
+
 const MainPageTitle = styled.h1`
   text-align: center;
   color: white;
@@ -81,6 +97,7 @@ const UserProfile = styled.div`
   align-items: center;
   text-align: center;
   margin-right: 20px;
+  min-width: 130px !important;
 `;
 
 const ProfileImage = styled.img`
@@ -193,7 +210,7 @@ const MainPage = () => {
           <DropdownMenu>
             <div style={{display: 'flex', flexDirection: 'column' }}>
               <StyledButtonLink to={`/${userEmail}/mypage`}>마이페이지</StyledButtonLink>
-              <Button onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</Button>
+              <StyledButton onClick={(e) => {handleButtonClick(e); navigate('/login');}}>로그아웃</StyledButton>
             </div>
           </DropdownMenu>
         )}

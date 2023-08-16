@@ -23,12 +23,14 @@ const FileAddButton = styled.input`
   border: none;
 
   width: 100px; /* 가로 크기를 100px로 설정 */
-  height: 50px; /* 세로 크기를 50px로 설정 */
+  height: 40px; /* 세로 크기를 50px로 설정 */
 
   font-size: 18px;
   font-weight: bold;
 
-  border-radius: 10px;
+  line-height: 13px;
+
+  border-radius: 5px;
 
   /* 숨겨진 input 요소를 대체하는 버튼 스타일 */
   &:hover {
@@ -45,12 +47,14 @@ const UploadButton = styled.button`
   border: none;
 
   width: 100px; /* 가로 크기를 100px로 설정 */
-  height: 50px; /* 세로 크기를 50px로 설정 */
+  height: 40px; /* 세로 크기를 50px로 설정 */
 
   font-size: 18px;
   font-weight: bold;
 
-  border-radius: 10px;
+  line-height: 40px;
+
+  border-radius: 5px;
 
   &:hover {
     background-color: #3498db; /* 호버 시 배경색 변경 */

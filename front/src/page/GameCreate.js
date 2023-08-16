@@ -36,10 +36,14 @@ const GetQuiz = () => {
   const [quizBooks, setQuizBooks] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get('https://i9b306.q.ssafy.io/api1/quizbook/get')
+    axios.get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
+      headers: {
+        'accessToken': localStorage.getItem('accessToken')
+      }
+    })
       .then(response => {
         setQuizBooks(response.data);
-        console.log(response)
+        console.log(response);
       })
       .catch(error => {
         console.error('서버 요청 실패:', error);
