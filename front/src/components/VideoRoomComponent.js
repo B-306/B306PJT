@@ -28,16 +28,16 @@ import 'primeicons/primeicons.css';
 const WhiteBox = styled.div`
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
     padding: 2rem;
-    width: 360px;
+    width: 310px;
     height: 400px;
-    background: white;
+    background-color: white;
     // backdrop-filter: blur(10px);
     background : transparent;
     border-radius: 2px;
     position: absolute;
-    z-index: 999999999999;
-    left: 90%;
-    top: 80%;
+    z-index: 999;
+    left: 70%;
+    top: 40%;
 
 `;
 
@@ -735,7 +735,7 @@ class VideoRoomComponent extends Component {
                         ))}
                         </ul>
                         {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'90%', top:'80%',}}> 이 버튼 누르기 </Button>
+                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'30%', top:'85%',}}> 이 버튼 누르기 </Button>
                         )}
                     </WhiteBox>
                     {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}> */}
