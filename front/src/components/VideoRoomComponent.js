@@ -722,7 +722,7 @@ class VideoRoomComponent extends Component {
                 {showCounter && capturedImage && (
                     <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'35%'}}>
                     {/* <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}> */}
-                        <Check image={this.state.capturedImage} answer = {this.state.quizAnswer} showCounter={showCounter} onScoreUpdate={this.handleScoreUpdate} />
+                        <Check image={this.state.capturedImage} answer={this.state.gameAnswer} showCounter={showCounter} onScoreUpdate={this.handleScoreUpdate} />
                     </div>
                 )}
 
