@@ -732,11 +732,11 @@ class VideoRoomComponent extends Component {
                 <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     <WhiteBox>
-                        <h1>Scoreboard</h1>
+                        <h1>스코어보드</h1>
                         <ul>
                             {sortedScores.map(([nickName, totalScore], index) => (
                                 <li key={nickName}>
-                                {index + 1}. {nickName}: {totalScore}
+                                {index + 1}. {nickName}: {totalScore.toFixed(0)}점
                                 </li>
                             ))}
                         </ul>
@@ -756,9 +756,10 @@ class VideoRoomComponent extends Component {
                             </p>
                         </Card>
                         )}
+                        <div className="scroll-container">
                         {!showCounter && this.state.subscribers.map((sub, i) => (
                             // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
-                            <div key={i} id="remoteUsers" style={{ 
+                            <div key={i} className="stream-item" id="remoteUsers" style={{ 
                                 display:'inline-block',
                                 width:'12%',
                                 height:'15%',
@@ -771,7 +772,7 @@ class VideoRoomComponent extends Component {
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                             </div>
                     ))}
-                    {/* </div> */}
+                    </div>
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
                         <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
