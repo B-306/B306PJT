@@ -25,7 +25,7 @@ class Scoring extends Component {
             ) {
                 if (checkImageData.data[i]===255){
                     differentPixels++;
-                } else if ((maskImageData.data[i+3]>150)) {
+                } else if ((maskImageData.data[i+3]>100)) {
                     differentPixels++;
                 }
             }

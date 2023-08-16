@@ -671,8 +671,7 @@ class VideoRoomComponent extends Component {
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
                 {/* <div id="layout" className="bounds"> */}
-                <div className="bounds" style={{
-                                overflowX: 'auto',}}>
+                <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                         <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'90%', top:'80%',}}> 이 버튼 누르기 </Button>
@@ -682,7 +681,7 @@ class VideoRoomComponent extends Component {
                             <Card title="Title" 
                             pt={{
                                 body: { className: 'bg-primary border-round-md' }
-                            }} style={{height: '20%'}}>
+                            }}>
                             <p className="m-0">
                                 <p>{gameText}</p>
                                 <p>유사도 점수: {myScore.toFixed(2)}%</p>
