@@ -29,8 +29,7 @@ public class UserController {
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-        // 여기는 access token만 있음
-        return new ResponseEntity<>(userService.refreshToken(request), HttpStatus.OK);
+        return userService.refreshToken(request);
     }
 
     @PatchMapping("/modify")
