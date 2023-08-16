@@ -32,7 +32,7 @@ const WhiteBox = styled.div`
     height: 400px;
     background-color: white;
     // backdrop-filter: blur(10px);
-    background : transparent;
+    // background : transparent;
     border-radius: 2px;
     position: absolute;
     z-index: 999;
