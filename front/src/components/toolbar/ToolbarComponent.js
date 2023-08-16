@@ -14,9 +14,9 @@ import FullscreenExit from '@material-ui/icons/FullscreenExit';
 // import PictureInPicture from '@material-ui/icons/PictureInPicture';
 // import ScreenShare from '@material-ui/icons/ScreenShare';
 // import StopScreenShare from '@material-ui/icons/StopScreenShare';
-// import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
-// import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
+import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
 
 import IconButton from '@material-ui/core/IconButton';
 
@@ -67,9 +67,9 @@ export default class ToolbarComponent extends Component {
         window.location.href = '/'; // 메인 페이지로 리디렉션
     }
 
-    // toggleChat() {
-    //     this.props.toggleChat();
-    // }
+    toggleChat() {
+        this.props.toggleChat();
+    }
 
     render() {
         const mySessionId = this.props.sessionId;
@@ -122,12 +122,12 @@ export default class ToolbarComponent extends Component {
                         <IconButton color="secondary" className="navButton" onClick={this.leaveSession} id="navLeaveButton">
                             <PowerSettingsNew />
                         </IconButton>
-                         {/* <IconButton color="inherit" onClick={this.toggleChat} id="navChatButton">
+                         <IconButton color="inherit" onClick={this.toggleChat} id="navChatButton">
                             {this.props.showNotification && <div id="point" className="" />}
                             <Tooltip title="Chat">
                                 <QuestionAnswer />
                             </Tooltip>
-                        </IconButton> */}
+                        </IconButton>
                     </div>
                 </Toolbar>
             </AppBar>

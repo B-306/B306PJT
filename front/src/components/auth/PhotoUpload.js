@@ -28,6 +28,8 @@ const FileAddButton = styled.input`
   font-size: 18px;
   font-weight: bold;
 
+  line-height: 13px;
+
   border-radius: 5px;
 
   /* 숨겨진 input 요소를 대체하는 버튼 스타일 */
@@ -49,6 +51,8 @@ const UploadButton = styled.button`
 
   font-size: 18px;
   font-weight: bold;
+
+  line-height: 40px;
 
   border-radius: 5px;
 

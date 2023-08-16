@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+// import React from 'react';
 
 class Scoring extends Component {
     constructor(props) {
@@ -20,9 +21,13 @@ class Scoring extends Component {
         let differentPixels = 0;
         for (let i = 0; i < checkImageData.data.length; i += 4) {
             if (
-                (checkImageData.data[i] !== maskImageData.data[i])&&(maskImageData.data[i+3]>150)
+                (checkImageData.data[i] !== maskImageData.data[i])
             ) {
-                differentPixels++;
+                if (checkImageData.data[i]===255){
+                    differentPixels++;
+                } else if ((maskImageData.data[i+3]>150)) {
+                    differentPixels++;
+                }
             }
             if (checkImageData.data[i] === 255) {
                 totalPixels++;
@@ -34,17 +39,20 @@ class Scoring extends Component {
         this.setState({
             similarityScore: similarityScore,
         });
+
+        this.props.onScoreUpdate(similarityScore);
     }
 
     render() {
-        const { similarityScore } = this.state;
+        return null;
+        // const { similarityScore } = this.state;
 
-        return (
-            <div className="scoring-container">
-                <h2>유사도 채점 결과</h2>
-                <p>유사도 점수: {similarityScore.toFixed(2)}%</p>
-            </div>
-        );
+        // return (
+        //     <div className="scoring-container">
+        //         <h2>유사도 채점 결과</h2>
+        //         <p>유사도 점수: {similarityScore.toFixed(2)}%</p>
+        //     </div>
+        // );
     }
 }
 

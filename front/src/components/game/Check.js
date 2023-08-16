@@ -45,11 +45,26 @@ class Check extends Component {
         this.state = {
             maxWidth: '100%',
             people: null, // 세그멘테이션 결과를 저장할 상태 변수
+            checkImageData: null,
+            maskImageBitmap: null,
+            maskImageData: null,
         };
     }
 
+    async componentDidUpdate(prevProps) {
+        const { showCounter } = this.props;
+        if (showCounter !== prevProps.showCounter) {
+            this.setState({
+                people: null,
+                checkImageData: null,
+                maskImageBitmap: null,
+                maskImageData: null,
+            });
+        }
+    }
     
     async componentDidMount() {
+        // 새로운 이미지가 들어올 때 이전 데이터와 상태 초기화
         // body-segmentation 관련 코드 실행
         // const checkImage = new Image();
         const templateURL = localStorage.getItem('templateURL');
@@ -131,6 +146,14 @@ class Check extends Component {
         });
     }
 
+    handleScoreUpdate = (similarityScore) => {
+        // 유사도 점수를 받아와서 처리하는 로직을 구현
+        // 예를 들어 점수를 상태에 저장하거나 다른 동작을 수행할 수 있습니다.
+        console.log('Scoring 컴포넌트에서 계산한 유사도 점수:', similarityScore);
+        // 유사도 점수를 부모 컴포넌트로 전달하는 로직 추가
+        this.props.onScoreUpdate(similarityScore);
+    }
+
     render() {
         const { people, checkImageData, maskImageBitmap, maskImageData } = this.state;
         const { showCounter } = this.props;
@@ -162,11 +185,19 @@ class Check extends Component {
         }
         console.log('srgb', srgb)
         console.log('마스크데이터', maskImageData)
+
+        const checkStyle = {
+            width: '720px',
+            height: '540px',
+            overflow: 'hidden',
+        };
+
         return (
             <div>
                 <div className="check-container">
                     <div style={{ overflowX: 'auto' }}>
                         <canvas
+                            style={checkStyle}
                             ref={canvasRef => {
                                 if (canvasRef) {
                                     const ctx = canvasRef.getContext('2d');
@@ -185,7 +216,7 @@ class Check extends Component {
                         />
                     </div>
                 </div>
-                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} />
+                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} onScoreUpdate={this.handleScoreUpdate} />
             </div>
         );
     }
