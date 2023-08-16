@@ -694,7 +694,7 @@ class VideoRoomComponent extends Component {
                                 display:'inline-block',
                                 width:'12%',
                                 height:'15%',
-                                position:'relative',
+                                // position:'relative',
                                 margin: '0px 2px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
                                 top: '75px',
