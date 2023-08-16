@@ -48,6 +48,7 @@ class Check extends Component {
             checkImageData: null,
             maskImageBitmap: null,
             maskImageData: null,
+            // answer: null,
         };
     }
 
@@ -59,6 +60,7 @@ class Check extends Component {
                 checkImageData: null,
                 maskImageBitmap: null,
                 maskImageData: null,
+                // answer: null,
             });
         }
     }
@@ -216,7 +218,7 @@ class Check extends Component {
                         />
                     </div>
                 </div>
-                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} onScoreUpdate={this.handleScoreUpdate} />
+                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} answer={this.props.answer} onScoreUpdate={this.handleScoreUpdate} />
             </div>
         );
     }

@@ -127,7 +127,7 @@ const deleteAccount = async () => {
   // e.preventDefault();
   if (window.confirm('확인을 누르면 회원 정보가 삭제됩니다.')) {
     try {
-      await axios.patch('https://i9b306.q.ssafy.io/api/user/delete', null, {
+      await axios.patch('https://i9b306.q.ssafy.io/api1/user/delete', null, {
         headers: {
           accessToken: localStorage.getItem('accessToken'), // 토큰을 헤더에 포함하여 전송
         },
@@ -173,7 +173,7 @@ const MyPage = (props) => {
     try {
       // 회원정보 수정 요청 보내기
 
-      const response = await axios.patch('https://i9b306.1.ssafy.io/api/user/modify', {
+      const response = await axios.patch('https://i9b306.1.ssafy.io/api1/user/modify', {
         userName: name,
         userPassword: password,
       }, {

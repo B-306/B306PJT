@@ -99,7 +99,7 @@ const AuthForm = ({ type}) => {
           }
 
           // 회원가입 요청 보내기
-          const response = await axios.post('https://i9b306.q.ssafy.io/api/user/signup', {
+          const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/signup', {
             userName: name,
             userPassword: password,
             userEmail: email,
@@ -124,7 +124,7 @@ const AuthForm = ({ type}) => {
       else if (type === 'login') {
         try {
           // 로그인 요청 보내기
-          const response = await axios.post('https://i9b306.q.ssafy.io/api/user/login', {
+          const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/login', {
             userEmail: email,
             userPassword: password,
           });
@@ -178,7 +178,7 @@ const AuthForm = ({ type}) => {
 
     try {
       // e메일 인증보내기
-      const response = await axios.post('https://i9b306.q.ssafy.io/api/user/email', {
+      const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email', {
         email: email,
       });
       console.log(response.data)
@@ -204,7 +204,7 @@ const AuthForm = ({ type}) => {
     console.log('eamilCheck 실행 \n')
     try {
       // e메일 검증
-      const response = await axios.post('https://i9b306.q.ssafy.io/api/user/email/auth', {
+      const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/email/auth', {
         authCode: authCode,
         email: email,
       });
