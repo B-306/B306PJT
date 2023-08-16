@@ -755,9 +755,9 @@ class VideoRoomComponent extends Component {
                                 }}
                                 style={{ 
                                     whiteSpace: 'pre-line',
-                                    fontSize: '25px', 
-                                    height: '145px',
-                                    paddingBottom: '35px'
+                                    fontSize: '20px', 
+                                    height: '200px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.8)'
                                  }}
                                 >
                                 <p className="m-0">
