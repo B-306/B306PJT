@@ -40,7 +40,8 @@ class VideoRoomComponent extends Component {
         this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
         // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
-        let userName = this.props.user ? this.props.user : decodedState.userName;
+        let userName = decodedState.userName;
+        console.log(userName);
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
@@ -52,8 +53,8 @@ class VideoRoomComponent extends Component {
             session: undefined,
             localUser: undefined,
             subscribers: [],
-            // chatDisplay: 'none',
-            chatDisplay: 'display',
+            chatDisplay: 'none',
+            // chatDisplay: 'display',
             currentVideoDevice: undefined,
             showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
