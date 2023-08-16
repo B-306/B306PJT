@@ -753,7 +753,12 @@ class VideoRoomComponent extends Component {
                                 pt={{
                                     body: { className: 'bg-primary border-round-md' }
                                 }}
-                                style={{ whiteSpace: 'pre-line' }}
+                                style={{ 
+                                    whiteSpace: 'pre-line',
+                                    fontSize: '25px', 
+                                    height: '185px'
+
+                                 }}
                                 >
                                 <p className="m-0">
                                     {gameText}
