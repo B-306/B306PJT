@@ -99,18 +99,16 @@ function TemplateUploader() {
     };
 
     return (
-        <StyledForm>
-            <form onSubmit={handleImageUpload}> {/* 폼을 <form> 요소로 감싸줍니다 */}
-                <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
-                <FileAddButton type="button" value="파일추가"
-                    onClick={() => {
-                        document.getElementById('selectedFile1').click();
-                    }}
-                />
-                <input type="text" placeholder="템플릿 유형" onChange={(e) => setTemplateType(e.target.value)} />
-                <input type="text" placeholder="템플릿 이름" onChange={(e) => setTemplateName(e.target.value)} />
-                <UploadButton type="submit">템플릿 업로드</UploadButton>
-            </form>
+        <StyledForm onSubmit={handleImageUpload}>
+            <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
+            <FileAddButton type="button" value="파일추가"
+                onClick={() => {
+                    document.getElementById('selectedFile1').click();
+                }}
+            />
+            <input type="text" placeholder="템플릿 유형" onChange={(e) => setTemplateType(e.target.value)} />
+            <input type="text" placeholder="템플릿 이름" onChange={(e) => setTemplateName(e.target.value)} />
+            <UploadButton type="submit">템플릿 업로드</UploadButton>
         </StyledForm>
     );
 }
