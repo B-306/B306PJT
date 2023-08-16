@@ -7,7 +7,7 @@ import backgroundImage2 from './assets/images/bfo_right.gif';
 
 const GlobalStyles = createGlobalStyle`
   body {
-    background-image: url(${backgroundImage1}), url(${backgroundImage2});
+    background-image: url(${backgroundImage2}), url(${backgroundImage1});
     // background-size: cover;
     background-size: 30% 100%, 30% 100%;
     // background-size: contain;
