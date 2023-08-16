@@ -1,4 +1,5 @@
 import axios from 'axios';
+import tokenHttp from './api/tokenHttp';
 import { OpenVidu } from 'openvidu-browser';
 import React, { Component } from 'react';
 import ChatComponent from './chat/ChatComponent';
@@ -7,8 +8,12 @@ import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
 import Check from './game/Check';
+import { decodeState } from './common/CodedState';
+import { connect } from 'react-redux';
+// import QuizText from './game/QuizText';
+import styled from 'styled-components';
 import Button from './common/Button';
-
+import { Card } from 'primereact/card';
 // import { Carousel } from 'primereact/carousel';
 
 import OpenViduLayout from '../layout/openvidu-layout';
@@ -16,7 +21,26 @@ import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 // import { v4 } from 'uuid';
 
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
+
+const WhiteBox = styled.div`
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
+    padding: 2rem;
+    width: 310px;
+    height: 400px;
+    background-color: white;
+    // backdrop-filter: blur(10px);
+    // background : transparent;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 999;
+    left: 70%;
+    top: 40%;
+
+`;
 
 
 var localUser = new UserModel();
@@ -32,17 +56,23 @@ class VideoRoomComponent extends Component {
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
-        let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
+        // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
+        let userName = this.props.userName;
+        console.log('-------------------------userName : ' + userName);
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
             mySessionId: sessionName,
             myUserName: userName,
+            myScore: 0,
+            scores: {},
+            gameText: null,
+            gameAnswer: null,
             session: undefined,
             localUser: undefined,
             subscribers: [],
-            // chatDisplay: 'none',
-            chatDisplay: 'display',
+            chatDisplay: 'none',
+            // chatDisplay: 'display',
             currentVideoDevice: undefined,
             showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
@@ -60,10 +90,11 @@ class VideoRoomComponent extends Component {
         // this.screenShare = this.screenShare.bind(this);
         // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.closeDialogExtension = this.closeDialogExtension.bind(this);
-        // this.toggleChat = this.toggleChat.bind(this);
+        this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
-        this.checkSize = this.checkSize.bind(this);
+        // this.checkSize = this.checkSize.bind(this);
         this.sendGameSignal = this.sendGameSignal.bind(this);
+        this.sendScoreSignal = this.sendScoreSignal.bind(this);
         // this.handleSignalReceived = this.handleSignalReceived.bind(this);
     }
 
@@ -86,7 +117,7 @@ class VideoRoomComponent extends Component {
         this.layout.initLayoutContainer(document.getElementById('layout'), openViduLayoutOptions);
         window.addEventListener('beforeunload', this.onbeforeunload);
         // window.addEventListener('resize', this.updateLayout);
-        window.addEventListener('resize', this.checkSize);
+        // window.addEventListener('resize', this.checkSize);
         this.joinSession();
         
     }
@@ -96,7 +127,7 @@ class VideoRoomComponent extends Component {
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.onbeforeunload);
         // window.removeEventListener('resize', this.updateLayout);
-        window.removeEventListener('resize', this.checkSize);
+        // window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
         // this.OV.off('signal', this.handleSignalReceived);
     }
@@ -191,6 +222,7 @@ class VideoRoomComponent extends Component {
         // localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
         this.receiveGameSignal();
+        this.receiveScoreSignal();
         // this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         // this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
@@ -360,7 +392,8 @@ class VideoRoomComponent extends Component {
     async fnc (num) {
         console.log('num, response.data, response.data.quizTemplateId')
         console.log(num)
-        const response = await axios.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
+        // const response = await axios.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
+        const response = await tokenHttp.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
         console.log(response.data)
         console.log(response.data.quizTemplateId)
         return response.data;
@@ -380,6 +413,8 @@ class VideoRoomComponent extends Component {
                     type: 'gameStart',
                     data: JSON.stringify({
                         templateImage: quizData.quizTemplateId.templateImage,
+                        quizText: quizData.quizText,
+                        quizAnswer: quizData.quizAnswer,
                         otherInfo: 'some other data',
                         // ... 다른 정보들
                     }),
@@ -396,9 +431,6 @@ class VideoRoomComponent extends Component {
         }
     }    
 
-
-
-
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
             console.log('변경 전 showCounter : ' + this.state.showCounter)
@@ -409,6 +441,8 @@ class VideoRoomComponent extends Component {
             this.setState(
                 {
                     showCounter: !this.state.showCounter,
+                    gameText: data.quizText,
+                    gameAnswer: data.quizAnswer,
                 }
             )
             localStorage.setItem('templateURL', data.templateImage)
@@ -416,6 +450,43 @@ class VideoRoomComponent extends Component {
     }
 
 
+
+    async sendScoreSignal() {
+        const { myUserName, myScore } = this.state;
+        const signalOptions = {
+            type: 'scoreUpdate',
+            data: JSON.stringify({
+                userName: myUserName,
+                userScore: myScore,
+                otherInfo: 'some other data',
+                // ... 다른 정보들
+            }),
+        };
+        this.state.session.signal(signalOptions);
+    }
+
+    receiveScoreSignal() {
+        this.state.session.on('signal:scoreUpdate', (event) => {
+            const data = JSON.parse(event.data);
+            const { userName, userScore } = data;
+            let score;
+            if (userScore < 0) {
+                score = 0;
+            } else {
+                score = userScore;
+            }
+            // ... 다른 정보 처리
+            this.setState((prevState) => {
+                const updatedScores = { ...prevState.scores };
+                if (updatedScores[userName] === undefined) {
+                  updatedScores[userName] = score;
+                } else {
+                  updatedScores[userName] += score;
+                }
+                return { scores: updatedScores };
+            });
+        });
+    }
 
     toggleFullscreen() {
         const document = window.document;
@@ -551,35 +622,35 @@ class VideoRoomComponent extends Component {
     //     // this.updateLayout();
     // }
 
-    // toggleChat(property) {
-    //     let display = property;
+    toggleChat(property) {
+        let display = property;
 
-    //     if (display === undefined) {
-    //         display = this.state.chatDisplay === 'none' ? 'block' : 'none';
-    //     }
-    //     if (display === 'block') {
-    //         this.setState({ chatDisplay: display, messageReceived: false });
-    //     } else {
-    //         console.log('chat', display);
-    //         this.setState({ chatDisplay: display });
-    //     }
-    //     // this.updateLayout();
-    // }
+        if (display === undefined) {
+            display = this.state.chatDisplay === 'none' ? 'block' : 'none';
+        }
+        if (display === 'block') {
+            this.setState({ chatDisplay: display, messageReceived: false });
+        } else {
+            console.log('chat', display);
+            this.setState({ chatDisplay: display });
+        }
+        // this.updateLayout();
+    }
 
     checkNotification(event) {
         this.setState({
             messageReceived: this.state.chatDisplay === 'none',
         });
     }
-    checkSize() {
-        if (document.getElementById('layout').offsetWidth <= 700 && !this.hasBeenUpdated) {
-            this.toggleChat('none');
-            this.hasBeenUpdated = true;
-        }
-        if (document.getElementById('layout').offsetWidth > 700 && this.hasBeenUpdated) {
-            this.hasBeenUpdated = false;
-        }
-    }
+    // checkSize() {
+    //     if (document.getElementById('layout').offsetWidth <= 700 && !this.hasBeenUpdated) {
+    //         this.toggleChat('none');
+    //         this.hasBeenUpdated = true;
+    //     }
+    //     if (document.getElementById('layout').offsetWidth > 700 && this.hasBeenUpdated) {
+    //         this.hasBeenUpdated = false;
+    //     }
+    // }
 
     handleImageCaptured = (capturedImageBlob) => {
         this.setState(
@@ -592,13 +663,23 @@ class VideoRoomComponent extends Component {
         );
     }
     
+    handleScoreUpdate = (similarityScore) => {
+        // Check 컴포넌트나 Scoring 컴포넌트로부터 받은 유사도 점수를 상태에 저장
+        this.setState({
+            myScore: similarityScore,
+        }, () => {
+            // 유사도 점수가 업데이트된 후에 sendScoreSignal 실행
+            if (similarityScore !== 0) {
+                this.sendScoreSignal();
+            }
+        });
+    }
+
     render() {
-        const mySessionId = this.state.mySessionId;
-        const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage } = this.state;
+        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore, scores } = this.state;
         const templateURL = localStorage.getItem('templateURL')
-        
+        const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
 
         return (
             <div className="container" id="container">
@@ -613,9 +694,20 @@ class VideoRoomComponent extends Component {
                     toggleFullscreen={this.toggleFullscreen}
                     // switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
-                    // toggleChat={this.toggleChat}
+                    toggleChat={this.toggleChat}
                 />
-                
+            {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                        // 채팅 컴포넌트
+                        // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
+                        <div style={chatDisplay}>
+                            <ChatComponent
+                                user={localUser}
+                                chatDisplay={this.state.chatDisplay}
+                                close={this.toggleChat}
+                                messageReceived={this.checkNotification}
+                            />
+                        </div>
+                    )}
                 {/* {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
@@ -632,7 +724,7 @@ class VideoRoomComponent extends Component {
                 {showCounter && capturedImage && (
                     <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'35%'}}>
                     {/* <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}> */}
-                        <Check image={this.state.capturedImage} showCounter={showCounter} />
+                        <Check image={this.state.capturedImage} answer={this.state.gameAnswer} showCounter={showCounter} onScoreUpdate={this.handleScoreUpdate} />
                     </div>
                 )}
 
@@ -641,24 +733,49 @@ class VideoRoomComponent extends Component {
                 {/* <div id="layout" className="bounds"> */}
                 <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
-                    {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
-                    )}
-                    {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap' }}> */}
-                    {this.state.subscribers.map((sub, i) => (
-                        // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
-                        <div key={i} id="remoteUsers" style={{ 
-                            display:'inline-block',
-                            width:'20%',
-                            height:'20%',
-                            position:'relative',
-                            margin: '0px 2px 0px', // 스트림 간격 조절
-                            transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
-                            top: '75px',
-                            left: '100px',
-                            }}>
-                            <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
-                        </div>
+                    <WhiteBox>
+                        <h1>스코어보드</h1>
+                        <ul>
+                            {sortedScores.map(([nickName, totalScore], index) => (
+                                <li key={nickName}>
+                                {index + 1}. {nickName}: {totalScore.toFixed(0)}점
+                                </li>
+                            ))}
+                        </ul>
+                        {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
+                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'30%', top:'85%',}}> 이 버튼 누르기 </Button>
+                        )}
+                    </WhiteBox>
+                    {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}> */}
+                        {showCounter && (
+                            <Card
+                                title="Title"
+                                pt={{
+                                    body: { className: 'bg-primary border-round-md' }
+                                }}
+                                style={{ whiteSpace: 'pre-line' }}
+                                >
+                                <p className="m-0">
+                                    {gameText}
+                                    <br />
+                                    유사도 점수: {myScore.toFixed(2)}%
+                                </p>
+                            </Card>
+                        )}
+                        {!showCounter && this.state.subscribers.map((sub, i) => (
+                            // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
+                            <div key={i} id="remoteUsers" style={{ 
+                                display:'inline-block',
+                                width:'13%',
+                                height:'16%',
+                                position:'relative',
+                                margin: '0px 2px 0px', // 스트림 간격 조절
+                                transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
+                                top: '75px',
+                                left: '135px',
+                                }}>
+                                    <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                            </div>
                     ))}
                     {/* </div> */}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
@@ -683,18 +800,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                     
-                    {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        // 채팅 컴포넌트
-                        // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
-                        <div style={chatDisplay}>
-                            <ChatComponent
-                                user={localUser}
-                                chatDisplay={this.state.chatDisplay}
-                                // close={this.toggleChat}
-                                messageReceived={this.checkNotification}
-                            />
-                        </div>
-                    )}
+                    
                 </div>
             </div>
         );
@@ -766,4 +872,9 @@ class VideoRoomComponent extends Component {
         return response.data.token; // The token
     }
 }
-export default VideoRoomComponent;
+
+const mapStateToProps = (state) => ({
+  userName: decodeState(state.auth.userName), // 리덕스 스토어에서 가져올 값의 키
+});
+
+export default connect(mapStateToProps)(VideoRoomComponent);

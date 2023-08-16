@@ -48,6 +48,7 @@ class Check extends Component {
             checkImageData: null,
             maskImageBitmap: null,
             maskImageData: null,
+            // answer: null,
         };
     }
 
@@ -59,6 +60,7 @@ class Check extends Component {
                 checkImageData: null,
                 maskImageBitmap: null,
                 maskImageData: null,
+                // answer: null,
             });
         }
     }
@@ -146,9 +148,17 @@ class Check extends Component {
         });
     }
 
+    handleScoreUpdate = (similarityScore) => {
+        // 유사도 점수를 받아와서 처리하는 로직을 구현
+        // 예를 들어 점수를 상태에 저장하거나 다른 동작을 수행할 수 있습니다.
+        console.log('Scoring 컴포넌트에서 계산한 유사도 점수:', similarityScore);
+        // 유사도 점수를 부모 컴포넌트로 전달하는 로직 추가
+        this.props.onScoreUpdate(similarityScore);
+    }
+
     render() {
         const { people, checkImageData, maskImageBitmap, maskImageData } = this.state;
-        const { showCounter } = this.props;
+        const { showCounter, answer } = this.props;
 
         // showCounter 값에 따라 렌더링 여부 결정
         if (!showCounter) {
@@ -183,7 +193,8 @@ class Check extends Component {
             height: '540px',
             overflow: 'hidden',
         };
-
+        
+        console.log('Check에서 정답 : ' + answer);
         return (
             <div>
                 <div className="check-container">
@@ -208,7 +219,7 @@ class Check extends Component {
                         />
                     </div>
                 </div>
-                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} />
+                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} answer={answer} onScoreUpdate={this.handleScoreUpdate} />
             </div>
         );
     }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 // import axios from 'axios';
+import tokenHttp from '../api/tokenHttp';
 import styled from 'styled-components';
 
 const StyledForm = styled.div`
@@ -10,33 +11,7 @@ const StyledForm = styled.div`
   margin: auto;
 `;
 
-const UploadButton = styled.button`
-  font-family: 'Ftstardust';
-  background-color: #5ec9f2;
-  color: white;
-  border: none;
-
-  width: 120px; /* 가로 크기를 100px로 설정 */
-  height: 50px; /* 세로 크기를 50px로 설정 */
-
-  font-size: 18px;
-  font-weight: bold;
-
-  border-radius: 10px;
-
-  &:hover {
-    background-color: #3498db; /* 호버 시 배경색 변경 */
-    color: #fff; /* 호버 시 글씨 색 변경 */
-    cursor: pointer;
-  }
-}`;
-
-
-// const FileInput = styled.input`
-//   display: none;
-// `;
-
-// const SelectImageButton = styled.label`
+// const FileAddButton = styled.input`
 //   font-family: 'Ftstardust';
 //   background-color: #5ec9f2;
 //   color: white;
@@ -50,9 +25,26 @@ const UploadButton = styled.button`
 
 //   border-radius: 10px;
 
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
+//   &:hover {
+//     background-color: #3498db;
+//     color: #fff;
+//     cursor: pointer;
+//   }
+// `;
+
+// const UploadButton = styled.button`
+//   font-family: 'Ftstardust';
+//   background-color: #5ec9f2;
+//   color: white;
+//   border: none;
+
+//   width: 120px;
+//   height: 50px;
+
+//   font-size: 18px;
+//   font-weight: bold;
+
+//   border-radius: 10px;
 
 //   &:hover {
 //     background-color: #3498db;
@@ -62,31 +54,57 @@ const UploadButton = styled.button`
 // `;
 
 function TemplateUploader() {
-    const [templateImageUrl, setTemplateImageUrl] = useState(null);
-    const [templateType, setTemplateType] = useState('');
-    const [templateName, setTemplateName] = useState('');
-  
-    const handleImageUpload = () => {
-      // 프론트엔드 내에서 선택한 이미지 URL을 저장
-      // 이 예제에서는 로컬 스토리지에 저장하도록 하겠습니다.
-      localStorage.setItem('templateImageUrl', templateImageUrl);
-      localStorage.setItem('templateType', templateType);
-      localStorage.setItem('templateName', templateName);
-  
-      console.log('이미지 URL 저장 성공');
-      alert('이미지 URL 저장 성공');
+  const [templateImage, setTemplateImage] = useState(null);
+  const [templateType, setTemplateType] = useState('');
+  const [templateName, setTemplateName] = useState('');
+
+  const handleImageUpload = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('file', templateImage);
+
+    const templateSaveDto = {
+      templateImage: templateImage,
+      templateType: templateType,
+      templateName: templateName,
+      // userPk: null,
     };
-  
-    return (
-      <StyledForm>
-        {/* 이미지 URL 입력란 */}
-        <input
-          type="text"
-          placeholder="이미지 URL"
-          value={templateImageUrl}
-          onChange={(e) => setTemplateImageUrl(e.target.value)}
-        />
-  
+
+    formData.append('templateSaveDto', templateSaveDto)
+
+    try {
+      // const response = await axios.post('https://i9b306.q.ssafy.io/api1/template/add-template', formData, {
+      const response = await tokenHttp.post('https://i9b306.q.ssafy.io/api1/template/add-template', formData, {
+        // params: templateSaveDto,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': localStorage.getItem("accessToken"),
+          "Access-Control-Allow-Origin" : "*",
+        },
+      });
+      console.log('이미지 업로드 성공', response);
+      alert('업로드 성공');
+    } catch (error) {
+      console.error('이미지 업로드 실패', error);
+      console.log('accessToken : ' + localStorage.getItem('accessToken'))
+      alert('업로드 실패');
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (!selectedFile || !(selectedFile instanceof Blob)) {
+      console.error('Invalid file');
+      return;
+    }
+    console.log('selectedFile : ' + selectedFile);
+    setTemplateImage(selectedFile);
+  };
+
+  return (
+    <StyledForm>
+      <form onSubmit={handleImageUpload}>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
         <input
           type="text"
           placeholder="템플릿 유형"
@@ -97,9 +115,10 @@ function TemplateUploader() {
           placeholder="템플릿 이름"
           onChange={(e) => setTemplateName(e.target.value)}
         />
-        <UploadButton onClick={handleImageUpload}>템플릿 업로드</UploadButton>
-      </StyledForm>
-    );
-  }
-  
-  export default TemplateUploader;
+        <button type="submit">템플릿 업로드</button>
+      </form>
+    </StyledForm>
+  );
+}
+
+export default TemplateUploader;

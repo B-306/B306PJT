@@ -1,7 +1,7 @@
 import React from "react";
 import styled from 'styled-components';
 // import palette from '../../lib/styles/palette';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const AuthTemplateBlock = styled.div`
     position: absolute;
@@ -37,7 +37,8 @@ const AuthTemplate = ( { children } ) => {
         <AuthTemplateBlock>
             <WhiteBox>
                 <div className="logo-area">
-                    <Link to="/">두뇌 풀 가동</Link>
+                    {/* <Link to="/">두뇌 풀 가동</Link> */}
+                    <h2 style={{color: '#5ec9f2'}}>두뇌 풀 가동</h2>
                 </div>
                 {children}
             </WhiteBox>

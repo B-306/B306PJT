@@ -1,11 +1,13 @@
 // GlobalStyles.js
 import { createGlobalStyle } from 'styled-components';
 // import backgroundImage from './assets/images/bfo_bgimg.png';
-import backgroundImage from './assets/images/bfo_move_bg.gif';
+// import backgroundImage from './assets/images/bfo_move_bg.gif';
+import backgroundImage1 from './assets/images/bfo_left.gif';
+import backgroundImage2 from './assets/images/bfo_right.gif';
 
 const GlobalStyles = createGlobalStyle`
   body {
-    background-image: url(${backgroundImage}), url(${backgroundImage});
+    background-image: url(${backgroundImage2}), url(${backgroundImage1});
     // background-size: cover;
     background-size: 30% 100%, 30% 100%;
     // background-size: contain;

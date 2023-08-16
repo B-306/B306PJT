@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import tokenHttp from '../components/api/tokenHttp';
 import styles from './GameCreate.module.css';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -36,7 +37,8 @@ const GetQuiz = () => {
   const [quizBooks, setQuizBooks] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
+    // axios.get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
+      tokenHttp.get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
       headers: {
         'accessToken': localStorage.getItem('accessToken')
       }
@@ -51,7 +53,8 @@ const GetQuiz = () => {
   }, []);
 
   const handleMoveToVideoRoom = (quizBookId) => {
-    axios.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
+    // axios.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
+      tokenHttp.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
       headers: {
         accessToken: localStorage.getItem('accessToken') // 여기에 액세스 토큰 값을 넣어주세요
       }
