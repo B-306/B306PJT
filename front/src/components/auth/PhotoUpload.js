@@ -112,7 +112,7 @@ function PhotoUpload() {
       const response = await axios.post("https://i9b306.q.ssafy.io/api1/image/profile", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'accessToken': `${localStorage.getItem("accessToken")}`
+          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
         }
       })
 

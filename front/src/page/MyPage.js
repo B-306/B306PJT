@@ -178,7 +178,7 @@ const MyPage = (props) => {
         userPassword: password,
       }, {
         headers: {
-          'accessToken': `${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
+          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
         },
       });
 
