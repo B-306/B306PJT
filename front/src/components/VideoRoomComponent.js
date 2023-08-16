@@ -34,14 +34,14 @@ class VideoRoomComponent extends Component {
     
     constructor(props) {
         // let roomCode = v4();
-        const decodedState = GetDecodedState;
+        const decodedState = GetDecodedState();
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
         // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         let userName = decodedState.userName;
-        console.log(userName);
+        console.log('-------------------------userName : ' + userName);
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
@@ -74,7 +74,7 @@ class VideoRoomComponent extends Component {
         this.closeDialogExtension = this.closeDialogExtension.bind(this);
         this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
-        this.checkSize = this.checkSize.bind(this);
+        // this.checkSize = this.checkSize.bind(this);
         this.sendGameSignal = this.sendGameSignal.bind(this);
         // this.handleSignalReceived = this.handleSignalReceived.bind(this);
     }
@@ -98,7 +98,7 @@ class VideoRoomComponent extends Component {
         this.layout.initLayoutContainer(document.getElementById('layout'), openViduLayoutOptions);
         window.addEventListener('beforeunload', this.onbeforeunload);
         // window.addEventListener('resize', this.updateLayout);
-        window.addEventListener('resize', this.checkSize);
+        // window.addEventListener('resize', this.checkSize);
         this.joinSession();
         
     }
@@ -108,7 +108,7 @@ class VideoRoomComponent extends Component {
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.onbeforeunload);
         // window.removeEventListener('resize', this.updateLayout);
-        window.removeEventListener('resize', this.checkSize);
+        // window.removeEventListener('resize', this.checkSize);
         this.leaveSession();
         // this.OV.off('signal', this.handleSignalReceived);
     }
@@ -587,15 +587,15 @@ class VideoRoomComponent extends Component {
             messageReceived: this.state.chatDisplay === 'none',
         });
     }
-    checkSize() {
-        if (document.getElementById('layout').offsetWidth <= 700 && !this.hasBeenUpdated) {
-            this.toggleChat('none');
-            this.hasBeenUpdated = true;
-        }
-        if (document.getElementById('layout').offsetWidth > 700 && this.hasBeenUpdated) {
-            this.hasBeenUpdated = false;
-        }
-    }
+    // checkSize() {
+    //     if (document.getElementById('layout').offsetWidth <= 700 && !this.hasBeenUpdated) {
+    //         this.toggleChat('none');
+    //         this.hasBeenUpdated = true;
+    //     }
+    //     if (document.getElementById('layout').offsetWidth > 700 && this.hasBeenUpdated) {
+    //         this.hasBeenUpdated = false;
+    //     }
+    // }
 
     handleImageCaptured = (capturedImageBlob) => {
         this.setState(
@@ -674,7 +674,7 @@ class VideoRoomComponent extends Component {
                 <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
+                        <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'90%', top:'80%',}}> 이 버튼 누르기 </Button>
                     )}
                     {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}> */}
                         {showCounter && (
