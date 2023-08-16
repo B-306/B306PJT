@@ -10,26 +10,26 @@ const StyledForm = styled.div`
   margin: auto;
 `;
 
-const FileAddButton = styled.input`
-  font-family: 'Ftstardust';
-  background-color: #5ec9f2;
-  color: white;
-  border: none;
+// const FileAddButton = styled.input`
+//   font-family: 'Ftstardust';
+//   background-color: #5ec9f2;
+//   color: white;
+//   border: none;
 
-  width: 120px;
-  height: 50px;
+//   width: 120px;
+//   height: 50px;
 
-  font-size: 18px;
-  font-weight: bold;
+//   font-size: 18px;
+//   font-weight: bold;
 
-  border-radius: 10px;
+//   border-radius: 10px;
 
-  &:hover {
-    background-color: #3498db;
-    color: #fff;
-    cursor: pointer;
-  }
-`;
+//   &:hover {
+//     background-color: #3498db;
+//     color: #fff;
+//     cursor: pointer;
+//   }
+// `;
 
 const UploadButton = styled.button`
   font-family: 'Ftstardust';
@@ -102,14 +102,7 @@ function TemplateUploader() {
   return (
     <StyledForm>
       <form onSubmit={handleImageUpload}>
-        <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden />
-        <FileAddButton
-          type="button"
-          value="파일추가"
-          onClick={() => {
-            document.getElementById('selectedFile1').click();
-          }}
-        />
+        <input type="file" accept="image/*" onChange={handleFileChange} />
         <input
           type="text"
           placeholder="템플릿 유형"
