@@ -43,7 +43,7 @@ class VideoRoomComponent extends Component {
         this.state = {
             mySessionId: sessionName,
             myUserName: userName,
-            myScore: null,
+            myScore: 0,
             gameText: null,
             gameAnswer: null,
             session: undefined,
