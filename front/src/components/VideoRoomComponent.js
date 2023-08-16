@@ -7,7 +7,8 @@ import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
 import Check from './game/Check';
-import GetDecodedState from './common/CodedState';
+import { decodeState } from './common/CodedState';
+import { connect } from 'react-redux';
 // import QuizText from './game/QuizText';
 import Button from './common/Button';
 import { Card } from 'primereact/card';
@@ -34,13 +35,12 @@ class VideoRoomComponent extends Component {
     
     constructor(props) {
         // let roomCode = v4();
-        const decodedState = GetDecodedState();
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
         // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
-        let userName = decodedState.userName;
+        let userName = this.props.userName;
         console.log('-------------------------userName : ' + userName);
         this.remotes = [];
         this.localUserAccessAllowed = false;
@@ -798,4 +798,9 @@ class VideoRoomComponent extends Component {
         return response.data.token; // The token
     }
 }
-export default VideoRoomComponent;
+
+const mapStateToProps = (state) => ({
+  userName: decodeState(state.auth.userName), // 리덕스 스토어에서 가져올 값의 키
+});
+
+export default connect(mapStateToProps)(VideoRoomComponent);
