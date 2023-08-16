@@ -31,26 +31,26 @@ const StyledForm = styled.div`
 //   }
 // `;
 
-const UploadButton = styled.button`
-  font-family: 'Ftstardust';
-  background-color: #5ec9f2;
-  color: white;
-  border: none;
+// const UploadButton = styled.button`
+//   font-family: 'Ftstardust';
+//   background-color: #5ec9f2;
+//   color: white;
+//   border: none;
 
-  width: 120px;
-  height: 50px;
+//   width: 120px;
+//   height: 50px;
 
-  font-size: 18px;
-  font-weight: bold;
+//   font-size: 18px;
+//   font-weight: bold;
 
-  border-radius: 10px;
+//   border-radius: 10px;
 
-  &:hover {
-    background-color: #3498db;
-    color: #fff;
-    cursor: pointer;
-  }
-`;
+//   &:hover {
+//     background-color: #3498db;
+//     color: #fff;
+//     cursor: pointer;
+//   }
+// `;
 
 function TemplateUploader() {
   const [templateImage, setTemplateImage] = useState(null);
@@ -76,7 +76,7 @@ function TemplateUploader() {
         // params: templateSaveDto,
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`,
+          'Authorization': localStorage.getItem("accessToken"),
           "Access-Control-Allow-Origin" : "*",
         },
       });
