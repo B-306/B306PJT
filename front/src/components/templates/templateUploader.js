@@ -113,7 +113,7 @@ function TemplateUploader() {
           placeholder="템플릿 이름"
           onChange={(e) => setTemplateName(e.target.value)}
         />
-        <UploadButton type="submit">템플릿 업로드</UploadButton>
+        <button type="submit">템플릿 업로드</button>
       </form>
     </StyledForm>
   );
