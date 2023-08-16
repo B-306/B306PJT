@@ -38,7 +38,7 @@ const AuthTemplate = ( { children } ) => {
             <WhiteBox>
                 <div className="logo-area">
                     {/* <Link to="/">두뇌 풀 가동</Link> */}
-                    <h2 style={{color: 'white'}}>두뇌 풀 가동</h2>
+                    <h2 style={{color: '#ff5733'}}>두뇌 풀 가동</h2>
                 </div>
                 {children}
             </WhiteBox>

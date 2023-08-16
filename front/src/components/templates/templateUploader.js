@@ -63,15 +63,17 @@ function TemplateUploader() {
     formData.append('file', templateImage);
 
     const templateSaveDto = {
-      templateImage: '',
+      templateImage: templateImage,
       templateType: templateType,
       templateName: templateName,
-      userPk: null,
+      // userPk: null,
     };
+
+    formData.append('templateSaveDto', templateSaveDto)
 
     try {
       const response = await axios.post('https://i9b306.q.ssafy.io/api1/template/add-template', formData, {
-        params: templateSaveDto,
+        // params: templateSaveDto,
         headers: {
           'Content-Type': 'multipart/form-data',
           'accessToken': localStorage.getItem("accessToken"),
@@ -91,6 +93,7 @@ function TemplateUploader() {
       console.error('Invalid file');
       return;
     }
+    console.log('selectedFile : ' + selectedFile);
     setTemplateImage(selectedFile);
   };
 

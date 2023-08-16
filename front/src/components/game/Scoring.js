@@ -22,15 +22,15 @@ class Scoring extends Component {
         console.log('정답 : ' + answer);
         for (let i = 0; i < checkImageData.data.length; i += 4) {
             if (
-                (checkImageData.data[i] !== maskImageData.data[i])
+                (checkImageData.data[i+answer] !== maskImageData.data[i])
             ) {
-                if (checkImageData.data[i]===255){
+                if (checkImageData.data[i+answer]===255){
                     differentPixels++;
                 } else if ((maskImageData.data[i+3]>100)) {
                     differentPixels++;
                 }
             }
-            if (checkImageData.data[i] === 255) {
+            if (checkImageData.data[i+answer] === 255) {
                 totalPixels++;
             }
         }
