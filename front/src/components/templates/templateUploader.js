@@ -76,13 +76,15 @@ function TemplateUploader() {
         // params: templateSaveDto,
         headers: {
           'Content-Type': 'multipart/form-data',
-          'accessToken': localStorage.getItem("accessToken"),
+          'accessToken': `${localStorage.getItem("accessToken")}`,
+          "Access-Control-Allow-Origin" : "*",
         },
       });
       console.log('이미지 업로드 성공', response);
       alert('업로드 성공');
     } catch (error) {
       console.error('이미지 업로드 실패', error);
+      console.log('accessToken : ' + localStorage.getItem('accessToken'))
       alert('업로드 실패');
     }
   };

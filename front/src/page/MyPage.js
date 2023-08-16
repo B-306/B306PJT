@@ -173,7 +173,7 @@ const MyPage = (props) => {
     try {
       // 회원정보 수정 요청 보내기
 
-      const response = await axios.patch('https://i9b306.1.ssafy.io/api1/user/modify', {
+      const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
         userName: name,
         userPassword: password,
       }, {
