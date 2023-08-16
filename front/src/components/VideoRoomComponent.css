@@ -72,7 +72,7 @@
 
 .bounds {
   /* background-color: #494949; */
-  /* overflow: hidden; */
+  overflow: hidden;
   position: absolute;
   left: 0;
   right: 0;
