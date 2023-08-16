@@ -26,20 +26,19 @@ import 'primeicons/primeicons.css';
 
 
 const WhiteBox = styled.div`
-    .logo-area {
-        display: block;
-        padding-bottom: 2rem;
-        text-align: center;
-        font-weight: bold;
-        letter-spacing: 2px;
-    }
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
     padding: 2rem;
     width: 360px;
+    height: 400px;
     background: white;
     // backdrop-filter: blur(10px);
     background : transparent;
     border-radius: 2px;
+    position: absolute;
+    z-index: 999999999999;
+    left: 90%;
+    top: 80%;
+
 `;
 
 
@@ -65,6 +64,7 @@ class VideoRoomComponent extends Component {
             mySessionId: sessionName,
             myUserName: userName,
             myScore: 0,
+            scores: {},
             gameText: null,
             gameAnswer: null,
             session: undefined,
@@ -221,6 +221,7 @@ class VideoRoomComponent extends Component {
         // localUser.setScreenShareActive(false);
         localUser.setStreamManager(publisher);
         this.receiveGameSignal();
+        this.receiveScoreSignal();
         // this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         // this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
@@ -449,34 +450,35 @@ class VideoRoomComponent extends Component {
 
 
     async sendScoreSignal() {
-        const selectedQuizesString = localStorage.getItem('selectedQuizes');
-        const selectedQuizesArray = selectedQuizesString.split(',');
-        for (let index = 0; index < selectedQuizesArray.length; index++) {
-            const quiz = selectedQuizesArray[index];
-            const quizData = await this.fnc(quiz);
-            
-            setTimeout(() => {
-                const signalOptions = {
-                    type: 'gameStart',
-                    data: JSON.stringify({
-                        templateImage: quizData.quizTemplateId.templateImage,
-                        quizText: quizData.quizText,
-                        quizAnswer: quizData.quizAnswer,
-                        otherInfo: 'some other data',
-                        // ... 다른 정보들
-                    }),
-                };
-                this.state.session.signal(signalOptions);
-            }, index * 20000);
-            setTimeout(() => {
-                const signalOptions = {
-                    type: 'gameStart',
-                    data: JSON.stringify({})
-                };
-                this.state.session.signal(signalOptions);
-            }, index * 20000 + 17000);
-        }
-    }    
+        const { userName, myScore } = this.state;
+        const signalOptions = {
+            type: 'scoreUpdate',
+            data: JSON.stringify({
+                userName: userName,
+                userScore: myScore,
+                otherInfo: 'some other data',
+                // ... 다른 정보들
+            }),
+        };
+        this.state.session.signal(signalOptions);
+    }
+
+    receiveScoreSignal() {
+        this.state.session.on('signal:scoreUpdate', (event) => {
+            const data = JSON.parse(event.data);
+            const { userName, userScore } = data;
+            // ... 다른 정보 처리
+            this.setState((prevState) => {
+                const updatedScores = { ...prevState.scores };
+                if (updatedScores[userName] === undefined) {
+                  updatedScores[userName] = userScore;
+                } else {
+                  updatedScores[userName] += userScore;
+                }
+                return { scores: updatedScores };
+            });
+        });
+    }
 
     toggleFullscreen() {
         const document = window.document;
@@ -667,9 +669,9 @@ class VideoRoomComponent extends Component {
 
     render() {
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore } = this.state;
+        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore, scores } = this.state;
         const templateURL = localStorage.getItem('templateURL')
-        
+        const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
 
         return (
             <div className="container" id="container">
@@ -724,9 +726,17 @@ class VideoRoomComponent extends Component {
                 <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     <WhiteBox>
-                    {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                        <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'90%', top:'80%',}}> 이 버튼 누르기 </Button>
-                    )}
+                        <h1>Scoreboard</h1>
+                        <ul>
+                        {sortedScores.map(([nickName, totalScore]) => (
+                            <li key={nickName}>
+                            {nickName}: {totalScore}
+                            </li>
+                        ))}
+                        </ul>
+                        {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
+                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'90%', top:'80%',}}> 이 버튼 누르기 </Button>
+                        )}
                     </WhiteBox>
                     {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}> */}
                         {showCounter && (
