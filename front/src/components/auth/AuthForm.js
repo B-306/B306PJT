@@ -8,6 +8,7 @@ import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
 import { setPhoto } from '../../redux/modules/photoSlice';
+// import tokenHttp from '../api/tokenHttp';
 
 const AuthFormBlock = styled.div`
     h3 {
