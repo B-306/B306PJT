@@ -756,7 +756,7 @@ class VideoRoomComponent extends Component {
                             </p>
                         </Card>
                         )}
-                        <div className="scroll-container">
+                        <div className="scroll-container" style={{ overflow: 'auto', maxheight: '70vh' }} >
                         {!showCounter && this.state.subscribers.map((sub, i) => (
                             // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
                             <div key={i} className="stream-item" id="remoteUsers" style={{ 
@@ -766,8 +766,8 @@ class VideoRoomComponent extends Component {
                                 // position:'relative',
                                 margin: '0px 2px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
-                                top: '75px',
-                                left: '100px',
+                                // top: '75px',
+                                // left: '100px',
                                 }}>
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                             </div>
