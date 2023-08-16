@@ -7,14 +7,19 @@ import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
 import Check from './game/Check';
+// import QuizText from './game/QuizText';
 import Button from './common/Button';
-
+import { Card } from 'primereact/card';
 // import { Carousel } from 'primereact/carousel';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 // import { v4 } from 'uuid';
+
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 
 
@@ -38,6 +43,8 @@ class VideoRoomComponent extends Component {
         this.state = {
             mySessionId: sessionName,
             myUserName: userName,
+            gameText: null,
+            gameAnswer: null,
             session: undefined,
             localUser: undefined,
             subscribers: [],
@@ -380,6 +387,8 @@ class VideoRoomComponent extends Component {
                     type: 'gameStart',
                     data: JSON.stringify({
                         templateImage: quizData.quizTemplateId.templateImage,
+                        quizText: quizData.quizText,
+                        quizAnswer: quizData.quizAnswer,
                         otherInfo: 'some other data',
                         // ... 다른 정보들
                     }),
@@ -409,6 +418,8 @@ class VideoRoomComponent extends Component {
             this.setState(
                 {
                     showCounter: !this.state.showCounter,
+                    gameText: data.quizText,
+                    gameAnswer: data.quizAnswer,
                 }
             )
             localStorage.setItem('templateURL', data.templateImage)
@@ -593,10 +604,8 @@ class VideoRoomComponent extends Component {
     }
     
     render() {
-        const mySessionId = this.state.mySessionId;
-        const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage } = this.state;
+        const { showCounter, capturedImage, gameText, mySessionId, localUser } = this.state;
         const templateURL = localStorage.getItem('templateURL')
         
 
@@ -644,23 +653,30 @@ class VideoRoomComponent extends Component {
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                         <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
-                    {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap' }}> */}
-                    {this.state.subscribers.map((sub, i) => (
-                        // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
-                        <div key={i} id="remoteUsers" style={{ 
-                            display:'inline-block',
-                            width:'20%',
-                            height:'20%',
-                            position:'relative',
-                            margin: '0px 2px 0px', // 스트림 간격 조절
-                            transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
-                            top: '75px',
-                            left: '100px',
-                            }}>
-                            <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
-                        </div>
+                    <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}>
+                        {showCounter && (
+                            <Card title="Title">
+                            <p className="m-0">
+                                <p>{gameText}</p>
+                            </p>
+                        </Card>
+                        )}
+                        {!showCounter && this.state.subscribers.map((sub, i) => (
+                            // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
+                            <div key={i} id="remoteUsers" style={{ 
+                                display:'inline-block',
+                                width:'16%',
+                                height:'12%',
+                                position:'relative',
+                                margin: '0px 2px 0px', // 스트림 간격 조절
+                                transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
+                                top: '75px',
+                                left: '100px',
+                                }}>
+                                    <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                            </div>
                     ))}
-                    {/* </div> */}
+                    </div>
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
                         <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
