@@ -59,7 +59,8 @@ function TemplateUploader() {
     const [templateType, setTemplateType] = useState('');
     const [templateName, setTemplateName] = useState('');
 
-    const handleImageUpload = async () => {
+    const handleImageUpload = async (event) => {
+        event.preventDefault();
         const formData = new FormData();
         formData.append('file', templateImage);
 
