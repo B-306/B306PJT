@@ -7,6 +7,7 @@ import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
 import Counter from './secCounter';
 import Check from './game/Check';
+import GetDecodedState from './common/CodedState';
 // import QuizText from './game/QuizText';
 import Button from './common/Button';
 import { Card } from 'primereact/card';
@@ -33,11 +34,13 @@ class VideoRoomComponent extends Component {
     
     constructor(props) {
         // let roomCode = v4();
+        const decodedState = GetDecodedState;
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
-        let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
+        // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
+        let userName = this.props.user ? this.props.user : decodedState.userName;
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
@@ -68,7 +71,7 @@ class VideoRoomComponent extends Component {
         // this.screenShare = this.screenShare.bind(this);
         // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.closeDialogExtension = this.closeDialogExtension.bind(this);
-        // this.toggleChat = this.toggleChat.bind(this);
+        this.toggleChat = this.toggleChat.bind(this);
         this.checkNotification = this.checkNotification.bind(this);
         this.checkSize = this.checkSize.bind(this);
         this.sendGameSignal = this.sendGameSignal.bind(this);
@@ -563,20 +566,20 @@ class VideoRoomComponent extends Component {
     //     // this.updateLayout();
     // }
 
-    // toggleChat(property) {
-    //     let display = property;
+    toggleChat(property) {
+        let display = property;
 
-    //     if (display === undefined) {
-    //         display = this.state.chatDisplay === 'none' ? 'block' : 'none';
-    //     }
-    //     if (display === 'block') {
-    //         this.setState({ chatDisplay: display, messageReceived: false });
-    //     } else {
-    //         console.log('chat', display);
-    //         this.setState({ chatDisplay: display });
-    //     }
-    //     // this.updateLayout();
-    // }
+        if (display === undefined) {
+            display = this.state.chatDisplay === 'none' ? 'block' : 'none';
+        }
+        if (display === 'block') {
+            this.setState({ chatDisplay: display, messageReceived: false });
+        } else {
+            console.log('chat', display);
+            this.setState({ chatDisplay: display });
+        }
+        // this.updateLayout();
+    }
 
     checkNotification(event) {
         this.setState({
@@ -630,9 +633,20 @@ class VideoRoomComponent extends Component {
                     toggleFullscreen={this.toggleFullscreen}
                     // switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
-                    // toggleChat={this.toggleChat}
+                    toggleChat={this.toggleChat}
                 />
-                
+            {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                        // 채팅 컴포넌트
+                        // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
+                        <div style={chatDisplay}>
+                            <ChatComponent
+                                user={localUser}
+                                chatDisplay={this.state.chatDisplay}
+                                close={this.toggleChat}
+                                messageReceived={this.checkNotification}
+                            />
+                        </div>
+                    )}
                 {/* {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                     <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'80%', height:'80%', top:'50%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}>
                         <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
@@ -665,7 +679,7 @@ class VideoRoomComponent extends Component {
                         {showCounter && (
                             <Card title="Title" 
                             pt={{
-                                body: { className: 'bg-primary border-round-lg' }
+                                body: { className: 'bg-primary border-round-md' }
                             }}>
                             <p className="m-0">
                                 <p>{gameText}</p>
@@ -711,18 +725,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )}
                     
-                    {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        // 채팅 컴포넌트
-                        // <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
-                        <div style={chatDisplay}>
-                            <ChatComponent
-                                user={localUser}
-                                chatDisplay={this.state.chatDisplay}
-                                // close={this.toggleChat}
-                                messageReceived={this.checkNotification}
-                            />
-                        </div>
-                    )}
+                    
                 </div>
             </div>
         );
