@@ -72,6 +72,7 @@
 
 .bounds {
   /* background-color: #494949; */
+  background-image: url(../assets/images/bfo_mx_bg.gif);
   /* overflow: hidden; */
   position: absolute;
   left: 0;
