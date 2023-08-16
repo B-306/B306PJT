@@ -146,6 +146,14 @@ class Check extends Component {
         });
     }
 
+    handleScoreUpdate = (similarityScore) => {
+        // 유사도 점수를 받아와서 처리하는 로직을 구현
+        // 예를 들어 점수를 상태에 저장하거나 다른 동작을 수행할 수 있습니다.
+        console.log('Scoring 컴포넌트에서 계산한 유사도 점수:', similarityScore);
+        // 유사도 점수를 부모 컴포넌트로 전달하는 로직 추가
+        this.props.onScoreUpdate(similarityScore);
+    }
+
     render() {
         const { people, checkImageData, maskImageBitmap, maskImageData } = this.state;
         const { showCounter } = this.props;
@@ -208,7 +216,7 @@ class Check extends Component {
                         />
                     </div>
                 </div>
-                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} />
+                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} onScoreUpdate={this.handleScoreUpdate} />
             </div>
         );
     }

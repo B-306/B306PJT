@@ -43,6 +43,7 @@ class VideoRoomComponent extends Component {
         this.state = {
             mySessionId: sessionName,
             myUserName: userName,
+            myScore: null,
             gameText: null,
             gameAnswer: null,
             session: undefined,
@@ -603,9 +604,16 @@ class VideoRoomComponent extends Component {
         );
     }
     
+    handleScoreUpdate = (similarityScore) => {
+        // Check 컴포넌트나 Scoring 컴포넌트로부터 받은 유사도 점수를 상태에 저장
+        this.setState({
+            myScore: similarityScore,
+        });
+    }
+
     render() {
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage, gameText, mySessionId, localUser } = this.state;
+        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore } = this.state;
         const templateURL = localStorage.getItem('templateURL')
         
 
@@ -641,7 +649,7 @@ class VideoRoomComponent extends Component {
                 {showCounter && capturedImage && (
                     <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'35%'}}>
                     {/* <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'50%'}}> */}
-                        <Check image={this.state.capturedImage} showCounter={showCounter} />
+                        <Check image={this.state.capturedImage} showCounter={showCounter} onScoreUpdate={this.handleScoreUpdate} />
                     </div>
                 )}
 
@@ -653,11 +661,15 @@ class VideoRoomComponent extends Component {
                     {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                         <Button onClick={this.sendGameSignal} style={{ position: 'relative', zIndex: '999999999999'}}> 이 버튼 누르기 </Button>
                     )}
-                    <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}>
+                    {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}> */}
                         {showCounter && (
-                            <Card title="Title">
+                            <Card title="Title" 
+                            pt={{
+                                body: { className: 'bg-primary border-round-lg' }
+                            }}>
                             <p className="m-0">
                                 <p>{gameText}</p>
+                                <p>유사도 점수: {myScore.toFixed(2)}%</p>
                             </p>
                         </Card>
                         )}
@@ -665,8 +677,8 @@ class VideoRoomComponent extends Component {
                             // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
                             <div key={i} id="remoteUsers" style={{ 
                                 display:'inline-block',
-                                width:'16%',
-                                height:'12%',
+                                width:'12%',
+                                height:'15%',
                                 position:'relative',
                                 margin: '0px 2px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
@@ -676,7 +688,7 @@ class VideoRoomComponent extends Component {
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                             </div>
                     ))}
-                    </div>
+                    {/* </div> */}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
                         <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
