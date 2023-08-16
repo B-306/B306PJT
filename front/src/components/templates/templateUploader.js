@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const StyledForm = styled.div`
@@ -8,6 +8,29 @@ const StyledForm = styled.div`
   justify-content: center;
   align-items: center;
   margin: auto;
+]
+`;
+
+const FileAddButton = styled.input`
+  font-family: 'Ftstardust';
+  background-color: #5ec9f2;
+  color: white;
+  border: none;
+
+  width: 120px; /* 가로 크기를 100px로 설정 */
+  height: 50px; /* 세로 크기를 50px로 설정 */
+
+  font-size: 18px;
+  font-weight: bold;
+
+  border-radius: 10px;
+
+  /* 숨겨진 input 요소를 대체하는 버튼 스타일 */
+  &:hover {
+    background-color: #3498db; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 글씨 색 변경 */
+    cursor: pointer;
+  }
 `;
 
 const UploadButton = styled.button`
@@ -29,77 +52,63 @@ const UploadButton = styled.button`
     color: #fff; /* 호버 시 글씨 색 변경 */
     cursor: pointer;
   }
-}`;
-
-
-// const FileInput = styled.input`
-//   display: none;
-// `;
-
-// const SelectImageButton = styled.label`
-//   font-family: 'Ftstardust';
-//   background-color: #5ec9f2;
-//   color: white;
-//   border: none;
-
-//   width: 120px;
-//   height: 50px;
-
-//   font-size: 18px;
-//   font-weight: bold;
-
-//   border-radius: 10px;
-
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-
-//   &:hover {
-//     background-color: #3498db;
-//     color: #fff;
-//     cursor: pointer;
-//   }
-// `;
+`;
 
 function TemplateUploader() {
-    const [templateImageUrl, setTemplateImageUrl] = useState(null);
+    const [templateImage, setTemplateImage] = useState(null);
     const [templateType, setTemplateType] = useState('');
     const [templateName, setTemplateName] = useState('');
-  
-    const handleImageUpload = () => {
-      // 프론트엔드 내에서 선택한 이미지 URL을 저장
-      // 이 예제에서는 로컬 스토리지에 저장하도록 하겠습니다.
-      localStorage.setItem('templateImageUrl', templateImageUrl);
-      localStorage.setItem('templateType', templateType);
-      localStorage.setItem('templateName', templateName);
-  
-      console.log('이미지 URL 저장 성공');
-      alert('이미지 URL 저장 성공');
+
+    const handleImageUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', templateImage);
+
+        const templateSaveDto = {
+            templateImage: templateImage.name,
+            templateType: templateType,
+            templateName: templateName,
+            // userPk: 1, // 유저 아이디 혹은 식별자
+        };
+
+        try {
+            await axios.post('/api1/template/add-template', formData, {
+                params: templateSaveDto,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'accessToken': localStorage.getItem("accessToken"),
+                },
+            });
+            console.log('이미지 업로드 성공');
+            alert('업로드 성공')
+        } catch (error) {
+            console.error('이미지 업로드 실패', error);
+            alert('업로드 실패')
+        }
     };
-  
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (!selectedFile || !(selectedFile instanceof Blob)) {
+            // 파일이 선택되지 않았거나 Blob 형식이 아닌 경우 처리
+            console.error('Invalid file');
+            return;
+          }
+        setTemplateImage(selectedFile);
+    };
+
     return (
-      <StyledForm>
-        {/* 이미지 URL 입력란 */}
-        <input
-          type="text"
-          placeholder="이미지 URL"
-          value={templateImageUrl}
-          onChange={(e) => setTemplateImageUrl(e.target.value)}
-        />
-  
-        <input
-          type="text"
-          placeholder="템플릿 유형"
-          onChange={(e) => setTemplateType(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="템플릿 이름"
-          onChange={(e) => setTemplateName(e.target.value)}
-        />
-        <UploadButton onClick={handleImageUpload}>템플릿 업로드</UploadButton>
-      </StyledForm>
+        <StyledForm>
+            <input type="file" accept="image/*" onChange={handleFileChange} id="selectedFile1" hidden/>
+            <FileAddButton type="button" value="파일추가"
+                onClick={() => {
+                document.getElementById('selectedFile1').click();
+                }}
+            />
+            <input type="text" placeholder="템플릿 유형" onChange={(e) => setTemplateType(e.target.value)} />
+            <input type="text" placeholder="템플릿 이름" onChange={(e) => setTemplateName(e.target.value)} />
+            <UploadButton onClick={handleImageUpload}>템플릿 업로드</UploadButton>
+        </StyledForm>
     );
-  }
-  
-  export default TemplateUploader;
+}
+
+export default TemplateUploader;
