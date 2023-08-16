@@ -76,7 +76,7 @@ function TemplateUploader() {
         // params: templateSaveDto,
         headers: {
           'Content-Type': 'multipart/form-data',
-          'accessToken': `${localStorage.getItem("accessToken")}`,
+          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`,
           "Access-Control-Allow-Origin" : "*",
         },
       });
