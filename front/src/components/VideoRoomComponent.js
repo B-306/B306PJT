@@ -20,6 +20,7 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import { relative } from 'path-browserify';
 
 
 
@@ -44,14 +45,15 @@ const WhiteBox = styled.div`
 const ResultCard = styled.div`
     display: ${props => props.show ? 'block' : 'none'};
     position: absolute;
-    top: 0;
+    top: 40px;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh-40px;
     background-color: rgba(255, 255, 255, 1);
     color: white;
     z-index: 1000000;
     text-align: center;
+    overflow: hidden;
 `;
 
 
@@ -643,15 +645,15 @@ class VideoRoomComponent extends Component {
         return (
             <div className="container" id="container">
                 <ResultCard show={captureRender}>
-                    {sortedUsers.map(userName => (
-                        <div key={userName}>
-                            <h2>{userName}'s Capture</h2>
-                            <div style={{ position: 'relative' }}>
+                    {sortedUsers.map((userName, index) => (
+                        <div key={userName} style={{ position: 'relative', minHeight: '100vh' }}>
+                            <h2 style={{ position: 'relative', zIndex: 1000003, color: 'yellow' }}>{index+1}등 : {userName}</h2>
+                            <div>
                                 <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
-                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
+                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5, position: 'relative', zIndex: 1000002 }} />
                                 </div>
                                 <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
-                                    <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
+                                    <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" style = {{ position: 'relative', zIndex: 1000001 }} />
                                 </div>
                             </div>
                         </div>
