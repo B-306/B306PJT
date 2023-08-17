@@ -417,8 +417,6 @@ class VideoRoomComponent extends Component {
         this.state.session.on('signal:gameStart', (event) => {
             console.log('변경 전 showCounter : ' + this.state.showCounter)
             const data = JSON.parse(event.data);
-            console.log(data.templateImage);
-            console.log(data.otherInfo);
             // ... 다른 정보 처리
             this.setState(
                 {
@@ -550,6 +548,7 @@ class VideoRoomComponent extends Component {
     handleImageCaptured = (capturedImageBlob) => {
         if (capturedImageBlob === null) {
             this.setState({ capturedImage: null }); // capturedImage를 null로 업데이트
+            console.log('capturedImage null로 변경~~~!@~!@~!@$!@$!@$!@#!@#')
             return;
         }
     
