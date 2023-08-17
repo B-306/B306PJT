@@ -430,7 +430,7 @@ class VideoRoomComponent extends Component {
         })
     }
 
-    async blobToBase64(blob) {
+    blobToBase64(blob) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result);
@@ -443,7 +443,7 @@ class VideoRoomComponent extends Component {
         const { myUserName, myScore, capturedImage } = this.state;
         console.log('시그널 보낼 이미지 : ' + capturedImage)
         try {
-            const capturedImageBase64 = await this.blobToBase64(capturedImage);
+            const capturedImageBase64 = this.blobToBase64(capturedImage);
             const signalOptions = {
                 type: 'scoreUpdate',
                 data: JSON.stringify({
