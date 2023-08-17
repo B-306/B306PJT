@@ -482,11 +482,12 @@ class VideoRoomComponent extends Component {
 
     receiveCaptureRenderSignal() {
         this.state.session.on('signal:captureRender', (event) => {
-            this.setState({
-                captureRender: !this.state.captureRender
-            })
-            console.log('captureRender : ' + this.state.captureRender)
-        })
+            this.setState(prevState => ({
+                captureRender: !prevState.captureRender
+            }), () => {
+                console.log('----------변경 captureRender : ' + this.state.captureRender);
+            });
+        });
     }
 
     toggleFullscreen() {
@@ -562,11 +563,11 @@ class VideoRoomComponent extends Component {
                     }),
                 () => {
                     console.log('캡처된이미지 변경 : ' + this.state.capturedImage);
+                    this.captureAndSaveImages();
                 }
             );
         };
         reader.readAsDataURL(new Blob([capturedImageBlob], { type: 'image/png' }));
-        this.captureAndSaveImages();
     };
     
     
@@ -621,17 +622,19 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
-                <ResultCard show={captureRender}>
-                    {sortedUsers.map(userName => (
-                        <div key={userName}>
-                            <h2>{userName}'s Capture</h2>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
-                                <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
+                { captureRender && (
+                    <ResultCard>
+                        {sortedUsers.map(userName => (
+                            <div key={userName}>
+                                <h2>{userName}'s Capture</h2>
+                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
+                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </ResultCard>
+                        ))}
+                    </ResultCard>
+                )}
                 <div className='bgimg'/>
                 <ToolbarComponent
                     sessionId={mySessionId}
@@ -677,13 +680,13 @@ class VideoRoomComponent extends Component {
                         <h1>스코어보드</h1>
                         <ul>
                             {sortedScores.map(([nickName, totalScore], index) => (
-                                <li key={nickName}>
+                                <li key={nickName} style={{ fontSize: '25px'}}>
                                 {index + 1}. {nickName}: {totalScore.toFixed(0)}점
                                 </li>
                             ))}
                         </ul>
                         {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'30%', top:'85%' }}> 게임 시작 </Button>
+                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'36%', top:'85%' }}> 게임 시작 </Button>
                         )}
                     </WhiteBox>
                         {showCounter && (
@@ -708,7 +711,7 @@ class VideoRoomComponent extends Component {
                                 </p>
                             </Card>
                         )}
-                    <div className="scrollable-container" style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '200px' }}>
+                    <div className="scrollable-container" style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '145px' }}>
                         {!showCounter && this.state.subscribers.map((sub, i) => (
                             <div key={i} id="remoteUsers" style={{ 
                                 display:'inline-block',

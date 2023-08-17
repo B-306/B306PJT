@@ -205,8 +205,10 @@ const MainPage = () => {
       <LogoImage src={gamelogoImage} alt="Logo" />
       <UserProfile>
         {/* <ProfileImage  src={photoUrl} alt="Profile" /> */}
-        <Tooltip title="마이페이지, 로그아웃!" placement="right-start">
+        <Tooltip title="마이페이지, 로그아웃!" placement="left-start">
           <ProfileImage onClick={() => setView(!view)} src={photoUrl} alt="Profile" />
+          </Tooltip>
+          <Tooltip title="마이페이지, 로그아웃!" placement="left-start">
           <span onClick={() => setView(!view)} style={{ fontSize: '35px', cursor: 'pointer', fontWeight: 'bold' }}>{userName}</span>
         </Tooltip> 
         {view && (
