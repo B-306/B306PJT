@@ -17,6 +17,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
+// import { Tooltip } from '@mui/material/Tooltip';
 
 const handleButtonClick = (e) => {
   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
@@ -225,6 +226,7 @@ const MainPage = () => {
       {/* {view && <Dropdown />} */}
       <StyledForm>
         <MainPageTitle>두뇌 풀 가동</MainPageTitle>
+        {/* <Tooltip title="Click me for more info" arrow> */}
         <StyledInput
           autoComplete="code"
           name="code"
@@ -232,7 +234,8 @@ const MainPage = () => {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={handleKeyDown}
-        />
+          />
+        {/* </Tooltip>   */}
           <GameCreateButton onClick={() => navigate(`/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
         {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
         <GameCreateButton onClick={()=>navigate(`/game/1`)} >게임방 테스트 방번호 1번</GameCreateButton>

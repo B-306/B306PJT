@@ -20,7 +20,7 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import { Carousel } from 'primereact/carousel';
+
 
 
 const WhiteBox = styled.div`
@@ -433,6 +433,7 @@ class VideoRoomComponent extends Component {
 
     async sendScoreSignal() {
         const { myUserName, myScore, capturedImage } = this.state;
+        console.log('시그널 보낼 이미지 : ' + capturedImage)
         const signalOptions = {
             type: 'scoreUpdate',
             data: JSON.stringify({
@@ -473,7 +474,7 @@ class VideoRoomComponent extends Component {
                 } else {
                   updatedScores[userName] += score;
                 }
-                return { scores: updatedScores, capturedImageArray: updatedImageArray };
+                return { scores: updatedScores, capturedImageArray: updatedImageArray, oneScore: updatedOneScore };
             });
 
         });
@@ -661,23 +662,6 @@ class VideoRoomComponent extends Component {
                         )}
                     <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}>
                         {!showCounter && this.state.subscribers.map((sub, i) => (
-                            <Carousel
-                            value={this.state.subscribers}
-                            numVisible={3} // You can adjust the number of visible items
-                            numScroll={1}
-                            responsiveOptions={[
-                              {
-                                breakpoint: '1024px',
-                                numVisible: 2,
-                                numScroll: 1,
-                              },
-                              {
-                                breakpoint: '768px',
-                                numVisible: 1,
-                                numScroll: 1,
-                              },
-                            ]}
-                          >
                             <div key={i} id="remoteUsers" style={{ 
                                 display:'inline-block',
                                 width:'200px',
@@ -690,7 +674,6 @@ class VideoRoomComponent extends Component {
                                 }}>
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                                 </div>
-                                </Carousel>
                     ))}
                     </div>
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
