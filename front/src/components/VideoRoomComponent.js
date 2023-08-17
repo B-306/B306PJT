@@ -649,8 +649,8 @@ class VideoRoomComponent extends Component {
                         {sortedUsers.map((userName, index) => (
                             <div key={userName} style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <h2 style={{ zIndex: 1000003, color: 'white' }}>{index + 1}등 : {userName}, 점수 : {oneScore[userName] !== undefined ? oneScore[userName].toFixed(2) + '점' : '점수 없음'}</h2>
-                                <div key={`template-${userName}`} style={{ position: 'relative', width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
+                                <div style={{ position: 'relative', width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <div key={`template-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
                                         <img src={templateURL} alt="Template" style={{ width: '100%', opacity: 0.5 }} />
                                     </div>
                                     <div key={`template-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
