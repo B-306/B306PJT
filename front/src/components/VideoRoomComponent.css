@@ -14,11 +14,12 @@
   justify-content: center;
   align-items: center;
   position: absolute;
+  height: 100%;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: transparent; /* Remove background color */
+  /* background-color: transparent;  */
   z-index: 9999; /* Ensure the counter is displayed above other content */
 }
 
@@ -73,13 +74,14 @@
 .bounds {
   /* background-color: #494949; */
   background-image: url(../assets/images/bfo_mx_bg.gif);
-  /* overflow: hidden; */
-  position: absolute;
+  overflow: hidden;
+  /* position: absolute; */
   left: 0;
   right: 0;
   top: 40px;
   bottom: 0;
-  height: inherit;
+  /* height: inherit; */
+  height: 100%;
   /* min-width: 640px !important; */
   min-width: 720px !important;
   width: inherit;

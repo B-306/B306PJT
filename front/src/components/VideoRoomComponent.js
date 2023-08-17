@@ -16,7 +16,7 @@ import Button from './common/Button';
 import { Card } from 'primereact/card';
 // import { Carousel } from 'primereact/carousel';
 
-import OpenViduLayout from '../layout/openvidu-layout';
+// import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 // import { v4 } from 'uuid';
@@ -54,7 +54,7 @@ class VideoRoomComponent extends Component {
         // let roomCode = v4();
         super(props);
         this.hasBeenUpdated = false;
-        this.layout = new OpenViduLayout();
+        // this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
         // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         let userName = this.props.userName;
@@ -101,20 +101,20 @@ class VideoRoomComponent extends Component {
     
 
     componentDidMount() {
-        const openViduLayoutOptions = {
-            maxRatio: 3 / 4, // The narrowest ratio that will be used (default 2x3)
-            minRatio: 3 / 4, // The widest ratio that will be used (default 16x9)
-            fixedRatio: true, // If this is true then the aspect ratio of the video is maintained and minRatio and maxRatio are ignored (default false)
-            bigClass: 'OV_big', // The class to add to elements that should be sized bigger
-            bigPercentage: 0.8, // The maximum percentage of space the big ones should take up
-            bigFixedRatio: true, // fixedRatio for the big ones
-            bigMaxRatio: 3 / 4, // The narrowest ratio to use for the big elements (default 2x3)
-            bigMinRatio: 3 / 4, // The widest ratio to use for the big elements (default 16x9)
-            bigFirst: true, // Whether to place the big one in the top left (true) or bottom right
-            animate: true, // Whether you want to animate the transitions
-        };
+        // const openViduLayoutOptions = {
+        //     maxRatio: 3 / 4, // The narrowest ratio that will be used (default 2x3)
+        //     minRatio: 3 / 4, // The widest ratio that will be used (default 16x9)
+        //     fixedRatio: true, // If this is true then the aspect ratio of the video is maintained and minRatio and maxRatio are ignored (default false)
+        //     bigClass: 'OV_big', // The class to add to elements that should be sized bigger
+        //     bigPercentage: 0.8, // The maximum percentage of space the big ones should take up
+        //     bigFixedRatio: true, // fixedRatio for the big ones
+        //     bigMaxRatio: 3 / 4, // The narrowest ratio to use for the big elements (default 2x3)
+        //     bigMinRatio: 3 / 4, // The widest ratio to use for the big elements (default 16x9)
+        //     bigFirst: true, // Whether to place the big one in the top left (true) or bottom right
+        //     animate: true, // Whether you want to animate the transitions
+        // };
 
-        this.layout.initLayoutContainer(document.getElementById('layout'), openViduLayoutOptions);
+        // this.layout.initLayoutContainer(document.getElementById('layout'), openViduLayoutOptions);
         window.addEventListener('beforeunload', this.onbeforeunload);
         // window.addEventListener('resize', this.updateLayout);
         // window.addEventListener('resize', this.checkSize);
@@ -731,6 +731,7 @@ class VideoRoomComponent extends Component {
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
                 {/* <div id="layout" className="bounds"> */}
+                {/* <div> */}
                 <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     <WhiteBox>
@@ -746,17 +747,13 @@ class VideoRoomComponent extends Component {
                             <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'30%', top:'85%',}}> 이 버튼 누르기 </Button>
                         )}
                     </WhiteBox>
-                    {/* <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}> */}
                         {showCounter && (
                             <Card
-                                title="Title"
-                                pt={{
-                                    body: { className: 'bg-primary border-round-md' }
-                                }}
                                 style={{ 
                                     whiteSpace: 'pre-line',
                                     fontSize: '20px', 
-                                    height: '200px',
+                                    height: '20%',
+                                    width: '100%',
                                     backgroundColor: 'rgba(255, 255, 255, 0.8)'
                                  }}
                                 >
@@ -767,14 +764,15 @@ class VideoRoomComponent extends Component {
                                 </p>
                             </Card>
                         )}
+                    <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}>
                         {!showCounter && this.state.subscribers.map((sub, i) => (
                             // <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers" style={{
                             <div key={i} id="remoteUsers" style={{ 
                                 display:'inline-block',
-                                width:'13%',
-                                height:'16%',
+                                width:'200px',
+                                height:'115px',
                                 position:'relative',
-                                margin: '0px 2px 0px', // 스트림 간격 조절
+                                margin: '0px 1px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
                                 top: '75px',
                                 left: '135px',
@@ -782,10 +780,10 @@ class VideoRoomComponent extends Component {
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                             </div>
                     ))}
-                    {/* </div> */}
+                    </div>
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         // 화면 위치 및 크기 조정
-                        <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}>
+                        <div id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'62%', transform: 'translate(-50%, -50%)', left:'32%', position:'absolute'}}>
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'720px', height:'540px', top:'60%', transform: 'translate(-50%, -50%)', left:'35%', position:'absolute'}}> */}
                         {/* <div className="OT_root OT_publisher custom-class" id="localUser" style={{ display:'inline-block', width:'640px', height:'480px', top:'60%', transform: 'translate(-50%, -50%)', left:'50%', position:'absolute'}}> */}
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
