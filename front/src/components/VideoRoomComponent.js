@@ -45,7 +45,7 @@ const ResultCard = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     color: white;
     z-index: 999;
     text-align: center;
@@ -432,12 +432,13 @@ class VideoRoomComponent extends Component {
 
     async sendScoreSignal() {
         const { myUserName, myScore, capturedImage } = this.state;
+        const capturedImageBase64 = capturedImage ? capturedImage.toDataURL() : null
         const signalOptions = {
             type: 'scoreUpdate',
             data: JSON.stringify({
                 userName: myUserName,
                 userScore: myScore,
-                capturedImage: capturedImage,
+                capturedImage: capturedImageBase64,
                 otherInfo: 'some other data',
                 // ... 다른 정보들
             }),
