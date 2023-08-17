@@ -566,6 +566,7 @@ class VideoRoomComponent extends Component {
             );
         };
         reader.readAsDataURL(new Blob([capturedImageBlob], { type: 'image/png' }));
+        this.captureAndSaveImages();
     };
     
     
@@ -689,10 +690,15 @@ class VideoRoomComponent extends Component {
                             <Card
                                 style={{ 
                                     whiteSpace: 'pre-line',
-                                    fontSize: '20px', 
+                                    fontSize: '22px',
+                                    fontWeight: 'bold',
                                     height: '20%',
                                     width: '100%',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+                                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                                    display: 'flex',              // 텍스트를 가운데 정렬하기 위한 flex 컨테이너 설정
+                                    justifyContent: 'center',     // 가로 중앙 정렬
+                                    alignItems: 'center',         // 세로 중앙 정렬
+                                    textAlign: 'center'
                                  }}
                                 >
                                 <p className="m-0">
