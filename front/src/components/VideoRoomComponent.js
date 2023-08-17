@@ -370,6 +370,7 @@ class VideoRoomComponent extends Component {
 
 
     async sendGameSignal() {
+        console.log('ㅁㅁㅁㅁㅁㅁㅁdocument : ' + document)
         if (this.state.onceStarted) {
             alert('게임이 이미 시작되었습니다.')
             return null;
@@ -479,9 +480,19 @@ class VideoRoomComponent extends Component {
 
     receiveCaptureRenderSignal() {
         this.state.session.on('signal:captureRender', (event) => {
+            console.log('캡처결과화면 출력 변경 전 : ' + this.state.captureRender)
             this.setState(prevState => ({
                 captureRender: !prevState.captureRender
-            }))
+            }),() => {
+                console.log('캡처결과화면 출력 변경 후 : ' + this.state.captureRender)
+                if (!this.state.captureRender) {
+                    this.setState({
+                        capturedImage: null,
+                        capturedImageArray: {},
+                        oneScore: {},
+                    })
+                }
+            })
         });
     }
 
@@ -550,7 +561,6 @@ class VideoRoomComponent extends Component {
         const reader = new FileReader();
         reader.onload = () => {
             const capturedImageDataURL = reader.result;
-            this.captureAndSaveImages();
             this.setState(
                 prevState => ({
                     capturedImageArray: {
@@ -558,7 +568,10 @@ class VideoRoomComponent extends Component {
                         [this.state.myUserName]: capturedImageDataURL
                     },
                     capturedImage: capturedImageBlob,
-                })
+                }), () => {            
+                    const num = Number(this.state.quizNumber)
+                    this.captureAndSaveImages(num);
+                }
             );
         };
     
@@ -569,34 +582,70 @@ class VideoRoomComponent extends Component {
     
     
     
-    // 이미지 캡처 버튼 클릭 시 호출되는 함수
-    captureAndSaveImages() {
-        const subscribers = this.state.subscribers; // subscribers 배열 가져오기
+    captureAndSaveImages = async (num) => {
+        const subscribers = this.state.subscribers;
+        console.log('captureAndSaveImages 실행~~~~~', subscribers);
+    
+        try {
+            for (const subscriber of subscribers) {
+                console.log(num + '번째 비디오')
+                const videoElement = subscriber.streamManager.videos[num-1].video;
+                console.log('---------------------------------------')
+                console.log(videoElement)
+                console.log('---------------------------------------')
+                console.log(subscriber.streamManager.videos)
+                console.log('---------------------------------------')
+                
 
-        subscribers.forEach((subscriber, index) => {
-            const videoElement = subscriber.streamManager.videos[0].video; // 구독 중인 비디오 엘리먼트 가져오기
-
-            // 비디오 엘리먼트의 현재 화면 캡처하여 이미지로 변환
-            const canvas = document.createElement('canvas');
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.translate(canvas.width, 0);
-            ctx.scale(-1, 1);
-            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
-            // 이미지를 데이터 URL로 변환하여 저장
-            const imageDataURL = canvas.toDataURL('image/png');
-
-            // 이미지 데이터를 capturedImageArray에 저장
-            this.setState(prevState => ({
-                capturedImageArray: {
-                    ...prevState.capturedImageArray,
-                    [subscriber.getNickname()]: imageDataURL
+    
+                const capturedImageBlob = await this.captureLastFrame(videoElement);
+    
+                if (capturedImageBlob) {
+                    const capturedImageDataURL = URL.createObjectURL(capturedImageBlob);
+                    this.setState(prevState => ({
+                        capturedImageArray: {
+                            ...prevState.capturedImageArray,
+                            [subscriber.getNickname()]: capturedImageDataURL,
+                        },
+                    }));
                 }
-            }));
-        });;
-    }
+            }
+        } catch (error) {
+            console.error('Error capturing and saving images:', error);
+        }
+    };
+    
+    captureLastFrame = async (videoElement) => {
+        return new Promise((resolve) => {
+            console.log('videoElement 길이 : ' + videoElement.duration)
+            console.log('videoElement 현재 시간 : ' + videoElement.currentTime)
+        //   videoElement.currentTime = videoElement.duration - 0.1; // 비디오의 마지막으로 이동
+            videoElement.currentTime = videoElement.currentTime + 32;
+          const canvas = document.createElement('canvas');
+          canvas.width = videoElement.videoWidth;
+          canvas.height = videoElement.videoHeight;
+          
+          // 캔버스에 비디오의 현재 프레임을 그림
+          canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      
+          canvas.toBlob(resolve, 'image/png');
+        });
+      }
+
+    captureVideoFrame = async (videoElement) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    
+        return new Promise((resolve) => {
+            canvas.toBlob(resolve, 'image/png');
+        });
+    };
+    
 
 
     
@@ -632,17 +681,17 @@ class VideoRoomComponent extends Component {
         const answerArray = ['빨강', '초록', '파랑'];
         return (
             <div className="container" id="container">
-                <ResultCard show={captureRender}>
+                <ResultCard show={captureRender} key={captureRender}>
                     <h1 style = {{zIndex: 1000003, color: 'white' }}>{quizNumber}번 문제 정답 : {answerArray[gameAnswer]}</h1>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: '10px', padding: '20px' }}>
                         {sortedUsers.map((userName, index) => (
                             <div key={userName} style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <h2 style={{ zIndex: 1000003, color: 'white' }}>{index + 1}등 : {userName}, 점수 : {oneScore[userName] !== undefined ? oneScore[userName].toFixed(2) + '점' : '점수 없음'}</h2>
                                 <div style={{ position: 'relative', width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
+                                    <div key={`template-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
                                         <img src={templateURL} alt="Template" style={{ width: '100%', opacity: 0.5 }} />
                                     </div>
-                                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
+                                    <div key={`captured-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
                                         <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
                                     </div>
                                 </div>
