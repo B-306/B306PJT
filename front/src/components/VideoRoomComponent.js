@@ -484,6 +484,7 @@ class VideoRoomComponent extends Component {
                 captureRender: !this.state.captureRender
             })
         })
+        console.log('captureRender : ' + this.state.captureRender)
     }
 
     toggleFullscreen() {
