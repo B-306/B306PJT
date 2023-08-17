@@ -19,7 +19,6 @@ class Scoring extends Component {
         // 예시: 단순히 픽셀 값이 다른 비율을 계산하는 예시
         let totalPixels = 0;
         let differentPixels = 0;
-        console.log('정답 : ' + answer);
         const ansNum = Number(answer);
         console.log(0+ansNum);
         for (let i = 0; i < checkImageData.data.length; i += 4) {
