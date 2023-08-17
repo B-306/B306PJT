@@ -370,6 +370,7 @@ class VideoRoomComponent extends Component {
 
 
     async sendGameSignal() {
+        console.log('ㅁㅁㅁㅁㅁㅁㅁdocument : ' + document)
         if (this.state.onceStarted) {
             alert('게임이 이미 시작되었습니다.')
             return null;
@@ -580,35 +581,45 @@ class VideoRoomComponent extends Component {
     
     
     
-    // 이미지 캡처 버튼 클릭 시 호출되는 함수
-    captureAndSaveImages() {
-        const subscribers = this.state.subscribers; // subscribers 배열 가져오기
-        console.log('captureAndSaveImages 실행~~~~~' + subscribers)
-
-        subscribers.forEach((subscriber, index) => {
-            const videoElement = subscriber.streamManager.videos[0].video; // 구독 중인 비디오 엘리먼트 가져오기
-
-            // 비디오 엘리먼트의 현재 화면 캡처하여 이미지로 변환
-            const canvas = document.createElement('canvas');
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.translate(canvas.width, 0);
-            ctx.scale(-1, 1);
-            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
-            // 이미지를 데이터 URL로 변환하여 저장
-            const imageDataURL = canvas.toDataURL('image/png');
-
-            // 이미지 데이터를 capturedImageArray에 저장
-            this.setState(prevState => ({
-                capturedImageArray: {
-                    ...prevState.capturedImageArray,
-                    [subscriber.getNickname()]: imageDataURL
+    captureAndSaveImages = async () => {
+        const subscribers = this.state.subscribers;
+        console.log('captureAndSaveImages 실행~~~~~', subscribers);
+    
+        try {
+            for (const subscriber of subscribers) {
+                const videoElement = subscriber.streamManager.videos[0].video;
+    
+                const capturedImageBlob = await this.captureVideoFrame(videoElement);
+    
+                if (capturedImageBlob) {
+                    const capturedImageDataURL = URL.createObjectURL(capturedImageBlob);
+                    this.setState(prevState => ({
+                        capturedImageArray: {
+                            ...prevState.capturedImageArray,
+                            [subscriber.getNickname()]: capturedImageDataURL,
+                        },
+                    }));
                 }
-            }));
-        });;
-    }
+            }
+        } catch (error) {
+            console.error('Error capturing and saving images:', error);
+        }
+    };
+    
+    captureVideoFrame = async (videoElement) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    
+        return new Promise((resolve) => {
+            canvas.toBlob(resolve, 'image/png');
+        });
+    };
+    
 
 
     
