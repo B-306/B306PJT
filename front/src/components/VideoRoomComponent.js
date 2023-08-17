@@ -635,6 +635,10 @@ class VideoRoomComponent extends Component {
         console.log('sortedScores : ' + sortedScores);
         console.log('capturedImageArray : ' + capturedImageArray);
         console.log('sortedUsers : ' + sortedUsers);
+        console.log('Template URL:', templateURL);
+        sortedUsers.forEach(userName => {
+            console.log(`Captured Image URL for ${userName}:`, capturedImageArray[userName]);
+        });
         return (
             <div className="container" id="container">
                 <ResultCard show={captureRender}>
