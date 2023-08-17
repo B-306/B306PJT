@@ -560,7 +560,6 @@ class VideoRoomComponent extends Component {
         const reader = new FileReader();
         reader.onload = () => {
             const capturedImageDataURL = reader.result;
-            this.captureAndSaveImages();
             this.setState(
                 prevState => ({
                     capturedImageArray: {
@@ -568,7 +567,9 @@ class VideoRoomComponent extends Component {
                         [this.state.myUserName]: capturedImageDataURL
                     },
                     capturedImage: capturedImageBlob,
-                })
+                }), () => {            
+                    this.captureAndSaveImages();
+                }
             );
         };
     
