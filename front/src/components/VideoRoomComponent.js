@@ -622,19 +622,17 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
-                { captureRender && (
-                    <ResultCard>
-                        {sortedUsers.map(userName => (
-                            <div key={userName}>
-                                <h2>{userName}'s Capture</h2>
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
-                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
-                                </div>
+                <ResultCard show={captureRender}>
+                    {sortedUsers.map(userName => (
+                        <div key={userName}>
+                            <h2>{userName}'s Capture</h2>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
+                                <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
                             </div>
-                        ))}
-                    </ResultCard>
-                )}
+                        </div>
+                    ))}
+                </ResultCard>
                 <div className='bgimg'/>
                 <ToolbarComponent
                     sessionId={mySessionId}

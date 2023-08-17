@@ -18,6 +18,7 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
             // showCounter가 false인 경우에는 null을 전달
             onImageCaptured(null);
             clearInterval(id);
+            setCount(count => count - 1)
         } else if (count === 0) {
             console.log('카운트 끝');
 
