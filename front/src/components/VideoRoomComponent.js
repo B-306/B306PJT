@@ -565,7 +565,7 @@ class VideoRoomComponent extends Component {
                 }
             );
         };
-        reader.readAsDataURL(capturedImageBlob);
+        reader.readAsDataURL(new Blob([capturedImageBlob], { type: 'image/png' }));
     };
     
     
