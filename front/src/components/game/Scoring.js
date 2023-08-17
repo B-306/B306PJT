@@ -10,18 +10,12 @@ class Scoring extends Component {
     }
 
     componentDidMount() {
-        // checkImageData와 maskImageData를 이용하여 유사도 채점 로직을 구현하고
-        // similarityScore를 계산하여 state에 저장하세요.
         const { checkImageData, maskImageData, answer } = this.props;
-
         // TODO: 유사도 채점 로직 구현
         
-        // 예시: 단순히 픽셀 값이 다른 비율을 계산하는 예시
         let totalPixels = 0;
         let differentPixels = 0;
-        console.log('정답 : ' + answer);
         const ansNum = Number(answer);
-        console.log(0+ansNum);
         for (let i = 0; i < checkImageData.data.length; i += 4) {
             if (
                 (checkImageData.data[i+ansNum] !== maskImageData.data[i])
@@ -37,7 +31,7 @@ class Scoring extends Component {
             }
         }
         const similarityScore = ((totalPixels - differentPixels) / totalPixels) * 100;
-        console.log('채점 결과', totalPixels, differentPixels, similarityScore)
+        
 
         this.setState({
             similarityScore: similarityScore,
@@ -48,14 +42,6 @@ class Scoring extends Component {
 
     render() {
         return null;
-        // const { similarityScore } = this.state;
-
-        // return (
-        //     <div className="scoring-container">
-        //         <h2>유사도 채점 결과</h2>
-        //         <p>유사도 점수: {similarityScore.toFixed(2)}%</p>
-        //     </div>
-        // );
     }
 }
 

@@ -7,17 +7,18 @@ const StyledH1 = styled.h1`
 `;
 
 const Counter = ({ localUser, onImageCaptured, showCounter }) => {
-    const [count, setCount] = useState(5);
+    const [count, setCount] = useState(10);
 
     useEffect(() => {
         const id = setInterval(() => {
             setCount(count => count - 1); 
             console.log('똑딱똑딱')
         }, 1000);
-        if (count === -5) {
+        if (count === -6) {
             // showCounter가 false인 경우에는 null을 전달
             onImageCaptured(null);
             clearInterval(id);
+            setCount(count => count - 1)
         } else if (count === 0) {
             console.log('카운트 끝');
 
@@ -30,8 +31,32 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
                 imageCapture.takePhoto()
                     .then(capturedImageBlob => {
                         console.log('캡처 성공');
-                        console.log(capturedImageBlob);
-                        onImageCaptured(capturedImageBlob);
+                        // 이미지 데이터를 로드하고 좌우반전 처리
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            const img = new Image();
+                            img.onload = () => {
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+
+                                // 좌우반전 처리
+                                ctx.translate(canvas.width, 0);
+                                ctx.scale(-1, 1);
+
+                                // 이미지 그리기
+                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                                // 변환된 이미지를 다시 Blob으로 변환
+                                canvas.toBlob((flippedImageBlob) => {
+                                    // 좌우반전된 이미지 블롭을 전달
+                                    onImageCaptured(flippedImageBlob);
+                                }, 'image/png');
+                            };
+                            img.src = reader.result;
+                        };
+                        reader.readAsDataURL(capturedImageBlob);
                     })
                     .catch(error => {
                         console.error('Error capturing image:', error);

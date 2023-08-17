@@ -1,9 +1,14 @@
 .quizListContainer {
-  max-width: 400px; /* 최대 가로 너비 */
-  max-height: 500px; /* 최대 세로 높이 */
+  min-width: 400px; /* 최대 가로 너비 */
+  min-height: 500px; /* 최대 세로 높이 */
   margin: 0 auto; /* 가운데 정렬 */
   padding: 20px;
   overflow-y: auto; /* 세로 스크롤이 필요할 때만 스크롤바 표시 */
+}
+
+.quizListContainer::-webkit-scrollbar-thumb {
+  background-color: #5ec9f2; /* 스크롤바의 색상 */
+  border-radius: 4px;
 }
 
 .quizList {
@@ -16,6 +21,8 @@
   padding: 16px;
   margin-bottom: 10px;
   background-color: white;
+  font-weight: bold;
+  font-size: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }

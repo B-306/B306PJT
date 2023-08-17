@@ -119,6 +119,7 @@ const AuthForm = ({ type}) => {
         } catch (error) {
           console.error('실패:', error);
           alert('이미 가입된 이메일입니다.')
+          setEmailConfirm(false)
           // 회원가입 실패 처리를 원하는 경우 적절한 방법으로 처리
         }
       }
@@ -132,7 +133,7 @@ const AuthForm = ({ type}) => {
           console.dir(response.data);
           // 로그인 성공 시 accessToken을 localStorage에 저장
           localStorage.setItem("accessToken", response.data.accessToken);
-          // localStorage.setItem("refreshToken", response.data.refreshToken);
+          localStorage.setItem("refreshToken", response.data.refreshToken);
           // localStorage.setItem("userName", response.data.userName);
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));

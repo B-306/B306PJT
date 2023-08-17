@@ -2,12 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';
-// import Button from '../components/common/Button';
 import { Button } from 'primereact/button';
 import Input from "../components/common/Input";
 import styled, { keyframes } from 'styled-components';
 import Logout from '../components/auth/Logout';
-// import UserInfo from '../components/auth/UserInfo'
 import { checkLoginStatus } from '../redux/config/AuthMiddleware'
 import GetDecodedState from '../components/common/CodedState';
 import gamelogoImage from '../assets/images/bfo_logo.png';
@@ -17,7 +15,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-
+import { Tooltip } from '@mui/material';
 
 const handleButtonClick = (e) => {
   e.preventDefault(); // 이벤트 객체를 받아온 후 preventDefault 호출
@@ -26,21 +24,6 @@ const handleButtonClick = (e) => {
   )
 };
 
-
-// function Dropdown() {
-//   // const userEmail = localStorage.getItem("userEmail")
-//   const decodedState = GetDecodedState();
-//   const { accessToken, refreshToken, userName, userEmail } = decodedState;
-
-//   return (
-//     <>
-//       <div><Link to={`/${userEmail}/mypage`}>마이페이지</Link></div>
-//       {/* <li>마이페이지</li> */}
-//       <Button onClick={(e) => handleButtonClick(e)}>로그아웃</Button>
-//       {/* <li>로그아웃</li> */}
-//     </>
-//   );
-// }
 
 
 const CenteredContainer = styled.div`
@@ -56,7 +39,7 @@ const CenteredContainer = styled.div`
 const GameCreateButton = styled(Button)`
   font-family: Ftstardust;
   margin-top: 1rem;
-  margin-right: 1rem; 
+  // margin-right: 1rem; 
 `;
 
 const StyledInput = styled(Input)``;
@@ -204,8 +187,13 @@ const MainPage = () => {
     <CenteredContainer>
       <LogoImage src={gamelogoImage} alt="Logo" />
       <UserProfile>
-        <ProfileImage src={photoUrl} alt="Profile" />
-        <span onClick={() => setView(!view)} style={{fontSize: '35px', cursor: 'pointer', fontWeight:'bold' }}>{userName}</span>
+        {/* <ProfileImage  src={photoUrl} alt="Profile" /> */}
+        <Tooltip title="마이페이지, 로그아웃!" placement="left-start">
+          <ProfileImage onClick={() => setView(!view)} src={photoUrl} alt="Profile" />
+          </Tooltip>
+          <Tooltip title="마이페이지, 로그아웃!" placement="left-start">
+          <span onClick={() => setView(!view)} style={{ fontSize: '35px', cursor: 'pointer', fontWeight: 'bold' }}>{userName}</span>
+        </Tooltip> 
         {view && (
           <DropdownMenu>
             <div style={{display: 'flex', flexDirection: 'column' }}>
@@ -215,16 +203,9 @@ const MainPage = () => {
           </DropdownMenu>
         )}
       </UserProfile>
-      {/* <span
-        style={{ textDecoration: 'underline', cursor: 'pointer' }}
-        onClick={() => setView(!view)}
-      > */}
-        {/* {setUserData.userName} */}
-        {/* {userName} */}
-      {/* </span> */}
-      {/* {view && <Dropdown />} */}
       <StyledForm>
         <MainPageTitle>두뇌 풀 가동</MainPageTitle>
+        <Tooltip title="코드를 입력하고 Enter를 누르면 게임에 입장합니다!" placement="right-start">
         <StyledInput
           autoComplete="code"
           name="code"
@@ -232,13 +213,9 @@ const MainPage = () => {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={handleKeyDown}
-        />
-        <GameCreateButton onClick={()=>navigate(`/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
-        {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
-        <GameCreateButton onClick={()=>navigate(`/game/1`)} >게임방 테스트 방번호 1번</GameCreateButton>
-        <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>
-        {/* <GameCreateButton><Link to={`/templatecreate`}>템플릿 업로드 페이지</Link></GameCreateButton> */}
-        <GameCreateButton onClick={()=>navigate(`/templatecreate`)} >템플릿 업로드</GameCreateButton>
+          />
+        </Tooltip>  
+          <GameCreateButton onClick={() => navigate(`/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
       </StyledForm>
     </CenteredContainer>
   );

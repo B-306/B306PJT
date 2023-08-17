@@ -82,7 +82,6 @@ class Check extends Component {
                 responseType: 'arraybuffer' // 이 부분을 추가하여 이미지 데이터를 ArrayBuffer로 받아옴
             });
         
-            console.log('templateURL get 요청');
             console.log(response.data); // 이미지 데이터 ArrayBuffer 확인
         
             const img = new Image();
@@ -103,27 +102,6 @@ class Check extends Component {
             console.error('Error:', error);
         }
 
-        // const img = new Image();
-        // img.onload = function () {
-        //     canvas.width = img.width;
-        //     canvas.height = img.height;
-        //     ctx.drawImage(img, 0, 0);
-        // };
-        // img.src = 'data:image/png;base64,' + imageData;
-        // if (checkImageData) {
-            
-        // }
-        // await checkImage.decode();
-        // Canvas를 생성하여 이미지를 그립니다
-        // const canvas = document.createElement('canvas');
-        // canvas.width = checkImage.width;
-        // canvas.height = checkImage.height;
-        // const ctx = canvas.getContext('2d');
-        // ctx.drawImage(checkImage, 0, 0);
-        
-        // Canvas에서 ImageData를 추출합니다
-        // const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
-
         const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
         const segmenterConfig = {
           runtime: 'mediapipe',
@@ -131,7 +109,7 @@ class Check extends Component {
                         // or 'base/node_modules/@mediapipe/selfie_segmentation' in npm.
         };
         const segmenter = await bodySegmentation.createSegmenter(model, segmenterConfig);
-        const segmentationConfig = { flipHorizontal: true };
+        const segmentationConfig = { flipHorizontal: false };
     
         // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
         const imageElement = await convertBlobToImageData(this.props.image);
@@ -151,7 +129,6 @@ class Check extends Component {
     handleScoreUpdate = (similarityScore) => {
         // 유사도 점수를 받아와서 처리하는 로직을 구현
         // 예를 들어 점수를 상태에 저장하거나 다른 동작을 수행할 수 있습니다.
-        console.log('Scoring 컴포넌트에서 계산한 유사도 점수:', similarityScore);
         // 유사도 점수를 부모 컴포넌트로 전달하는 로직 추가
         this.props.onScoreUpdate(similarityScore);
     }
@@ -169,7 +146,6 @@ class Check extends Component {
             return null; // 세그멘테이션 결과가 없으면 아무것도 렌더링하지 않음
         }
         
-        console.log('샘플 이미지', checkImageData)
         const srgb = [0,0,0,0]
         for (let i=0; i<307200; i++) {
             if (checkImageData.data[4*i]!==0) {
@@ -185,8 +161,6 @@ class Check extends Component {
                 srgb[3] ++;
             }
         }
-        console.log('srgb', srgb)
-        console.log('마스크데이터', maskImageData)
 
         const checkStyle = {
             width: '720px',
@@ -194,7 +168,6 @@ class Check extends Component {
             overflow: 'hidden',
         };
         
-        console.log('Check에서 정답 : ' + answer);
         return (
             <div>
                 <div className="check-container">
