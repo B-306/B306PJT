@@ -50,7 +50,7 @@ const ResultCard = styled.div`
     height: 100%;
     background-color: rgba(255, 255, 255, 1);
     color: white;
-    z-index: 10000;
+    z-index: 1000000;
     text-align: center;
 `;
 
@@ -647,10 +647,10 @@ class VideoRoomComponent extends Component {
                         <div key={userName}>
                             <h2>{userName}'s Capture</h2>
                             <div style={{ position: 'relative' }}>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10002 }}>
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
                                     <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
                                 </div>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10001 }}>
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
                                     <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
                                 </div>
                             </div>
