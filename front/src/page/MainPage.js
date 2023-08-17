@@ -205,8 +205,10 @@ const MainPage = () => {
       <LogoImage src={gamelogoImage} alt="Logo" />
       <UserProfile>
         {/* <ProfileImage  src={photoUrl} alt="Profile" /> */}
-        <ProfileImage onClick={() => setView(!view)} src={photoUrl} alt="Profile" />
-        <span onClick={() => setView(!view)} style={{fontSize: '35px', cursor: 'pointer', fontWeight:'bold' }}>{userName}</span>
+        <Tooltip title="마이페이지, 로그아웃!" placement="right-start">
+          <ProfileImage onClick={() => setView(!view)} src={photoUrl} alt="Profile" />
+          <span onClick={() => setView(!view)} style={{ fontSize: '35px', cursor: 'pointer', fontWeight: 'bold' }}>{userName}</span>
+        </Tooltip> 
         {view && (
           <DropdownMenu>
             <div style={{display: 'flex', flexDirection: 'column' }}>
