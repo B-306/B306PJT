@@ -16,7 +16,8 @@ import gamelogoImage from '../assets/images/bfo_logo.png';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-
+//mui
+import { Tooltip } from '@mui/material';
 
 
 const handleButtonClick = (e) => {
@@ -204,7 +205,8 @@ const MainPage = () => {
     <CenteredContainer>
       <LogoImage src={gamelogoImage} alt="Logo" />
       <UserProfile>
-        <ProfileImage src={photoUrl} alt="Profile" />
+        {/* <ProfileImage  src={photoUrl} alt="Profile" /> */}
+        <ProfileImage onClick={() => setView(!view)} src={photoUrl} alt="Profile" />
         <span onClick={() => setView(!view)} style={{fontSize: '35px', cursor: 'pointer', fontWeight:'bold' }}>{userName}</span>
         {view && (
           <DropdownMenu>
@@ -233,7 +235,9 @@ const MainPage = () => {
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <GameCreateButton onClick={()=>navigate(`/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
+        <Tooltip title="Enter를 누르면 게임방으로 입장합니다!" arrow>
+          <GameCreateButton onClick={() => navigate(`/${userEmail}/gamecreate`)} >방 만들기</GameCreateButton>
+        </Tooltip>
         {/* <GameCreateButton><Link to={`/game`}>게임방 테스트</Link></GameCreateButton>   */}
         <GameCreateButton onClick={()=>navigate(`/game/1`)} >게임방 테스트 방번호 1번</GameCreateButton>
         <GameCreateButton><Link to={`/game/2`}>게임방 테스트 방번호 2번</Link></GameCreateButton>

@@ -20,6 +20,7 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import { Carousel } from 'primereact/carousel';
 
 
 const WhiteBox = styled.div`
@@ -45,7 +46,7 @@ const ResultCard = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 1);
     color: white;
     z-index: 999;
     text-align: center;
@@ -432,13 +433,12 @@ class VideoRoomComponent extends Component {
 
     async sendScoreSignal() {
         const { myUserName, myScore, capturedImage } = this.state;
-        const capturedImageBase64 = capturedImage ? capturedImage.toDataURL() : null
         const signalOptions = {
             type: 'scoreUpdate',
             data: JSON.stringify({
                 userName: myUserName,
                 userScore: myScore,
-                capturedImage: capturedImageBase64,
+                capturedImage: capturedImage,
                 otherInfo: 'some other data',
                 // ... 다른 정보들
             }),
@@ -582,7 +582,7 @@ class VideoRoomComponent extends Component {
                         <div key={userName}>
                             <h2>{userName}'s Capture</h2>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
+                                <img src={URL.createObjectURL(capturedImageArray[userName])} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
                                 <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
                             </div>
                         </div>
@@ -639,7 +639,7 @@ class VideoRoomComponent extends Component {
                             ))}
                         </ul>
                         {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'30%', top:'85%',}}> 이 버튼 누르기 </Button>
+                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'30%', top:'85%' }}> 게임 시작 </Button>
                         )}
                     </WhiteBox>
                         {showCounter && (
@@ -661,6 +661,23 @@ class VideoRoomComponent extends Component {
                         )}
                     <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}>
                         {!showCounter && this.state.subscribers.map((sub, i) => (
+                            <Carousel
+                            value={this.state.subscribers}
+                            numVisible={3} // You can adjust the number of visible items
+                            numScroll={1}
+                            responsiveOptions={[
+                              {
+                                breakpoint: '1024px',
+                                numVisible: 2,
+                                numScroll: 1,
+                              },
+                              {
+                                breakpoint: '768px',
+                                numVisible: 1,
+                                numScroll: 1,
+                              },
+                            ]}
+                          >
                             <div key={i} id="remoteUsers" style={{ 
                                 display:'inline-block',
                                 width:'200px',
@@ -672,7 +689,8 @@ class VideoRoomComponent extends Component {
                                 left: '135px',
                                 }}>
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
-                            </div>
+                                </div>
+                                </Carousel>
                     ))}
                     </div>
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
