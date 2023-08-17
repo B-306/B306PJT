@@ -728,7 +728,6 @@ class VideoRoomComponent extends Component {
                         <Check image={this.state.capturedImage} answer={this.state.gameAnswer} showCounter={showCounter} onScoreUpdate={this.handleScoreUpdate} />
                     </div>
                 )}
-                <Button onClick={this.copyRoomCodeToClipboard} style={{ position: 'absolute', zIndex: '999999999999', left:'31%', top:'92%', color: 'black' }}> 초대 코드 복사 </Button>
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
@@ -746,6 +745,7 @@ class VideoRoomComponent extends Component {
                         {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
                                 <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'36%', top:'85%', color: 'black' }}> 게임 시작 </Button>
                         )}
+                        <Button onClick={this.copyRoomCodeToClipboard} style={{ position: 'absolute', zIndex: '999999999999', left:'31%', top:'92%', color: 'black' }}> 초대 코드 복사 </Button>
                     </WhiteBox>
                         {showCounter && (
                             <Card

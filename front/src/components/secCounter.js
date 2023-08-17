@@ -14,7 +14,7 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
             setCount(count => count - 1); 
             console.log('똑딱똑딱')
         }, 1000);
-        if (count === -7) {
+        if (count === -6) {
             // showCounter가 false인 경우에는 null을 전달
             onImageCaptured(null);
             clearInterval(id);
