@@ -38,6 +38,20 @@ const WhiteBox = styled.div`
 
 `;
 
+const ResultCard = styled.div`
+    display: ${props => props.show ? 'block' : 'none'};
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 999;
+    text-align: center;
+`;
+
+
 
 var localUser = new UserModel();
 console.log('NODE_ENV 상태 : ' + process.env.NODE_ENV);
@@ -47,12 +61,9 @@ const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 class VideoRoomComponent extends Component {
     
     constructor(props) {
-        // let roomCode = v4();
         super(props);
         this.hasBeenUpdated = false;
-        // this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
-        // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         let userName = this.props.userName;
         console.log('-------------------------userName : ' + userName);
         this.remotes = [];
@@ -61,7 +72,8 @@ class VideoRoomComponent extends Component {
             mySessionId: sessionName,
             myUserName: userName,
             myScore: 0,
-            scores: {},
+            scores: {}, // 플레이어들의 누적 점수
+            oneScore: {}, // 플레이어들의 직전 문제 점수
             gameText: null,
             gameAnswer: null,
             session: undefined,
@@ -71,6 +83,9 @@ class VideoRoomComponent extends Component {
             currentVideoDevice: undefined,
             showCounter: false, // Counter 컴포넌트를 표시할지 여부를 나타내는 상태 변수
             capturedImage: null, // 이미지 데이터를 저장할 상태 변수
+            capturedImageArray: {}, // 모든 플레이어들의 직전 문제 캡쳐
+            captureRender: false,
+            onceStarted: false,
         };
 
         this.joinSession = this.joinSession.bind(this);
@@ -192,6 +207,7 @@ class VideoRoomComponent extends Component {
         localUser.setStreamManager(publisher);
         this.receiveGameSignal();
         this.receiveScoreSignal();
+        this.receiveCaptureRenderSignal();
         this.subscribeToStreamDestroyed();
 
         this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
@@ -353,8 +369,15 @@ class VideoRoomComponent extends Component {
 
 
     async sendGameSignal() {
+        if (this.state.onceStarted) {
+            alert('게임이 이미 시작되었습니다.')
+            return null;
+        }
         const selectedQuizesString = localStorage.getItem('selectedQuizes');
         const selectedQuizesArray = selectedQuizesString.split(',');
+        this.setState({
+            onceStarted: true,
+        })
         for (let index = 0; index < selectedQuizesArray.length; index++) {
             const quiz = selectedQuizesArray[index];
             const quizData = await this.fnc(quiz);
@@ -371,14 +394,19 @@ class VideoRoomComponent extends Component {
                     }),
                 };
                 this.state.session.signal(signalOptions);
-            }, index * 20000);
+            }, index * 23000);
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
                     data: JSON.stringify({})
                 };
                 this.state.session.signal(signalOptions);
-            }, index * 20000 + 17000);
+                const signalOptions2 = {
+                    type: 'captureRender',
+                    data: JSON.stringify({})
+                };
+                this.state.session.signal(signalOptions2);
+            }, index * 23000 + 20000);
         }
     }    
 
@@ -415,12 +443,17 @@ class VideoRoomComponent extends Component {
             }),
         };
         this.state.session.signal(signalOptions);
+        const signalOptions2 = {
+            type: 'captureRender',
+            data: JSON.stringify({})
+        };
+        this.state.session.signal(signalOptions2);
     }
 
     receiveScoreSignal() {
         this.state.session.on('signal:scoreUpdate', (event) => {
             const data = JSON.parse(event.data);
-            const { userName, userScore } = data;
+            const { userName, userScore, capturedImage } = data;
             let score;
             if (userScore < 0) {
                 score = 0;
@@ -430,14 +463,27 @@ class VideoRoomComponent extends Component {
             // ... 다른 정보 처리
             this.setState((prevState) => {
                 const updatedScores = { ...prevState.scores };
+                const updatedImageArray = {...prevState.capturedImageArray}
+                const updatedOneScore = {...prevState.oneScore};
+                updatedOneScore[userName] = userScore;
+                updatedImageArray[userName] = capturedImage;
                 if (updatedScores[userName] === undefined) {
                   updatedScores[userName] = score;
                 } else {
                   updatedScores[userName] += score;
                 }
-                return { scores: updatedScores };
+                return { scores: updatedScores, capturedImageArray: updatedImageArray };
             });
+
         });
+    }
+
+    receiveCaptureRenderSignal() {
+        this.state.session.on('signal:captureRender', (event) => {
+            this.setState({
+                captureRender: !this.state.captureRender
+            })
+        })
     }
 
     toggleFullscreen() {
@@ -522,12 +568,24 @@ class VideoRoomComponent extends Component {
 
     render() {
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore, scores } = this.state;
+        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore, scores, resultRender, capturedImageArray, oneScore } = this.state;
         const templateURL = localStorage.getItem('templateURL')
         const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+        const sortedUsers = Object.keys(capturedImageArray).sort((a, b) => oneScore[b] - oneScore[a]);
 
         return (
             <div className="container" id="container">
+                <ResultCard show={resultRender}>
+                    {sortedUsers.map(userName => (
+                        <div key={userName}>
+                            <h2>{userName}'s Capture</h2>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
+                                <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
+                            </div>
+                        </div>
+                    ))}
+                </ResultCard>
                 <div className='bgimg'/>
                 <ToolbarComponent
                     sessionId={mySessionId}
@@ -539,17 +597,17 @@ class VideoRoomComponent extends Component {
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
                 />
-            {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        // 채팅 컴포넌트
-                        <div style={chatDisplay}>
-                            <ChatComponent
-                                user={localUser}
-                                chatDisplay={this.state.chatDisplay}
-                                close={this.toggleChat}
-                                messageReceived={this.checkNotification}
-                            />
-                        </div>
-                    )}
+                {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                    // 채팅 컴포넌트
+                    <div style={chatDisplay}>
+                        <ChatComponent
+                            user={localUser}
+                            chatDisplay={this.state.chatDisplay}
+                            close={this.toggleChat}
+                            messageReceived={this.checkNotification}
+                        />
+                    </div>
+                )}
 
                 {/* Counter 컴포넌트를 렌더링하고 필요한 props를 전달합니다 */}
                 {showCounter && (
