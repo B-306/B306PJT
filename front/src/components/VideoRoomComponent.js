@@ -547,22 +547,29 @@ class VideoRoomComponent extends Component {
     }
 
     handleImageCaptured = (capturedImageBlob) => {
-        this.setState(
-            prevState => (
-            {
-                capturedImageArray: {
-                    ...prevState.capturedImageArray,
-                    [this.state.myUserName]: capturedImageBlob
-                },
-                capturedImage: capturedImageBlob,
-            }),
-            () => {
-                console.log('캡처된이미지 변경 : ' + this.state.capturedImage);
-                
-            }
-        );
+        const reader = new FileReader();
+        reader.onload = () => {
+            const capturedImageDataURL = reader.result;
+    
+            this.setState(
+                prevState => (
+                    {
+                        capturedImageArray: {
+                            ...prevState.capturedImageArray,
+                            [this.state.myUserName]: capturedImageDataURL
+                        },
+                        capturedImage: capturedImageDataURL,
+                    }),
+                () => {
+                    console.log('캡처된이미지 변경 : ' + this.state.capturedImage);
+                }
+            );
+        };
+        reader.readAsDataURL(capturedImageBlob);
     };
-
+    
+    
+    
     // 이미지 캡처 버튼 클릭 시 호출되는 함수
     captureAndSaveImages() {
         const subscribers = this.state.subscribers; // subscribers 배열 가져오기
