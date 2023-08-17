@@ -34,7 +34,7 @@ const WhiteBox = styled.div`
     border: 2px solid #00ad4b;
     border-radius: 5px;
     position: absolute;
-    z-index: 10000;
+    z-index: 999;
     left: 70%;
     top: 40%;
     text-align: center;
@@ -50,7 +50,7 @@ const ResultCard = styled.div`
     height: 100%;
     background-color: rgba(255, 255, 255, 1);
     color: white;
-    z-index: 999;
+    z-index: 10000;
     text-align: center;
 `;
 
