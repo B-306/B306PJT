@@ -1,26 +1,14 @@
 import React, { useState } from "react";
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-// import Button from '../common/Button';
 import { Button } from 'primereact/button';
 import Input from "../common/Input";
 import palette from "../../lib/styles/palette";
 import axios from "axios";
-import Logout from "./Logout";
 import { useDispatch } from 'react-redux';
 import { setTokens, setUserData } from '../../redux/modules/authSlice';
 import { setPhoto } from '../../redux/modules/photoSlice';
-// import { encodeState } from "../common/CodedState";
-// import AuthMail from "./AuthMail"
-
-// const EmailForm = styled.form`
-//   display: flex;
-
-
-// 
-// import 'primereact/resources/themes/saga-blue/theme.css';
-// import 'primereact/resources/primereact.min.css';
-// import 'primeicons/primeicons.css';
+// import tokenHttp from '../api/tokenHttp';
 
 const AuthFormBlock = styled.div`
     h3 {
@@ -60,11 +48,11 @@ const ButtonWithMarginTop = styled(Button)`
 const textMap = {
   signup: '회원가입',
   login: '로그인',
-  modify: '회원정보 수정',
+  modify: '',
 };
 
 
-const AuthForm = ({ type }) => {
+const AuthForm = ({ type}) => {
 
   const text = textMap[type];
   const [email, setEmail] = useState('');
@@ -133,7 +121,8 @@ const AuthForm = ({ type }) => {
           alert('이미 가입된 이메일입니다.')
           // 회원가입 실패 처리를 원하는 경우 적절한 방법으로 처리
         }
-      } else if (type === 'login') {
+      }
+      else if (type === 'login') {
         try {
           // 로그인 요청 보내기
           const response = await axios.post('https://i9b306.q.ssafy.io/api1/user/login', {
@@ -163,47 +152,9 @@ const AuthForm = ({ type }) => {
           alert('이메일과 비밀번호를 확인해 주세요.')
           // 로그인 실패 처리를 원하는 경우 적절한 방법으로 처리
         }
-      } else if (type === 'modify') {
-        // 비밀번호와 비밀번호 확인이 일치하는지 확인
-        if (password !== passwordConfirm) {
-          console.error('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-          alert('비밀번호 일치 확인해주세요');
-          return; // 일치하지 않으면 함수 종료
-        }
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-        if (!passwordRegex.test(password)) {
-          alert('유효한 비밀번호(영문, 숫자, 특수기호 조합으로 8자리 이상)를 입력해주세요.');
-          return;
-        }
-        // 회원가입 요청 보내기
-        try {
-          // 회원정보 수정 요청 보내기
-
-          const response = await axios.patch('https://i9b306.q.ssafy.io/api1/user/modify', {
-            userName: name,
-            userPassword: password,
-          }, {
-            headers: {
-              'accessToken': `${localStorage.getItem("accessToken")}`, // JWT 토큰을 헤더에 포함하여 보냅니다.
-            },
-          });
-
-          // 회원정보 수정이 성공하면 메인 페이지로 이동하거나 다른 동작 수행
-          // 예시: 페이지 리디렉션
-          console.log(response.data);
-          console.log("회원정보 수정 성공!");
-          Logout();
-          window.location.href = '/login'; // login 페이지로 리디렉션
-          alert('회원정보 수정이 완료되었습니다. 다시 로그인해 주세요.');
-        } catch (error) {
-          console.error('회원정보 수정 실패:', error);
-          // 회원정보 수정 실패 처리를 원하는 경우 적절한 방법으로 처리
-        }
       }
     } catch (error) {
-      console.error('실패:', error);
-      alert('예상치 못한 오류가 발생하였습니다.')
-      // 회원가입 실패 처리를 원하는 경우 적절한 방법으로 처리
+
     }
   };
 
@@ -221,10 +172,10 @@ const AuthForm = ({ type }) => {
     console.log(email)
 
     const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,3}$/;
-          if (!emailRegex.test(email)) {
-            alert('유효한 이메일 주소를 입력해주세요.');
-            return;
-          }
+    if (!emailRegex.test(email)) {
+      alert('유효한 이메일 주소를 입력해주세요.');
+      return;
+    }
 
     try {
       // e메일 인증보내기
@@ -278,9 +229,9 @@ const AuthForm = ({ type }) => {
 
   return (
 
-    <AuthFormBlock style={{display:"flex", flexDirection:"column"}}>
+    <AuthFormBlock style={{ display: "flex", flexDirection: "column" }}>
       <h3>{text}</h3>
-      <form onSubmit={handleSubmit} style={{display: 'flex',alignItems: 'space-between', flexDirection:"column"}}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'space-between', flexDirection: "column" }}>
         {/* <EmailForm> */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {type !== 'modify' && (
@@ -290,30 +241,30 @@ const AuthForm = ({ type }) => {
               placeholder="이메일"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{ marginRight: '10px', marginBottom:'10px', display: 'flex', alignItems: 'center' }} // 이메일 입력(input) 칸 오른쪽 여백
+              style={{ marginRight: '10px', marginBottom: '10px', display: 'flex', alignItems: 'center' }} // 이메일 입력(input) 칸 오른쪽 여백
             />
           )}
           {type !== 'login' && type !== 'modify' && (
-            <ButtonWithMarginTop onClick={(e) => emailButtonClick(e)}             style={{ marginRight: '10px' , marginBottom:'10px', display: 'flex', justifyContent: 'center'}}
+            <ButtonWithMarginTop onClick={(e) => emailButtonClick(e)} style={{ marginRight: '10px', marginBottom: '10px', display: 'flex', justifyContent: 'center' }}
             >
-            인증
+              인증
             </ButtonWithMarginTop>
           )}
         </div>
         {type !== 'login' && type !== 'modify' && view && (
           <div style={{ display: 'flex', alignItems: 'center' }}>
-              <StyledInput
-                name="authCode"
-                placeholder="이메일 인증번호 입력"
-                value={authCode}
-                onChange={(e) => setAuthCode(e.target.value)
-                }
-                style={{ marginRight: '10px' , marginBottom:'10px'}} // 오른쪽 여백
-              />
-              <ButtonWithMarginTop onClick={(e) => emailCheckClick(e)}             style={{ marginRight: '10px' , marginBottom:'10px'}}
-              >
-                인증 확인
-              </ButtonWithMarginTop>
+            <StyledInput
+              name="authCode"
+              placeholder="이메일 인증번호 입력"
+              value={authCode}
+              onChange={(e) => setAuthCode(e.target.value)
+              }
+              style={{ marginRight: '10px', marginBottom: '10px' }} // 오른쪽 여백
+            />
+            <ButtonWithMarginTop onClick={(e) => emailCheckClick(e)} style={{ marginRight: '10px', marginBottom: '10px' }}
+            >
+              인증 확인
+            </ButtonWithMarginTop>
           </div>
         )}
         {/* </EmailForm> */}
@@ -326,7 +277,7 @@ const AuthForm = ({ type }) => {
               type="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={{ marginRight: '10px' , marginBottom:'10px'}}
+              style={{ marginRight: '10px', marginBottom: '10px' }}
             />
           )}
         </div>
@@ -338,7 +289,7 @@ const AuthForm = ({ type }) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ marginRight: '10px' , marginBottom:'10px'}}
+            style={{ marginRight: '10px', marginBottom: '10px' }}
           />
         </div>
         <div style={{ display: 'flex' }}>
@@ -351,7 +302,7 @@ const AuthForm = ({ type }) => {
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)
               }
-              style={{ marginRight: '10px' , marginBottom:'10px'}}
+              style={{ marginRight: '10px', marginBottom: '10px' }}
 
             />
           )}

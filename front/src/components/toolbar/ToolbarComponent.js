@@ -33,7 +33,7 @@ export default class ToolbarComponent extends Component {
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
         // this.switchCamera = this.switchCamera.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
-        // this.toggleChat = this.toggleChat.bind(this);
+        this.toggleChat = this.toggleChat.bind(this);
     }
 
 

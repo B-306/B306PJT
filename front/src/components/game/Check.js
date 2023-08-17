@@ -48,6 +48,7 @@ class Check extends Component {
             checkImageData: null,
             maskImageBitmap: null,
             maskImageData: null,
+            // answer: null,
         };
     }
 
@@ -59,6 +60,7 @@ class Check extends Component {
                 checkImageData: null,
                 maskImageBitmap: null,
                 maskImageData: null,
+                // answer: null,
             });
         }
     }
@@ -156,7 +158,7 @@ class Check extends Component {
 
     render() {
         const { people, checkImageData, maskImageBitmap, maskImageData } = this.state;
-        const { showCounter } = this.props;
+        const { showCounter, answer } = this.props;
 
         // showCounter 값에 따라 렌더링 여부 결정
         if (!showCounter) {
@@ -191,7 +193,8 @@ class Check extends Component {
             height: '540px',
             overflow: 'hidden',
         };
-
+        
+        console.log('Check에서 정답 : ' + answer);
         return (
             <div>
                 <div className="check-container">
@@ -216,7 +219,7 @@ class Check extends Component {
                         />
                     </div>
                 </div>
-                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} onScoreUpdate={this.handleScoreUpdate} />
+                <Scoring maskImageData={maskImageData} checkImageData={checkImageData} answer={answer} onScoreUpdate={this.handleScoreUpdate} />
             </div>
         );
     }
