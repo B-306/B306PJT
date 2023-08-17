@@ -7,14 +7,14 @@ const StyledH1 = styled.h1`
 `;
 
 const Counter = ({ localUser, onImageCaptured, showCounter }) => {
-    const [count, setCount] = useState(3);
+    const [count, setCount] = useState(10);
 
     useEffect(() => {
         const id = setInterval(() => {
             setCount(count => count - 1); 
             console.log('똑딱똑딱')
         }, 1000);
-        if (count === -15) {
+        if (count === -7) {
             // showCounter가 false인 경우에는 null을 전달
             onImageCaptured(null);
             clearInterval(id);

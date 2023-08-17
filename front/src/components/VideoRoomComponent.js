@@ -41,14 +41,17 @@ const WhiteBox = styled.div`
 
 `;
 
+
+
 const ResultCard = styled.div`
+    background-color: rgba(0, 0, 0, 1);
+    // background-image: url(../assets/images/bfo_mx_bg.gif);
     display: ${props => props.show ? 'block' : 'none'};
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255, 255, 255, 1);
     color: white;
     z-index: 1000000;
     text-align: center;
@@ -90,6 +93,7 @@ class VideoRoomComponent extends Component {
             capturedImageArray: {}, // 모든 플레이어들의 직전 문제 캡쳐
             captureRender: false,
             onceStarted: false,
+            quizNumber: 0,
         };
 
         this.joinSession = this.joinSession.bind(this);
@@ -399,7 +403,10 @@ class VideoRoomComponent extends Component {
                     }),
                 };
                 this.state.session.signal(signalOptions);
-            }, index * 23000);
+                this.setState({
+                    quizNumber: this.state.quizNumber+1,
+                })
+            }, index * 20000);
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
@@ -411,7 +418,7 @@ class VideoRoomComponent extends Component {
                     data: JSON.stringify({})
                 };
                 this.state.session.signal(signalOptions2);
-            }, index * 23000 + 20000);
+            }, index * 20000 + 18000);
         }
     }    
 
@@ -623,12 +630,24 @@ class VideoRoomComponent extends Component {
         });
     }
 
+    copyRoomCodeToClipboard = () => {
+        const roomCode = localStorage.getItem('roomCode');
+        if (roomCode) {
+            navigator.clipboard.writeText(roomCode).then(() => {
+                alert('초대 코드가 클립보드에 복사되었습니다.')
+            }).catch((error) => {
+                console.error('Failed to copy to clipboard:', error);
+            });
+        }
+    }
+
     render() {
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore, scores, captureRender, capturedImageArray, oneScore } = this.state;
+        const { showCounter, capturedImage, gameText, mySessionId, localUser, scores, captureRender, capturedImageArray, oneScore, quizNumber, gameAnswer } = this.state;
         const templateURL = localStorage.getItem('templateURL')
         const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
         const sortedUsers = Object.keys(capturedImageArray).sort((a, b) => oneScore[b] - oneScore[a]);
+        const answerArray = ['빨강', '초록', '파랑']
         console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
         console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
         console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
@@ -639,13 +658,14 @@ class VideoRoomComponent extends Component {
         return (
             <div className="container" id="container">
                 <ResultCard show={captureRender}>
+                    <h1 style = {{zIndex: 1000003, color: 'white' }}>{quizNumber}번 문제 정답 : {answerArray[gameAnswer]}</h1>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: '10px', padding: '20px' }}>
                         {sortedUsers.map((userName, index) => (
                             <div key={userName} style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                <h2 style={{ zIndex: 1000003, color: 'yellow' }}>{index + 1}등 : {userName} {oneScore[userName] !== undefined ? oneScore[userName].toFixed(2) + '점' : '점수 없음'}</h2>
+                                <h2 style={{ zIndex: 1000003, color: 'white' }}>{index + 1}등 : {userName}, 점수 : {oneScore[userName] !== undefined ? oneScore[userName].toFixed(2) + '점' : '점수 없음'}</h2>
                                 <div style={{ position: 'relative', width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
-                                        <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
+                                        <img src={templateURL} alt="Template" style={{ width: '100%', opacity: 0.5 }} />
                                     </div>
                                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
                                         <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
@@ -723,7 +743,10 @@ class VideoRoomComponent extends Component {
                             ))}
                         </ul>
                         {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                            <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'36%', top:'85%' }}> 게임 시작 </Button>
+                            <div>
+                                <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'36%', top:'85%', color: 'black' }}> 게임 시작 </Button>
+                                <Button onClick={this.copyRoomCodeToClipboard} style={{ position: 'absolute', zIndex: '999999999999', left:'31%', top:'92%', color: 'black' }}> 초대 코드 복사 </Button>
+                            </div>
                         )}
                     </WhiteBox>
                         {showCounter && (
@@ -743,8 +766,6 @@ class VideoRoomComponent extends Component {
                                 >
                                 <p className="m-0">
                                     {gameText}
-                                    <br />
-                                    유사도 점수: {myScore.toFixed(2)}%
                                 </p>
                             </Card>
                         )}
