@@ -130,7 +130,7 @@ class Check extends Component {
                         // or 'base/node_modules/@mediapipe/selfie_segmentation' in npm.
         };
         const segmenter = await bodySegmentation.createSegmenter(model, segmenterConfig);
-        const segmentationConfig = { flipHorizontal: true };
+        const segmentationConfig = { flipHorizontal: false };
     
         // props로 전달받은 이미지 블롭을 이미지 데이터로 변환하여 사용
         const imageElement = await convertBlobToImageData(this.props.image);

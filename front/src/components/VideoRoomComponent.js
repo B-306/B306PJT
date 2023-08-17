@@ -637,16 +637,17 @@ class VideoRoomComponent extends Component {
                         <div key={userName}>
                             <h2>{userName}'s Capture</h2>
                             <div style={{ position: 'relative' }}>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-                                    <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%', zIndex: 2 }} />
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1002 }}>
+                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
                                 </div>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.5 }}>
-                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', zIndex: 1 }} />
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1001 }}>
+                                    <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
                                 </div>
                             </div>
                         </div>
                     ))}
                 </ResultCard>
+
                 <div className='bgimg'/>
                 <ToolbarComponent
                     sessionId={mySessionId}
