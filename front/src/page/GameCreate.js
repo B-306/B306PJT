@@ -7,12 +7,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 const QuizbookH1 = styled.h1`
   text-align: center;
-  color: white;
+  color: #5ec9f2;
 `;
 
 const QuizbookH2 = styled.h2`
   text-align: center;
-  color: white;
+  color: #5ec9f2;
 `;
 
 const StyledButtonLink = styled(Link)`
@@ -35,37 +35,39 @@ const GetQuiz = () => {
   const [quizBooks, setQuizBooks] = React.useState([]);
 
   React.useEffect(() => {
-      tokenHttp.get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
-      headers: {
-        'accessToken': localStorage.getItem('accessToken')
-      }
-    })
-      .then(response => {
+    tokenHttp
+      .get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
+        headers: {
+          accessToken: localStorage.getItem('accessToken'),
+        },
+      })
+      .then((response) => {
         setQuizBooks(response.data);
         console.log(response);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('서버 요청 실패:', error);
       });
   }, []);
 
   const handleMoveToVideoRoom = (quizBookId) => {
-      tokenHttp.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
-      headers: {
-        accessToken: localStorage.getItem('accessToken') // 여기에 액세스 토큰 값을 넣어주세요
-      }
-    })
-    .then(response => {
-      const quizIds = response.data.quizList.map(quiz => quiz.quizId);
-      localStorage.setItem('selectedQuizes', quizIds);
-      const roomCode = uuidv4();
-      localStorage.setItem('roomCode',roomCode);
-      localStorage.setItem('hostOf', roomCode);
-      window.location.href = `/game/${roomCode}`;
-    })
-    .catch(error => {
-      console.error('서버 요청 실패:', error);
-    });
+    tokenHttp
+      .get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
+        headers: {
+          accessToken: localStorage.getItem('accessToken'), // 여기에 액세스 토큰 값을 넣어주세요
+        },
+      })
+      .then((response) => {
+        const quizIds = response.data.quizList.map((quiz) => quiz.quizId);
+        localStorage.setItem('selectedQuizes', quizIds);
+        const roomCode = uuidv4();
+        localStorage.setItem('roomCode', roomCode);
+        localStorage.setItem('hostOf', roomCode);
+        window.location.href = `/game/${roomCode}`;
+      })
+      .catch((error) => {
+        console.error('서버 요청 실패:', error);
+      });
   };
 
   return (
@@ -73,12 +75,14 @@ const GetQuiz = () => {
       <QuizbookH2>문제집 목록</QuizbookH2>
       <div className={styles.quizListContainer}>
         <ul className={styles.quizList}>
-          {quizBooks.map(quizBook => (
+          {quizBooks.map((quizBook) => (
             <li key={quizBook.quizBookId}>
               <div className={styles.card}>
                 <h3>{quizBook.quizBookTitle}</h3>
                 <p>제작자: {quizBook.quizBookUserName}</p>
-                <button onClick={() => handleMoveToVideoRoom(quizBook.quizBookId)}>
+                <button
+                  onClick={() => handleMoveToVideoRoom(quizBook.quizBookId)}
+                >
                   이동하기
                 </button>
               </div>
@@ -92,8 +96,22 @@ const GetQuiz = () => {
 
 const GameCreatePage = () => {
   return (
-    <div>
-      <StyledButtonLink to="/">두뇌 풀 가동</StyledButtonLink>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '800px',
+        width: '650px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '3% auto',
+        border: '2px solid #5ec9f2',
+        borderRadius: '15px',
+      }}
+    >
+      <div>
+        <StyledButtonLink to="/">두뇌 풀 가동</StyledButtonLink>
+      </div>
       <QuizbookH1> Game 생성 </QuizbookH1>
       <GetQuiz />
     </div>
