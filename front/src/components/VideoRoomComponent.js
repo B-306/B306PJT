@@ -569,7 +569,8 @@ class VideoRoomComponent extends Component {
                     },
                     capturedImage: capturedImageBlob,
                 }), () => {            
-                    this.captureAndSaveImages();
+                    const num = Number(this.state.quizNumber)
+                    this.captureAndSaveImages(num);
                 }
             );
         };
@@ -581,15 +582,23 @@ class VideoRoomComponent extends Component {
     
     
     
-    captureAndSaveImages = async () => {
+    captureAndSaveImages = async (num) => {
         const subscribers = this.state.subscribers;
         console.log('captureAndSaveImages 실행~~~~~', subscribers);
     
         try {
             for (const subscriber of subscribers) {
-                const videoElement = subscriber.streamManager.videos[0].video;
+                console.log(num + '번째 비디오')
+                const videoElement = subscriber.streamManager.videos[num-1].video;
+                console.log('---------------------------------------')
+                console.log(videoElement)
+                console.log('---------------------------------------')
+                console.log(subscriber.streamManager.videos)
+                console.log('---------------------------------------')
+                
+
     
-                const capturedImageBlob = await this.captureVideoFrame(videoElement);
+                const capturedImageBlob = await this.captureLastFrame(videoElement);
     
                 if (capturedImageBlob) {
                     const capturedImageDataURL = URL.createObjectURL(capturedImageBlob);
@@ -606,6 +615,23 @@ class VideoRoomComponent extends Component {
         }
     };
     
+    captureLastFrame = async (videoElement) => {
+        return new Promise((resolve) => {
+            console.log('videoElement 길이 : ' + videoElement.duration)
+            console.log('videoElement 현재 시간 : ' + videoElement.currentTime)
+        //   videoElement.currentTime = videoElement.duration - 0.1; // 비디오의 마지막으로 이동
+            videoElement.currentTime = videoElement.currentTime + 32;
+          const canvas = document.createElement('canvas');
+          canvas.width = videoElement.videoWidth;
+          canvas.height = videoElement.videoHeight;
+          
+          // 캔버스에 비디오의 현재 프레임을 그림
+          canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      
+          canvas.toBlob(resolve, 'image/png');
+        });
+      }
+
     captureVideoFrame = async (videoElement) => {
         const canvas = document.createElement('canvas');
         canvas.width = videoElement.videoWidth;
@@ -665,7 +691,7 @@ class VideoRoomComponent extends Component {
                                     <div key={`template-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
                                         <img src={templateURL} alt="Template" style={{ width: '100%', opacity: 0.5 }} />
                                     </div>
-                                    <div key={`template-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
+                                    <div key={`captured-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
                                         <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
                                     </div>
                                 </div>
