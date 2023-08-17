@@ -28,12 +28,13 @@ const WhiteBox = styled.div`
     padding: 2rem;
     width: 310px;
     height: 400px;
-    background-color: 'rgba(255, 255, 255, 0.4)';
+    background-color: 'rgba(255, 255, 255, 0.55)';
     // backdrop-filter: blur(10px);
     // background : transparent;
+    border: 2px solid #00ad4b;
     border-radius: 5px;
     position: absolute;
-    z-index: 999;
+    z-index: 10000;
     left: 70%;
     top: 40%;
     text-align: center;
@@ -646,10 +647,10 @@ class VideoRoomComponent extends Component {
                         <div key={userName}>
                             <h2>{userName}'s Capture</h2>
                             <div style={{ position: 'relative' }}>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1002 }}>
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10002 }}>
                                     <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
                                 </div>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1001 }}>
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10001 }}>
                                     <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
                                 </div>
                             </div>
@@ -688,7 +689,7 @@ class VideoRoomComponent extends Component {
                     </div>
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}
-                {showCounter && capturedImage && (
+                {showCounter && capturedImage && !captureRender && (
                     <div style={{ position: 'absolute', zIndex: 9999, overflow: 'visible', top:'60%', transform: 'translate(-50%, -50%)', left:'35%'}}>
                         <Check image={this.state.capturedImage} answer={this.state.gameAnswer} showCounter={showCounter} onScoreUpdate={this.handleScoreUpdate} />
                     </div>
