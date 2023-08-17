@@ -629,7 +629,12 @@ class VideoRoomComponent extends Component {
         const templateURL = localStorage.getItem('templateURL')
         const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
         const sortedUsers = Object.keys(capturedImageArray).sort((a, b) => oneScore[b] - oneScore[a]);
-
+        console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
+        console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
+        console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
+        console.log('sortedScores : ' + sortedScores);
+        console.log('capturedImageArray : ' + capturedImageArray);
+        console.log('sortedUsers : ' + sortedUsers);
         return (
             <div className="container" id="container">
                 <ResultCard show={captureRender}>
@@ -691,7 +696,7 @@ class VideoRoomComponent extends Component {
                     {/* 시그널 보내는 버튼 */}
                     <WhiteBox>
                         <h1>스코어보드</h1>
-                        <ul>
+                        <ul style={{ listStyleType: 'none', padding: 0 }}>
                             {sortedScores.map(([nickName, totalScore], index) => (
                                 <li key={nickName} style={{ fontSize: '25px'}}>
                                 {index + 1}. {nickName}: {totalScore.toFixed(0)}점
