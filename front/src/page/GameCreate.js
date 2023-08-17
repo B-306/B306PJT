@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
 import tokenHttp from '../components/api/tokenHttp';
 import styles from './GameCreate.module.css';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-// import VideoRoomComponent from './VideoRoomComponent'; // VideoRoomComponent의 경로에 맞게 수정해주세요
 
 const QuizbookH1 = styled.h1`
   text-align: center;
@@ -37,7 +35,6 @@ const GetQuiz = () => {
   const [quizBooks, setQuizBooks] = React.useState([]);
 
   React.useEffect(() => {
-    // axios.get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
       tokenHttp.get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
       headers: {
         'accessToken': localStorage.getItem('accessToken')
@@ -53,16 +50,13 @@ const GetQuiz = () => {
   }, []);
 
   const handleMoveToVideoRoom = (quizBookId) => {
-    // axios.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
       tokenHttp.get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
       headers: {
         accessToken: localStorage.getItem('accessToken') // 여기에 액세스 토큰 값을 넣어주세요
       }
     })
     .then(response => {
-      // console.log(response);
       const quizIds = response.data.quizList.map(quiz => quiz.quizId);
-      // console.log(quizIds)
       localStorage.setItem('selectedQuizes', quizIds);
       const roomCode = uuidv4();
       localStorage.setItem('roomCode',roomCode);
@@ -72,10 +66,6 @@ const GetQuiz = () => {
     .catch(error => {
       console.error('서버 요청 실패:', error);
     });
-    // VideoroomComponent로 이동
-    // window.location.href = '/video-room'; // 이동 시 새로고침 발생
-    // 또는 React Router의 history 객체를 이용하여 이동
-    // history.push('/video-room');
   };
 
   return (

@@ -72,7 +72,6 @@ class VideoRoomComponent extends Component {
         this.hasBeenUpdated = false;
         let sessionName = this.props.sessionName ? this.props.sessionName : localStorage.getItem('roomCode'); // 'sessionA' 대신 방 코드 
         let userName = this.props.userName;
-        console.log('-------------------------userName : ' + userName);
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
@@ -144,18 +143,15 @@ class VideoRoomComponent extends Component {
                 
             },
         );
-        console.log(this.state)
     }
 
     async connectToSession() {
-        console.log(this.props)
         if (this.props.token !== undefined) {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
         } else {
             try {
                 var token = await this.getToken();
-                console.log(token);
                 this.connect(token);
             } catch (error) {
                 console.error('There was an error getting the token:', error.code, error.message);
@@ -367,11 +363,7 @@ class VideoRoomComponent extends Component {
 // Start Game
 
     async fnc (num) {
-        console.log('num, response.data, response.data.quizTemplateId')
-        console.log(num)
         const response = await tokenHttp.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
-        console.log(response.data)
-        console.log(response.data.quizTemplateId)
         return response.data;
     }
 
@@ -398,14 +390,12 @@ class VideoRoomComponent extends Component {
                         templateImage: quizData.quizTemplateId.templateImage,
                         quizText: quizData.quizText,
                         quizAnswer: quizData.quizAnswer,
+                        quizNumberAdd: 1,
                         otherInfo: 'some other data',
                         // ... 다른 정보들
                     }),
                 };
                 this.state.session.signal(signalOptions);
-                this.setState({
-                    quizNumber: this.state.quizNumber+1,
-                })
             }, index * 22000);
             setTimeout(() => {
                 const signalOptions = {
@@ -424,7 +414,6 @@ class VideoRoomComponent extends Component {
 
     receiveGameSignal() {
         this.state.session.on('signal:gameStart', (event) => {
-            console.log('변경 전 showCounter : ' + this.state.showCounter)
             const data = JSON.parse(event.data);
             // ... 다른 정보 처리
             this.setState(
@@ -432,6 +421,7 @@ class VideoRoomComponent extends Component {
                     showCounter: !this.state.showCounter,
                     gameText: data.quizText,
                     gameAnswer: data.quizAnswer,
+                    quizNumber: this.state.quizNumber + Number(data.quizNumberAdd),
                 }
             )
             localStorage.setItem('templateURL', data.templateImage)
@@ -489,9 +479,7 @@ class VideoRoomComponent extends Component {
         this.state.session.on('signal:captureRender', (event) => {
             this.setState(prevState => ({
                 captureRender: !prevState.captureRender
-            }), () => {
-                console.log('----------변경 captureRender : ' + this.state.captureRender);
-            });
+            }))
         });
     }
 
@@ -541,7 +529,6 @@ class VideoRoomComponent extends Component {
         if (display === 'block') {
             this.setState({ chatDisplay: display, messageReceived: false });
         } else {
-            console.log('chat', display);
             this.setState({ chatDisplay: display });
         }
     }
@@ -555,14 +542,13 @@ class VideoRoomComponent extends Component {
     handleImageCaptured = (capturedImageBlob) => {
         if (capturedImageBlob === null) {
             this.setState({ capturedImage: null }); // capturedImage를 null로 업데이트
-            console.log('capturedImage null로 변경~~~!@~!@~!@$!@$!@$!@#!@#')
             return;
         }
     
         const reader = new FileReader();
         reader.onload = () => {
             const capturedImageDataURL = reader.result;
-    
+            this.captureAndSaveImages();
             this.setState(
                 prevState => ({
                     capturedImageArray: {
@@ -570,11 +556,7 @@ class VideoRoomComponent extends Component {
                         [this.state.myUserName]: capturedImageDataURL
                     },
                     capturedImage: capturedImageBlob,
-                }),
-                () => {
-                    console.log('캡처된이미지 변경 : ' + this.state.capturedImage);
-                    this.captureAndSaveImages();
-                }
+                })
             );
         };
     
@@ -610,9 +592,7 @@ class VideoRoomComponent extends Component {
                     ...prevState.capturedImageArray,
                     [subscriber.getNickname()]: imageDataURL
                 }
-            }), () => {
-                console.log(subscriber.getNickname() + ' 캡처 저장됨~~~~~~~~~~~~~~~')
-            });
+            }));
         });;
     }
 
@@ -647,14 +627,7 @@ class VideoRoomComponent extends Component {
         const templateURL = localStorage.getItem('templateURL')
         const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
         const sortedUsers = Object.keys(capturedImageArray).sort((a, b) => oneScore[b] - oneScore[a]);
-        const answerArray = ['빨강', '초록', '파랑']
-        console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
-        console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
-        console.log('렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다렌더합니다');
-        console.log('sortedScores : ' + sortedScores);
-        console.log('capturedImageArray : ' + capturedImageArray);
-        console.log('sortedUsers : ' + sortedUsers);
-        console.log('Template URL:', templateURL);
+        const answerArray = ['빨강', '초록', '파랑'];
         return (
             <div className="container" id="container">
                 <ResultCard show={captureRender}>
@@ -675,22 +648,6 @@ class VideoRoomComponent extends Component {
                         ))}
                     </div>
                 </ResultCard>
-
-                {/* <ResultCard show={captureRender}>
-                    {sortedUsers.map((userName, index) => (
-                        <div key={userName} style={{ position: 'relative', minHeight: '100vh' }}>
-                            <h2 style={{ position: 'relative', zIndex: 1000003, color: 'yellow' }}>{index+1}등 : {userName} {oneScore[userName].toFixed(2)}점</h2>
-                            <div>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
-                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5, position: 'relative', zIndex: 1000002 }} />
-                                </div>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
-                                    <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" style = {{ position: 'relative', zIndex: 1000001 }} />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </ResultCard> */}
 
                 <div className='bgimg'/>
                 <ToolbarComponent
@@ -774,7 +731,6 @@ class VideoRoomComponent extends Component {
                                 width:'200px',
                                 height:'120px',
                                 position: 'relative',
-                                // position:'absolute',
                                 margin: '0px 1px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
                                 top: '75px',
@@ -830,14 +786,9 @@ class VideoRoomComponent extends Component {
 
     async getToken() {
         try {
-            console.log('1번 후보 : ')
-            console.log(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`);
-            console.log('2번 후보 : ' + APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + this.state.mySessionId);
             const sessionData = await axios.get(`${APPLICATION_SERVER_URL}/openvidu/api/sessions/${this.state.mySessionId}`, {
                 headers: { "Authorization": openvidu_key, 'Content-Type': 'application/json' },});
-            console.log(sessionData.data);    
             const sessionId = sessionData.data.sessionId;
-            console.log(sessionId)
             console.log('이미 있는 방' + sessionId);
             return await this.createToken(sessionId);
         }
@@ -853,12 +804,9 @@ class VideoRoomComponent extends Component {
 
     async createSession(sessionId) {
         console.log('세션 생성')
-        console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions')
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions', { customSessionId: sessionId }, {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
-        console.log('createSession 리턴값------------')
-        console.log(response.data)
         return response.data; // The sessionId
     }
 
@@ -867,12 +815,9 @@ class VideoRoomComponent extends Component {
 
     async createToken(sessionId) {
         
-        console.log(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection')
         const response = await axios.post(APPLICATION_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection', {}, {
             headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin" : "*", "Authorization": openvidu_key,},
         });
-        console.log('토큰 생성 확인')
-        console.log(response.data.token)
         return response.data.token; // The token
     }
 }

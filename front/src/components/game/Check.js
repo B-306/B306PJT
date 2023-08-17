@@ -102,27 +102,6 @@ class Check extends Component {
             console.error('Error:', error);
         }
 
-        // const img = new Image();
-        // img.onload = function () {
-        //     canvas.width = img.width;
-        //     canvas.height = img.height;
-        //     ctx.drawImage(img, 0, 0);
-        // };
-        // img.src = 'data:image/png;base64,' + imageData;
-        // if (checkImageData) {
-            
-        // }
-        // await checkImage.decode();
-        // Canvas를 생성하여 이미지를 그립니다
-        // const canvas = document.createElement('canvas');
-        // canvas.width = checkImage.width;
-        // canvas.height = checkImage.height;
-        // const ctx = canvas.getContext('2d');
-        // ctx.drawImage(checkImage, 0, 0);
-        
-        // Canvas에서 ImageData를 추출합니다
-        // const checkImageData = ctx.getImageData(0, 0, checkImage.width, checkImage.height);
-
         const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation;
         const segmenterConfig = {
           runtime: 'mediapipe',
