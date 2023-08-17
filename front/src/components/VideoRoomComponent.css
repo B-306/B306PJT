@@ -9,6 +9,14 @@
   min-width: 400px !important;
 } */
 
+.scrollable-container::-webkit-scrollbar {
+  height: 5px; /* 수평 스크롤바의 높이 */
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: #00ad4b; /* 스크롤바의 색상 */
+}
+
 .container {
   background-image: url(../assets/images/bfo_mx_bg.gif);
   /* height: 100%; */

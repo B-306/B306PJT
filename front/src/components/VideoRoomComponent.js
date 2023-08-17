@@ -31,11 +31,12 @@ const WhiteBox = styled.div`
     background-color: white;
     // backdrop-filter: blur(10px);
     // background : transparent;
-    border-radius: 2px;
+    border-radius: 5px;
     position: absolute;
     z-index: 999;
     left: 70%;
     top: 40%;
+    text-align: center;
 
 `;
 
@@ -101,7 +102,7 @@ class VideoRoomComponent extends Component {
         this.checkNotification = this.checkNotification.bind(this);
         this.sendGameSignal = this.sendGameSignal.bind(this);
         this.sendScoreSignal = this.sendScoreSignal.bind(this);
-        this.blobToBase64 = this.blobToBase64.bind(this);
+        this.captureAndSaveImages = this.captureAndSaveImages.bind(this)
     }
 
     
@@ -430,26 +431,14 @@ class VideoRoomComponent extends Component {
         })
     }
 
-    blobToBase64(blob) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-    }
-
     async sendScoreSignal() {
-        const { myUserName, myScore, capturedImage } = this.state;
-        console.log('시그널 보낼 이미지 : ' + capturedImage)
+        const { myUserName, myScore } = this.state;
         try {
-            const capturedImageBase64 = this.blobToBase64(capturedImage);
             const signalOptions = {
                 type: 'scoreUpdate',
                 data: JSON.stringify({
                     userName: myUserName,
                     userScore: myScore,
-                    capturedImage: capturedImageBase64,
                     otherInfo: 'some other data',
                     // ... 다른 정보들
                 }),
@@ -468,7 +457,7 @@ class VideoRoomComponent extends Component {
     receiveScoreSignal() {
         this.state.session.on('signal:scoreUpdate', (event) => {
             const data = JSON.parse(event.data);
-            const { userName, userScore, capturedImage } = data;
+            const { userName, userScore } = data;
             let score;
             if (userScore < 0) {
                 score = 0;
@@ -478,16 +467,14 @@ class VideoRoomComponent extends Component {
             // ... 다른 정보 처리
             this.setState((prevState) => {
                 const updatedScores = { ...prevState.scores };
-                const updatedImageArray = {...prevState.capturedImageArray}
                 const updatedOneScore = {...prevState.oneScore};
                 updatedOneScore[userName] = userScore;
-                updatedImageArray[userName] = capturedImage;
                 if (updatedScores[userName] === undefined) {
                   updatedScores[userName] = score;
                 } else {
                   updatedScores[userName] += score;
                 }
-                return { scores: updatedScores, capturedImageArray: updatedImageArray, oneScore: updatedOneScore };
+                return { scores: updatedScores, oneScore: updatedOneScore };
             });
 
         });
@@ -561,14 +548,49 @@ class VideoRoomComponent extends Component {
 
     handleImageCaptured = (capturedImageBlob) => {
         this.setState(
+            prevState => (
             {
+                capturedImageArray: {
+                    ...prevState.capturedImageArray,
+                    [this.state.myUserName]: capturedImageBlob
+                },
                 capturedImage: capturedImageBlob,
-            },
+            }),
             () => {
                 console.log('캡처된이미지 변경 : ' + this.state.capturedImage);
+                
             }
         );
+    };
+
+    // 이미지 캡처 버튼 클릭 시 호출되는 함수
+    captureAndSaveImages() {
+        const subscribers = this.state.subscribers; // subscribers 배열 가져오기
+
+        subscribers.forEach((subscriber, index) => {
+            const videoElement = subscriber.streamManager.videos[0].video; // 구독 중인 비디오 엘리먼트 가져오기
+
+            // 비디오 엘리먼트의 현재 화면 캡처하여 이미지로 변환
+            const canvas = document.createElement('canvas');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            // 이미지를 데이터 URL로 변환하여 저장
+            const imageDataURL = canvas.toDataURL('image/png');
+
+            // 이미지 데이터를 capturedImageArray에 저장
+            this.setState(prevState => ({
+                capturedImageArray: {
+                    ...prevState.capturedImageArray,
+                    [subscriber.getNickname()]: imageDataURL
+                }
+            }));
+        });;
     }
+
+
     
     handleScoreUpdate = (similarityScore) => {
         // Check 컴포넌트나 Scoring 컴포넌트로부터 받은 유사도 점수를 상태에 저장
@@ -673,17 +695,17 @@ class VideoRoomComponent extends Component {
                                 </p>
                             </Card>
                         )}
-                    <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '200px' }}>
+                    <div className="scrollable-container" style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '200px' }}>
                         {!showCounter && this.state.subscribers.map((sub, i) => (
                             <div key={i} id="remoteUsers" style={{ 
                                 display:'inline-block',
                                 width:'200px',
-                                height:'125px',
-                                // position: 'relative',
-                                position:'absolute',
+                                height:'120px',
+                                position: 'relative',
+                                // position:'absolute',
                                 margin: '0px 1px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
-                                top: '15%',
+                                top: '75px',
                                 left: '135px',
                                 }}>
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
