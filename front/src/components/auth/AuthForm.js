@@ -132,7 +132,7 @@ const AuthForm = ({ type}) => {
           console.dir(response.data);
           // 로그인 성공 시 accessToken을 localStorage에 저장
           localStorage.setItem("accessToken", response.data.accessToken);
-          // localStorage.setItem("refreshToken", response.data.refreshToken);
+          localStorage.setItem("refreshToken", response.data.refreshToken);
           // localStorage.setItem("userName", response.data.userName);
           // localStorage.setItem("userEmail", email);
           dispatch(setTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken }));
