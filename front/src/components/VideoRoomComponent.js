@@ -615,24 +615,25 @@ class VideoRoomComponent extends Component {
         }
     };
     
-    captureLastFrameWithDelay = async (videoElement) => {
-        setTimeout(async () => {
+    captureLastFrame = async (videoElement) => {
+        return new Promise((resolve) => {
+            console.log('videoElement 길이 : ' + videoElement.duration)
+            console.log('videoElement 현재 시간 : ' + videoElement.currentTime)
+        //   videoElement.currentTime = videoElement.duration - 0.1; // 비디오의 마지막으로 이동
+            // videoElement.currentTime = videoElement.currentTime + 32;
+        setTimeout(() => {
           const canvas = document.createElement('canvas');
           canvas.width = videoElement.videoWidth;
           canvas.height = videoElement.videoHeight;
-      
+          
           // 캔버스에 비디오의 현재 프레임을 그림
           canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
       
-          await new Promise((resolve) => {
-            canvas.toBlob(resolve, 'image/png');
-          });
-      
-          // 여기서 blob을 사용하거나 처리할 수 있음
-      
-        }, 10000); // 10초 지연
-      };
-      
+          canvas.toBlob(resolve, 'image/png');
+        });  
+        }, 10000);
+
+      }
 
     captureVideoFrame = async (videoElement) => {
         const canvas = document.createElement('canvas');
