@@ -39,7 +39,7 @@ const CenteredContainer = styled.div`
 const GameCreateButton = styled(Button)`
   font-family: Ftstardust;
   margin-top: 1rem;
-  margin-right: 1rem; 
+  // margin-right: 1rem; 
 `;
 
 const StyledInput = styled(Input)``;

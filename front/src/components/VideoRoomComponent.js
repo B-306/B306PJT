@@ -400,7 +400,9 @@ class VideoRoomComponent extends Component {
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
-                    data: JSON.stringify({})
+                    data: JSON.stringify({
+                        quizNumberAdd: 0,
+                    })
                 };
                 this.state.session.signal(signalOptions);
                 const signalOptions2 = {
@@ -421,7 +423,7 @@ class VideoRoomComponent extends Component {
                     showCounter: !this.state.showCounter,
                     gameText: data.quizText,
                     gameAnswer: data.quizAnswer,
-                    quizNumber: this.state.quizNumber + Number(data.quizNumberAdd),
+                    quizNumber: Number(this.state.quizNumber) + Number(data.quizNumberAdd),
                 }
             )
             localStorage.setItem('templateURL', data.templateImage)
