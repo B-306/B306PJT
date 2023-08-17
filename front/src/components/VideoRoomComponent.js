@@ -101,6 +101,7 @@ class VideoRoomComponent extends Component {
         this.checkNotification = this.checkNotification.bind(this);
         this.sendGameSignal = this.sendGameSignal.bind(this);
         this.sendScoreSignal = this.sendScoreSignal.bind(this);
+        this.blobToBase64 = this.blobToBase64.bind(this);
     }
 
     
@@ -441,23 +442,27 @@ class VideoRoomComponent extends Component {
     async sendScoreSignal() {
         const { myUserName, myScore, capturedImage } = this.state;
         console.log('시그널 보낼 이미지 : ' + capturedImage)
-        const capturedImageBase64 = await this.blobToBase64(capturedImage);
-        const signalOptions = {
-            type: 'scoreUpdate',
-            data: JSON.stringify({
-                userName: myUserName,
-                userScore: myScore,
-                capturedImage: capturedImageBase64,
-                otherInfo: 'some other data',
-                // ... 다른 정보들
-            }),
-        };
-        this.state.session.signal(signalOptions);
-        const signalOptions2 = {
-            type: 'captureRender',
-            data: JSON.stringify({})
-        };
-        this.state.session.signal(signalOptions2);
+        try {
+            const capturedImageBase64 = await this.blobToBase64(capturedImage);
+            const signalOptions = {
+                type: 'scoreUpdate',
+                data: JSON.stringify({
+                    userName: myUserName,
+                    userScore: myScore,
+                    capturedImage: capturedImageBase64,
+                    otherInfo: 'some other data',
+                    // ... 다른 정보들
+                }),
+            };
+            this.state.session.signal(signalOptions);
+            const signalOptions2 = {
+                type: 'captureRender',
+                data: JSON.stringify({})
+            };
+            this.state.session.signal(signalOptions2);
+        } catch (error) {
+            console.error("Error sending signal:", error);
+        }
     }
 
     receiveScoreSignal() {
@@ -668,17 +673,17 @@ class VideoRoomComponent extends Component {
                                 </p>
                             </Card>
                         )}
-                    <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '150px' }}>
+                    <div style={{ display: 'flex', overflowX: 'auto', whiteSpace: 'nowrap', minHeight: '200px' }}>
                         {!showCounter && this.state.subscribers.map((sub, i) => (
                             <div key={i} id="remoteUsers" style={{ 
                                 display:'inline-block',
                                 width:'200px',
-                                height:'115px',
+                                height:'125px',
                                 // position: 'relative',
                                 position:'absolute',
                                 margin: '0px 1px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
-                                top: '75px',
+                                top: '15%',
                                 left: '135px',
                                 }}>
                                     <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
