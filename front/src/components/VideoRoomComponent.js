@@ -406,7 +406,7 @@ class VideoRoomComponent extends Component {
                 this.setState({
                     quizNumber: this.state.quizNumber+1,
                 })
-            }, index * 20000);
+            }, index * 22000);
             setTimeout(() => {
                 const signalOptions = {
                     type: 'gameStart',
@@ -418,7 +418,7 @@ class VideoRoomComponent extends Component {
                     data: JSON.stringify({})
                 };
                 this.state.session.signal(signalOptions2);
-            }, index * 20000 + 18000);
+            }, index * 22000 + 19000);
         }
     }    
 
@@ -728,6 +728,7 @@ class VideoRoomComponent extends Component {
                         <Check image={this.state.capturedImage} answer={this.state.gameAnswer} showCounter={showCounter} onScoreUpdate={this.handleScoreUpdate} />
                     </div>
                 )}
+                <Button onClick={this.copyRoomCodeToClipboard} style={{ position: 'absolute', zIndex: '999999999999', left:'31%', top:'92%', color: 'black' }}> 초대 코드 복사 </Button>
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
                 
@@ -743,10 +744,7 @@ class VideoRoomComponent extends Component {
                             ))}
                         </ul>
                         {localStorage.getItem('hostOf') === localStorage.getItem('roomCode') && (
-                            <div>
                                 <Button onClick={this.sendGameSignal} style={{ position: 'absolute', zIndex: '999999999999', left:'36%', top:'85%', color: 'black' }}> 게임 시작 </Button>
-                                <Button onClick={this.copyRoomCodeToClipboard} style={{ position: 'absolute', zIndex: '999999999999', left:'31%', top:'92%', color: 'black' }}> 초대 코드 복사 </Button>
-                            </div>
                         )}
                     </WhiteBox>
                         {showCounter && (
