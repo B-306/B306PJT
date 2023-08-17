@@ -569,14 +569,14 @@ class VideoRoomComponent extends Component {
 
     render() {
         var chatDisplay = { display: this.state.chatDisplay };
-        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore, scores, resultRender, capturedImageArray, oneScore } = this.state;
+        const { showCounter, capturedImage, gameText, mySessionId, localUser, myScore, scores, captureRender, capturedImageArray, oneScore } = this.state;
         const templateURL = localStorage.getItem('templateURL')
         const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
         const sortedUsers = Object.keys(capturedImageArray).sort((a, b) => oneScore[b] - oneScore[a]);
 
         return (
             <div className="container" id="container">
-                <ResultCard show={resultRender}>
+                <ResultCard show={captureRender}>
                     {sortedUsers.map(userName => (
                         <div key={userName}>
                             <h2>{userName}'s Capture</h2>
