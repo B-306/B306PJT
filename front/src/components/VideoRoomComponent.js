@@ -590,6 +590,8 @@ class VideoRoomComponent extends Component {
             canvas.width = videoElement.videoWidth;
             canvas.height = videoElement.videoHeight;
             const ctx = canvas.getContext('2d');
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
             ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
             // 이미지를 데이터 URL로 변환하여 저장
@@ -601,7 +603,9 @@ class VideoRoomComponent extends Component {
                     ...prevState.capturedImageArray,
                     [subscriber.getNickname()]: imageDataURL
                 }
-            }));
+            }), () => {
+                console.log(subscriber.getNickname() + ' 캡처 저장됨~~~~~~~~~~~~~~~')
+            });
         });;
     }
 
@@ -632,9 +636,13 @@ class VideoRoomComponent extends Component {
                     {sortedUsers.map(userName => (
                         <div key={userName}>
                             <h2>{userName}'s Capture</h2>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
-                                <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
+                            <div style={{ position: 'relative' }}>
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                                    <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%', zIndex: 2 }} />
+                                </div>
+                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.5 }}>
+                                    <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', zIndex: 1 }} />
+                                </div>
                             </div>
                         </div>
                     ))}
