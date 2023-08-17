@@ -683,6 +683,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div className="container" id="container">
+                <div className='bgimg'/>
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
