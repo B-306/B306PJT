@@ -429,17 +429,25 @@ class VideoRoomComponent extends Component {
         })
     }
 
-
+    async blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
 
     async sendScoreSignal() {
         const { myUserName, myScore, capturedImage } = this.state;
         console.log('시그널 보낼 이미지 : ' + capturedImage)
+        const capturedImageBase64 = await this.blobToBase64(capturedImage);
         const signalOptions = {
             type: 'scoreUpdate',
             data: JSON.stringify({
                 userName: myUserName,
                 userScore: myScore,
-                capturedImage: capturedImage,
+                capturedImage: capturedImageBase64,
                 otherInfo: 'some other data',
                 // ... 다른 정보들
             }),
@@ -583,7 +591,7 @@ class VideoRoomComponent extends Component {
                         <div key={userName}>
                             <h2>{userName}'s Capture</h2>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <img src={URL.createObjectURL(capturedImageArray[userName])} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
+                                <img src={capturedImageArray[userName]} alt="User Capture" style={{ maxWidth: '80%', maxHeight: '80%' }} />
                                 <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
                             </div>
                         </div>
@@ -666,7 +674,8 @@ class VideoRoomComponent extends Component {
                                 display:'inline-block',
                                 width:'200px',
                                 height:'115px',
-                                position:'relative',
+                                // position: 'relative',
+                                position:'absolute',
                                 margin: '0px 1px 0px', // 스트림 간격 조절
                                 transform: `translate(-50%, -50%) translateX(${20 * i}%)`, // i에 따라서 x 방향으로 이동
                                 top: '75px',
