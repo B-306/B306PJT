@@ -7,7 +7,7 @@ const StyledH1 = styled.h1`
 `;
 
 const Counter = ({ localUser, onImageCaptured, showCounter }) => {
-    const [count, setCount] = useState(15);
+    const [count, setCount] = useState(13);
 
     useEffect(() => {
         const id = setInterval(() => {
