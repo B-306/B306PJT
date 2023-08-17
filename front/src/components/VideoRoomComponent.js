@@ -44,10 +44,10 @@ const WhiteBox = styled.div`
 const ResultCard = styled.div`
     display: ${props => props.show ? 'block' : 'none'};
     position: absolute;
-    top: 40px;
+    top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh-40px;
+    height: 100vh;
     background-color: rgba(255, 255, 255, 1);
     color: white;
     z-index: 1000000;
@@ -444,11 +444,9 @@ class VideoRoomComponent extends Component {
                 }),
             };
             this.state.session.signal(signalOptions);
-            const signalOptions2 = {
-                type: 'captureRender',
-                data: JSON.stringify({})
-            };
-            this.state.session.signal(signalOptions2);
+            this.setState({
+                captureRender: true,
+            }) 
         } catch (error) {
             console.error("Error sending signal:", error);
         }
@@ -638,9 +636,6 @@ class VideoRoomComponent extends Component {
         console.log('capturedImageArray : ' + capturedImageArray);
         console.log('sortedUsers : ' + sortedUsers);
         console.log('Template URL:', templateURL);
-        sortedUsers.forEach(userName => {
-            console.log(`Captured Image URL for ${userName}:`, capturedImageArray[userName]);
-        });
         return (
             <div className="container" id="container">
                 <ResultCard show={captureRender}>
