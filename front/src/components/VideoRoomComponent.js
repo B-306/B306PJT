@@ -639,9 +639,27 @@ class VideoRoomComponent extends Component {
         return (
             <div className="container" id="container">
                 <ResultCard show={captureRender}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: '10px', padding: '20px' }}>
+                        {sortedUsers.map((userName, index) => (
+                            <div key={userName} style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                <h2 style={{ zIndex: 1000003, color: 'yellow' }}>{index + 1}등 : {userName} {oneScore[userName] !== undefined ? oneScore[userName].toFixed(2) + '점' : '점수 없음'}</h2>
+                                <div style={{ position: 'relative', width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
+                                        <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5 }} />
+                                    </div>
+                                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
+                                        <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </ResultCard>
+
+                {/* <ResultCard show={captureRender}>
                     {sortedUsers.map((userName, index) => (
                         <div key={userName} style={{ position: 'relative', minHeight: '100vh' }}>
-                            <h2 style={{ position: 'relative', zIndex: 1000003, color: 'yellow' }}>{index+1}등 : {userName}</h2>
+                            <h2 style={{ position: 'relative', zIndex: 1000003, color: 'yellow' }}>{index+1}등 : {userName} {oneScore[userName].toFixed(2)}점</h2>
                             <div>
                                 <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000002 }}>
                                     <img src={templateURL} alt="Template" style={{ maxWidth: '80%', maxHeight: '80%', opacity: 0.5, position: 'relative', zIndex: 1000002 }} />
@@ -652,7 +670,7 @@ class VideoRoomComponent extends Component {
                             </div>
                         </div>
                     ))}
-                </ResultCard>
+                </ResultCard> */}
 
                 <div className='bgimg'/>
                 <ToolbarComponent
