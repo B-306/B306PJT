@@ -479,9 +479,19 @@ class VideoRoomComponent extends Component {
 
     receiveCaptureRenderSignal() {
         this.state.session.on('signal:captureRender', (event) => {
+            console.log('캡처결과화면 출력 변경 전 : ' + this.state.captureRender)
             this.setState(prevState => ({
                 captureRender: !prevState.captureRender
-            }))
+            }),() => {
+                console.log('캡처결과화면 출력 변경 후 : ' + this.state.captureRender)
+                if (!this.state.captureRender) {
+                    this.setState({
+                        capturedImage: null,
+                        capturedImageArray: {},
+                        oneScore: {},
+                    })
+                }
+            })
         });
     }
 
@@ -572,6 +582,7 @@ class VideoRoomComponent extends Component {
     // 이미지 캡처 버튼 클릭 시 호출되는 함수
     captureAndSaveImages() {
         const subscribers = this.state.subscribers; // subscribers 배열 가져오기
+        console.log('captureAndSaveImages 실행~~~~~' + subscribers)
 
         subscribers.forEach((subscriber, index) => {
             const videoElement = subscriber.streamManager.videos[0].video; // 구독 중인 비디오 엘리먼트 가져오기
@@ -632,7 +643,7 @@ class VideoRoomComponent extends Component {
         const answerArray = ['빨강', '초록', '파랑'];
         return (
             <div className="container" id="container">
-                <ResultCard show={captureRender}>
+                <ResultCard show={captureRender} key={captureRender}>
                     <h1 style = {{zIndex: 1000003, color: 'white' }}>{quizNumber}번 문제 정답 : {answerArray[gameAnswer]}</h1>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: '10px', padding: '20px' }}>
                         {sortedUsers.map((userName, index) => (
