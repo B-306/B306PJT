@@ -28,7 +28,7 @@ const WhiteBox = styled.div`
     padding: 2rem;
     width: 310px;
     height: 400px;
-    background-color: white;
+    background-color: 'rgba(255, 255, 255, 0.4)';
     // backdrop-filter: blur(10px);
     // background : transparent;
     border-radius: 5px;
@@ -699,10 +699,10 @@ class VideoRoomComponent extends Component {
                 <div className="bounds">
                     {/* 시그널 보내는 버튼 */}
                     <WhiteBox>
-                        <h1>스코어보드</h1>
+                        <h1 style={{ color: 'white', fontWeight: 'bold'}}>스코어보드</h1>
                         <ul style={{ listStyleType: 'none', padding: 0 }}>
                             {sortedScores.map(([nickName, totalScore], index) => (
-                                <li key={nickName} style={{ fontSize: '25px'}}>
+                                <li key={nickName} style={{ fontSize: '25px', color: 'white'}}>
                                 {index + 1}. {nickName}: {totalScore.toFixed(0)}점
                                 </li>
                             ))}
