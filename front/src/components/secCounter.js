@@ -57,7 +57,7 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
                                     .then(imageUrl => {
                                         console.log('이미지 업로드 URL:', imageUrl);
                                         // 업로드가 완료되었을 때 실행할 동작
-                                        onImageCaptured(imageUrl);
+                                        onImageCaptured(flippedImageBlob, imageUrl);
                                     })
                                     .catch(error => {
                                         console.error('이미지 업로드 실패:', error);

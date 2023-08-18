@@ -107,7 +107,8 @@ class VideoRoomComponent extends Component {
         this.checkNotification = this.checkNotification.bind(this);
         this.sendGameSignal = this.sendGameSignal.bind(this);
         this.sendScoreSignal = this.sendScoreSignal.bind(this);
-        this.captureAndSaveImages = this.captureAndSaveImages.bind(this)
+        // this.sendCapturedSignal = this.sendCapturedSignal.bind(this);
+        // this.captureAndSaveImages = this.captureAndSaveImages.bind(this)
     }
 
     
@@ -555,16 +556,16 @@ class VideoRoomComponent extends Component {
         });
     }
 
-    handleImageCaptured = (imageUrl) => {
+    handleImageCaptured = (flippedImageBlob, imageUrl) => {
         this.setState(
             prevState => ({
                 capturedImageArray: {
                     ...prevState.capturedImageArray,
                     [this.state.myUserName]: imageUrl,
                 },
-                capturedImage: imageUrl,
+                capturedImage: flippedImageBlob,
             }), () => {            
-                this.sendCapturedSignal(imageUrl);
+                
             }
         );
 
