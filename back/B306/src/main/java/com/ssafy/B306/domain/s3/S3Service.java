@@ -23,7 +23,7 @@ public class S3Service {
 
     public String uploadFile(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-
+        System.out.println("file name : " + file.getOriginalFilename() + "  in uploadFile");
         //파일 형식 구하기
         String ext = fileName.split("\\.")[1];
         String contentType = "";
