@@ -705,7 +705,7 @@ class VideoRoomComponent extends Component {
                                         <img src={templateURL} alt="Template" style={{ width: '100%', opacity: 0.5 }} />
                                     </div>
                                     <div key={`captured-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
-                                        <img src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
+                                        <img key={captureRender} src={capturedImageArray[userName]} alt="User Capture" className="captured-image" />
                                     </div>
                                 </div>
                             </div>

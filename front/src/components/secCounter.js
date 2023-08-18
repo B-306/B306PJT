@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 import uploadImageToServer from './imageUploader';
+import { useSelector } from "react-redux";
 
 const StyledH1 = styled.h1`
   text-align: center;
@@ -9,7 +10,7 @@ const StyledH1 = styled.h1`
 
 const Counter = ({ localUser, onImageCaptured, showCounter }) => {
     const [count, setCount] = useState(10);
-
+    const name = useSelector(state => state.auth.userName);
     useEffect(() => {
         const id = setInterval(() => {
             setCount(count => count - 1); 
@@ -52,7 +53,8 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
                                 // 변환된 이미지를 다시 Blob으로 변환
                                 canvas.toBlob((flippedImageBlob) => {
                                     // 좌우반전된 이미지 블롭을 전달
-                                    const imageFile = new File([flippedImageBlob], 'image.png', { type: 'image/png' });
+                                    
+                                    const imageFile = new File([flippedImageBlob], 'image_' + name + '.png', { type: 'image/png' });
                                     uploadImageToServer(imageFile)
                                     .then(imageUrl => {
                                         console.log('이미지 업로드 URL:', imageUrl);
@@ -75,7 +77,7 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
         }
 
         return () => clearInterval(id);
-    }, [count, localUser, onImageCaptured, showCounter]);
+    }, [count, localUser, onImageCaptured, showCounter, name ]);
 
     return showCounter ? <StyledH1>{count}</StyledH1> : null;
 }
