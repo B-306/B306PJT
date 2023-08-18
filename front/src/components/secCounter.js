@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
+import uploadImageToServer from './imageUploader';
 
 const StyledH1 = styled.h1`
   text-align: center;
@@ -51,7 +52,11 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
                                 // 변환된 이미지를 다시 Blob으로 변환
                                 canvas.toBlob((flippedImageBlob) => {
                                     // 좌우반전된 이미지 블롭을 전달
-                                    onImageCaptured(flippedImageBlob);
+                                    const imageUrl = uploadImageToServer(flippedImageBlob, () => {
+                                        // 업로드가 완료되었을 때 실행할 동작
+                                        onImageCaptured(flippedImageBlob);
+                                      });
+                                    console.log('업로드된 이미지 URL : ' + imageUrl)
                                 }, 'image/png');
                             };
                             img.src = reader.result;
