@@ -131,7 +131,7 @@ const deleteAccount = async () => {
       // await axios.patch('https://i9b306.q.ssafy.io/api1/user/delete', null, {
       await tokenHttp.patch('https://i9b306.q.ssafy.io/api1/user/delete', null, {
         headers: {
-          accessToken: localStorage.getItem('accessToken'), // 토큰을 헤더에 포함하여 전송
+          'Authorization': localStorage.getItem('accessToken'), // 토큰을 헤더에 포함하여 전송
         },
       });
       localStorage.clear();
