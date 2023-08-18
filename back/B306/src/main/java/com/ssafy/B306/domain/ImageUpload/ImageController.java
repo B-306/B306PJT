@@ -53,6 +53,7 @@ public class ImageController {
 
     @PostMapping("/putimage")
     public ResponseEntity<String> putImageToS3(MultipartFile file) throws IOException {
+
         return new ResponseEntity<>(s3Service.uploadFile(file), HttpStatus.ACCEPTED);
     }
 }
