@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 import uploadImageToServer from './imageUploader';
 import { useSelector } from "react-redux";
+import { decodeState } from "./common/CodedState";
 
 const StyledH1 = styled.h1`
   text-align: center;
@@ -10,7 +11,7 @@ const StyledH1 = styled.h1`
 
 const Counter = ({ localUser, onImageCaptured, showCounter }) => {
     const [count, setCount] = useState(10);
-    const name = useSelector(state => state.auth.userName);
+    const name = decodeState(useSelector(state => state.auth.userName));
     useEffect(() => {
         const id = setInterval(() => {
             setCount(count => count - 1); 
