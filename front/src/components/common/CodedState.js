@@ -7,8 +7,8 @@ export function encodeState(str) {
     return null
   }
   const key = [];
-  console.log(privateKey);
-  console.log('str',typeof str, str)
+  // console.log(privateKey);
+  // console.log('str',typeof str, str)
   const keyLength = privateKey.length;
   for (let i = 0; i < keyLength; i++) {
     const asciiCode = privateKey.charCodeAt(i);
@@ -27,7 +27,7 @@ export function decodeState(arr) {
     return null
   }
   let str = '';
-  console.log(arr)
+  // console.log(arr)
   const key = [];
   const keyLength = privateKey.length;
   for (let i = 0; i < keyLength; i++) {

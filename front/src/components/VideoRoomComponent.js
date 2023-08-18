@@ -476,7 +476,7 @@ class VideoRoomComponent extends Component {
                 } else {
                   updatedScores[userName] += score;
                 }
-                return { scores: updatedScores, oneScore: updatedOneScore };
+                return { scores: updatedScores, oneScore: updatedOneScore, capturedImageArray: updatedCapturedImageArray };
             });
 
         });
