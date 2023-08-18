@@ -52,11 +52,16 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
                                 // 변환된 이미지를 다시 Blob으로 변환
                                 canvas.toBlob((flippedImageBlob) => {
                                     // 좌우반전된 이미지 블롭을 전달
-                                    const imageUrl = uploadImageToServer(flippedImageBlob, () => {
+                                    const imageFile = new File([flippedImageBlob], 'image.png', { type: 'image/png' });
+                                    uploadImageToServer(imageFile)
+                                    .then(imageUrl => {
+                                        console.log('이미지 업로드 URL:', imageUrl);
                                         // 업로드가 완료되었을 때 실행할 동작
-                                        onImageCaptured(flippedImageBlob);
-                                      });
-                                    console.log('업로드된 이미지 URL : ' + imageUrl)
+                                        onImageCaptured(imageUrl);
+                                    })
+                                    .catch(error => {
+                                        console.error('이미지 업로드 실패:', error);
+                                    });
                                 }, 'image/png');
                             };
                             img.src = reader.result;

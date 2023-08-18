@@ -432,13 +432,14 @@ class VideoRoomComponent extends Component {
     }
 
     async sendScoreSignal() {
-        const { myUserName, myScore } = this.state;
+        const { myUserName, myScore, capturedImage } = this.state;
         try {
             const signalOptions = {
                 type: 'scoreUpdate',
                 data: JSON.stringify({
                     userName: myUserName,
                     userScore: myScore,
+                    imageUrl: capturedImage,
                     otherInfo: 'some other data',
                     // ... 다른 정보들
                 }),
@@ -455,7 +456,7 @@ class VideoRoomComponent extends Component {
     receiveScoreSignal() {
         this.state.session.on('signal:scoreUpdate', (event) => {
             const data = JSON.parse(event.data);
-            const { userName, userScore } = data;
+            const { userName, userScore, imageUrl } = data;
             let score;
             if (userScore < 0) {
                 score = 0;
@@ -466,6 +467,8 @@ class VideoRoomComponent extends Component {
             this.setState((prevState) => {
                 const updatedScores = { ...prevState.scores };
                 const updatedOneScore = {...prevState.oneScore};
+                const updatedCapturedImageArray = {...prevState.capturedImageArray};
+                updatedCapturedImageArray[userName] = imageUrl;
                 updatedOneScore[userName] = userScore;
                 if (updatedScores[userName] === undefined) {
                   updatedScores[userName] = score;
@@ -481,8 +484,8 @@ class VideoRoomComponent extends Component {
     receiveCaptureRenderSignal() {
         this.state.session.on('signal:captureRender', (event) => {
             console.log('캡처결과화면 출력 변경 전 : ' + this.state.captureRender)
-            this.setState(prevState => ({
-                captureRender: !prevState.captureRender
+            this.setState(({
+                captureRender: false
             }),() => {
                 console.log('캡처결과화면 출력 변경 후 : ' + this.state.captureRender)
                 if (!this.state.captureRender) {
@@ -552,99 +555,108 @@ class VideoRoomComponent extends Component {
         });
     }
 
-    handleImageCaptured = (capturedImageBlob) => {
-        if (capturedImageBlob === null) {
-            this.setState({ capturedImage: null }); // capturedImage를 null로 업데이트
-            return;
-        }
+    handleImageCaptured = (imageUrl) => {
+        this.setState(
+            prevState => ({
+                capturedImageArray: {
+                    ...prevState.capturedImageArray,
+                    [this.state.myUserName]: imageUrl,
+                },
+                capturedImage: imageUrl,
+            }), () => {            
+                this.sendCapturedSignal(imageUrl);
+            }
+        );
+
     
-        const reader = new FileReader();
-        reader.onload = () => {
-            const capturedImageDataURL = reader.result;
-            this.setState(
-                prevState => ({
-                    capturedImageArray: {
-                        ...prevState.capturedImageArray,
-                        [this.state.myUserName]: capturedImageDataURL
-                    },
-                    capturedImage: capturedImageBlob,
-                }), () => {            
-                    const num = Number(this.state.quizNumber)
-                    this.captureAndSaveImages(num);
-                }
-            );
-        };
     
-        reader.readAsDataURL(new Blob([capturedImageBlob], { type: 'image/png' }));
+        // const reader = new FileReader();
+        // reader.onload = () => {
+        //     const capturedImageDataURL = reader.result;
+        //     this.setState(
+        //         prevState => ({
+        //             capturedImageArray: {
+        //                 ...prevState.capturedImageArray,
+        //                 [this.state.myUserName]: capturedImageDataURL
+        //             },
+        //             capturedImage: imageUrl,
+        //         }), () => {            
+        //             const num = Number(this.state.quizNumber)
+        //             this.captureAndSaveImages(num);
+        //         }
+        //     );
+        // };
+    
+        // reader.readAsDataURL(new Blob([capturedImageBlob], { type: 'image/png' }));
     };
     
     
     
     
     
-    captureAndSaveImages = async (num) => {
-        const subscribers = this.state.subscribers;
-        console.log('captureAndSaveImages 실행~~~~~', subscribers);
+    // captureAndSaveImages = async (num) => {
+    //     const subscribers = this.state.subscribers;
+    //     console.log('captureAndSaveImages 실행~~~~~', subscribers);
     
-        try {
-            for (const subscriber of subscribers) {
-                console.log(num + '번째 비디오')
-                const videoElement = subscriber.streamManager.videos[num-1].video;
-                console.log('---------------------------------------')
-                console.log(videoElement)
-                console.log('---------------------------------------')
-                console.log(subscriber.streamManager.videos)
-                console.log('---------------------------------------')
+    //     try {
+    //         for (const subscriber of subscribers) {
+    //             console.log(num + '번째 비디오')
+    //             const videoElement = subscriber.streamManager.videos[num-1].video;
+    //             console.log('---------------------------------------')
+    //             console.log(videoElement)
+    //             console.log('---------------------------------------')
+    //             console.log(subscriber.streamManager.videos)
+    //             console.log('---------------------------------------')
                 
 
     
-                const capturedImageBlob = await this.captureLastFrame(videoElement);
+    //             const capturedImageBlob = await this.captureLastFrame(videoElement);
     
-                if (capturedImageBlob) {
-                    const capturedImageDataURL = URL.createObjectURL(capturedImageBlob);
-                    this.setState(prevState => ({
-                        capturedImageArray: {
-                            ...prevState.capturedImageArray,
-                            [subscriber.getNickname()]: capturedImageDataURL,
-                        },
-                    }));
-                }
-            }
-        } catch (error) {
-            console.error('Error capturing and saving images:', error);
-        }
-    };
+    //             if (capturedImageBlob) {
+    //                 const capturedImageDataURL = URL.createObjectURL(capturedImageBlob);
+    //                 this.setState(prevState => ({
+    //                     capturedImageArray: {
+    //                         ...prevState.capturedImageArray,
+    //                         [subscriber.getNickname()]: capturedImageDataURL,
+    //                     },
+    //                 }));
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('Error capturing and saving images:', error);
+    //     }
+    // };
     
-    captureLastFrame = async (videoElement) => {
-        return new Promise((resolve) => {
-            console.log('videoElement 길이 : ' + videoElement.duration)
-            console.log('videoElement 현재 시간 : ' + videoElement.currentTime)
-        //   videoElement.currentTime = videoElement.duration - 0.1; // 비디오의 마지막으로 이동
-            videoElement.currentTime = videoElement.currentTime + 32;
-          const canvas = document.createElement('canvas');
-          canvas.width = videoElement.videoWidth;
-          canvas.height = videoElement.videoHeight;
+    // captureLastFrame = async (videoElement) => {
+    //     return new Promise((resolve) => {
+    //         console.log('videoElement 길이 : ' + videoElement.duration)
+    //         console.log('videoElement 현재 시간 : ' + videoElement.currentTime)
+    //     //   videoElement.currentTime = videoElement.duration - 0.1; // 비디오의 마지막으로 이동
+    //         videoElement.currentTime = videoElement.currentTime + 32;
+    //       const canvas = document.createElement('canvas');
+    //       canvas.width = videoElement.videoWidth;
+    //       canvas.height = videoElement.videoHeight;
           
-          // 캔버스에 비디오의 현재 프레임을 그림
-          canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    //       // 캔버스에 비디오의 현재 프레임을 그림
+    //       canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
       
-          canvas.toBlob(resolve, 'image/png');
-        });
-      }
+    //       canvas.toBlob(resolve, 'image/png');
+    //     });
+    //   }
 
-    captureVideoFrame = async (videoElement) => {
-        const canvas = document.createElement('canvas');
-        canvas.width = videoElement.videoWidth;
-        canvas.height = videoElement.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.translate(canvas.width, 0);
-        ctx.scale(-1, 1);
-        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    // captureVideoFrame = async (videoElement) => {
+    //     const canvas = document.createElement('canvas');
+    //     canvas.width = videoElement.videoWidth;
+    //     canvas.height = videoElement.videoHeight;
+    //     const ctx = canvas.getContext('2d');
+    //     ctx.translate(canvas.width, 0);
+    //     ctx.scale(-1, 1);
+    //     ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
     
-        return new Promise((resolve) => {
-            canvas.toBlob(resolve, 'image/png');
-        });
-    };
+    //     return new Promise((resolve) => {
+    //         canvas.toBlob(resolve, 'image/png');
+    //     });
+    // };
     
 
 
