@@ -705,7 +705,7 @@ class VideoRoomComponent extends Component {
                                         <img src={templateURL} alt="Template" style={{ width: '100%', opacity: 0.5 }} />
                                     </div>
                                     <div key={`captured-${userName}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000001 }}>
-                                        <img key={captureRender} src={'https://b306-brain-full-operating.s3.ap-northeast-2.amazonaws.com/image_' + userName + '.png'} alt="User Capture" className="captured-image" />
+                                        <img key={captureRender} src={'https://b306-brain-full-operating.s3.ap-northeast-2.amazonaws.com/image_' + userName + '_' + quizNumber + '.png'} alt="User Capture" className="captured-image" />
                                     </div>
                                 </div>
                             </div>
@@ -740,7 +740,7 @@ class VideoRoomComponent extends Component {
                 {showCounter && (
                     <div className="counter-container">
                         {/* localUser와 onImageCaptured props를 전달합니다 */}
-                        <Counter localUser={localUser} onImageCaptured={this.handleImageCaptured} showCounter={showCounter} />
+                        <Counter localUser={localUser} quizNumber={quizNumber} onImageCaptured={this.handleImageCaptured} showCounter={showCounter} />
                     </div>
                 )}
                 {/* Check 컴포넌트를 여기에 렌더링합니다 */}

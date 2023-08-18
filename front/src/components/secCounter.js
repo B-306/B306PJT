@@ -9,7 +9,7 @@ const StyledH1 = styled.h1`
   color: white;
 `;
 
-const Counter = ({ localUser, onImageCaptured, showCounter }) => {
+const Counter = ({ localUser, quizNumber, onImageCaptured, showCounter}) => {
     const [count, setCount] = useState(10);
     const name = decodeState(useSelector(state => state.auth.userName));
     useEffect(() => {
@@ -55,7 +55,7 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
                                 canvas.toBlob((flippedImageBlob) => {
                                     // 좌우반전된 이미지 블롭을 전달
                                     
-                                    const imageFile = new File([flippedImageBlob], 'image_' + name + '.png', { type: 'image/png' });
+                                    const imageFile = new File([flippedImageBlob], 'image_' + name + '_' + quizNumber + '.png', { type: 'image/png' });
                                     uploadImageToServer(imageFile)
                                     .then(imageUrl => {
                                         console.log('이미지 업로드 URL:', imageUrl);
@@ -78,7 +78,7 @@ const Counter = ({ localUser, onImageCaptured, showCounter }) => {
         }
 
         return () => clearInterval(id);
-    }, [count, localUser, onImageCaptured, showCounter, name ]);
+    }, [count, localUser, onImageCaptured, showCounter, name, quizNumber ]);
 
     return showCounter ? <StyledH1>{count}</StyledH1> : null;
 }
