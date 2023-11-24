@@ -28,7 +28,7 @@ pipeline {
                 dir('back/B306'){
                     sh '''
                     echo 'Dockerimage build'
-                    docker build -t docker-springboot:0.0.2 .
+                    docker build -t docker-springboot-BFO:0.0.1 .
                     '''
                 }
             }
@@ -48,10 +48,7 @@ pipeline {
                     sh '''
                     echo 'Deploy'
 
-                    docker stop springboot
-                    docker rm springboot
-
-                    docker run -d -p 8080:8080 --name springboot docker-springboot:0.0.2
+                    docker run -d -p 8083:8080 --name springboot_BFO docker-springboot-BFO:0.0.1
                     '''
                 }
             }
