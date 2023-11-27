@@ -24,6 +24,7 @@ const ImageCircle = styled.div`
     background-image: url("${(props) => props.src}");
     background-size: cover;
     margin: 4px;
+    border: 2px solid #ffffff; /* 추가 */
 `
 
 const Image = (props) => {
@@ -61,8 +62,9 @@ const Image = (props) => {
 
 Image.defaultProps = {
     shape: "circle",
-    src: "https://cdn-icons-png.flaticon.com/512/20/20079.png",
-    size: 36,
+    // src: "https://cdn-icons-png.flaticon.com/512/20/20079.png",
+    src: "https://cdn-icons-png.flaticon.com/128/771/771372.png",
+    size: 50,
 };
 
 

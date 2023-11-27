@@ -1,19 +1,14 @@
 package com.ssafy.B306.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ssafy.B306.domain.quizbook.QuizBook;
-import com.ssafy.B306.domain.template.Template;
 import com.ssafy.B306.domain.user.dto.UserDto;
 import com.ssafy.B306.domain.user.dto.UserModifyRequestDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -83,11 +78,16 @@ public class User {
     public void modifyUser(UserModifyRequestDto userModifyDto) {
         userName = userModifyDto.getUserName();
         userPassword = userModifyDto.getUserPassword();
-        userProfile = userModifyDto.getUserProfile();
         userModifyDate = LocalDateTime.now();
     }
 
     public void modifyUserImage(String savePath) {
         userProfile = savePath;
     }
+
+    public User modifyUserName(String userName) {
+        this.userName = userName;
+        return this;
+    }
+
 }

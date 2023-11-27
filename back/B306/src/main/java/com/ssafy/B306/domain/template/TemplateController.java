@@ -1,7 +1,7 @@
 package com.ssafy.B306.domain.template;
 
 
-import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
+import com.ssafy.B306.domain.s3.S3Service;
 import com.ssafy.B306.domain.template.dto.TemplateResponseDto;
 import com.ssafy.B306.domain.template.dto.TemplateSaveDto;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,31 +20,23 @@ import java.util.List;
 public class TemplateController {
 
     private final TemplateService templateService;
-    private final ImageUploadService imageUploadService;
+    private final S3Service s3Service;
 
     @GetMapping("/get")
     public ResponseEntity<List<TemplateResponseDto>> getTemplateList(HttpServletRequest request) {
-        List<TemplateResponseDto> templateList = templateService.getTemplateList(request);
-        return new ResponseEntity<>(templateList, HttpStatus.OK);
+        return new ResponseEntity<>(templateService.getTemplateList(request), HttpStatus.OK);
     }
 
     @GetMapping("/get/{templateId}")
     public ResponseEntity<TemplateResponseDto> getTemplate(@PathVariable Long templateId) {
-
-        TemplateResponseDto template = templateService.getTemplate(templateId);
-
-        return new ResponseEntity<>(template, HttpStatus.OK);
+        return new ResponseEntity<>(templateService.getTemplate(templateId), HttpStatus.OK);
     }
 
     @PostMapping("/add-template")
-    public ResponseEntity<Void> addTemplate(MultipartFile file, TemplateSaveDto templateSaveDto, HttpServletRequest request) {
+    public ResponseEntity<Void> addTemplate(MultipartFile file, TemplateSaveDto templateSaveDto, HttpServletRequest request) throws IOException {
 
-        if(!file.getContentType().startsWith("image")) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        String image = imageUploadService.makeImagePath(file, "template");
-        templateSaveDto.setTemplateImage(image);
+        String url = s3Service.uploadFile(file);
+        templateSaveDto.setTemplateImage(url);
         templateService.addTemplate(templateSaveDto, request);
 
          return new ResponseEntity<>(HttpStatus.OK);

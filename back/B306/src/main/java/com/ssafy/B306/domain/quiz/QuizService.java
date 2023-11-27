@@ -1,5 +1,7 @@
 package com.ssafy.B306.domain.quiz;
 
+import com.ssafy.B306.domain.exception.CustomException;
+import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.quiz.dto.QuizRequestSaveDto;
 import com.ssafy.B306.domain.quiz.dto.QuizResponseDto;
 import com.ssafy.B306.domain.quizbook.QuizBook;
@@ -28,7 +30,7 @@ public class QuizService {
         for(QuizRequestSaveDto quiz : quizList){
             quiz.setQuizBookId(quizBookId);
             Template template = templateRepository.findByTemplateId(quiz.getTemplateId())
-                    .orElseThrow(() -> new RuntimeException("no template"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
 
             quiz.setQuizBookId(quizBookId);
 
@@ -43,23 +45,36 @@ public class QuizService {
     public void modifyQuiz(List<Quiz> quizList) {
         for(Quiz quiz : quizList){
             Quiz q = quizRepository.findById(quiz.getQuizId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 문제집이 없습니다."));
+                    .orElseThrow(() -> new CustomException(ErrorCode.QUIZBOOK_NOT_FOUND));
             q.modifyQuiz(quiz.toRequestDto(quiz, q.getQuizBookId()));
         }
     }
 
     public List<QuizResponseDto> getQuizList(QuizBook quizBook) {
-        List<Quiz> quizList = quizRepository.findByQuizBookId(quizBook).orElseThrow(()-> new RuntimeException("해당 문제집이 없습니다."));
+        List<Quiz> quizList = quizRepository.findByQuizBookId(quizBook)
+                .orElseThrow(()-> new CustomException(ErrorCode.QUIZBOOK_NOT_FOUND));
         List<QuizResponseDto> quizResponseDtoList = new ArrayList<>();
 
         for(Quiz quiz : quizList){
-            QuizResponseDto qrd = quiz.toDto(quiz);
+            TemplateResponseDto templateResponseDto = templateService.getTemplate(quiz.getQuizTemplateId().getTemplateId());
+            QuizResponseDto qrd = quiz.toDto(quiz, templateResponseDto);
             quizResponseDtoList.add(qrd);
         }
 
         return quizResponseDtoList;
     }
 
+    public QuizResponseDto getQuiz(Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new CustomException(ErrorCode.QUIZ_NOT_FOUND));
+
+        TemplateResponseDto templateResponseDto = templateService.getTemplate(quiz.getQuizTemplateId().getTemplateId());
+        QuizResponseDto quizResponseDto = quiz.toDto(quiz, templateResponseDto);
+
+        return quizResponseDto;
+    }
+
+    @Transactional
     public void deleteQuizList(Long quizBookId) {
         quizRepository.deleteById(quizBookId);
     }

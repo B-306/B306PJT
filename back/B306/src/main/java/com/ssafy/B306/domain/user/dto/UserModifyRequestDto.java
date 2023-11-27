@@ -1,15 +1,18 @@
 package com.ssafy.B306.domain.user.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor
 public class UserModifyRequestDto {
     private String userName;
     private String userPassword;
-    private String userProfile;
 
+    @Builder
+    public UserModifyRequestDto(String userName, String userPassword) {
+        this.userName = userName;
+        this.userPassword = userPassword;
+    }
 }

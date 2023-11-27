@@ -1,11 +1,14 @@
 package com.ssafy.B306.domain.user;
 
-import com.ssafy.B306.domain.ImageUpload.ImageUploadService;
+import com.ssafy.B306.domain.exception.CustomException;
+import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.security.JwtAuthenticationProvider;
 import com.ssafy.B306.domain.security.JwtUtil;
 import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -32,10 +34,9 @@ public class UserService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
-    private final ImageUploadService imageUploadService;
 
 
-    public Map<String, String> login(UserLoginRequestDto userLoginRequest){
+    public Map<String, Object> login(UserLoginRequestDto userLoginRequest){
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequest.getUserEmail(), userLoginRequest.getUserPassword());
@@ -46,10 +47,11 @@ public class UserService {
 
         // DB에 있는 User 정보에서 userName 가져오기
         User findUser = userRepository.findByUserEmail(userLoginRequest.getUserEmail())
-                .orElseThrow(()-> new RuntimeException("유저 없엉ㅜㅜ"));
-        Map<String, String> result = new HashMap<>();
-        result.put("accessToken", token.getAccessToken());
-        result.put("refreshToken", token.getRefreshToken());
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Map<String, Object> result = new HashMap<>();
+        String type = token.getGrantType();
+        result.put("accessToken", type + " " + token.getAccessToken());
+        result.put("refreshToken", type + " " + token.getRefreshToken());
         result.put("userName", findUser.getUserName());
         result.put("userProfile", findUser.getUserProfile());
 
@@ -61,7 +63,7 @@ public class UserService {
 
         // userEmail 중복 검증
         if(userRepository.existsByUserEmail(userRegisterRequestDto.getUserEmail())){
-            throw new RuntimeException("이미 가입된 이메일입니다.");
+            throw new CustomException(ErrorCode.USEREMAIL_DUPLICATED);
         }
 
         // 비밀번호 암호화
@@ -74,53 +76,64 @@ public class UserService {
     }
 
 
-    public JwtToken refreshToken(HttpServletRequest request) {
-        // access token 추출
-        String refreshToken = request.getHeader("refreshToken");
-        String accessToken = request.getHeader("accessToken");
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        Map<String, Object> result = new HashMap<>();
 
-        if (jwtUtil.isExpired(refreshToken)) { // DB에 있는 토큰이 만료가 된거면
-            throw new RuntimeException("refresh까지 만료");
+        // access token 추출
+        String refreshToken = jwtUtil.resolveToken(request);
+
+        if (refreshToken != null && jwtUtil.validateToken(refreshToken)
+                && jwtUtil.parseClaims(refreshToken).get("type").equals("REFRESH")) {
+
+            User findUser = userRepository.findByUserId(Long.parseLong(jwtUtil.parseClaims(refreshToken).get("userPk").toString()))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            result.put("accessToken", "Bearer " + jwtUtil.refreshToken(refreshToken, findUser.getUserEmail()).getAccessToken());
+            result.put("message", "success");
+
+            return new ResponseEntity(result, HttpStatus.OK);
         }
 
-        return jwtUtil.refreshToken(accessToken);
+        result.put("message", "fail");
+        return new ResponseEntity(result, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Transactional
     public void modify(UserModifyRequestDto userModifyDto, HttpServletRequest request) {
-
         Long userPk = jwtUtil.extractUserPkFromToken(request);
 
         if (userPk == null) return;
 
         User findUser = userRepository.findByUserId(userPk)
-                .orElseThrow(()-> new RuntimeException("유저 없는데?"));
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         findUser.modifyUser(
                 UserModifyRequestDto.builder()
-                .userProfile(userModifyDto.getUserProfile())
                 .userPassword(bCryptPasswordEncoder.encode(userModifyDto.getUserPassword()))
                 .userName(userModifyDto.getUserName())
                 .build());
     }
 
+    @Transactional
     public void deleteUser(HttpServletRequest request) {
         Long userPk = jwtUtil.extractUserPkFromToken(request);
-        userRepository.deleteById(userPk);
+        try{
+            userRepository.deleteById(userPk);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional
-    public void modifyUserImage(MultipartFile file, HttpServletRequest request) {
+    public void modifyUserImage(String url, HttpServletRequest request) {
 
         Long userPk = jwtUtil.extractUserPkFromToken(request);
         if (userPk == null) return;
 
         User findUser = userRepository.findByUserId(userPk)
-                .orElseThrow(()-> new RuntimeException("유저 없는데?"));
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        String savePath = imageUploadService.makeImagePath(file, "profile");
-
-        findUser.modifyUserImage(savePath);
+        findUser.modifyUserImage(url);
     }
 
     @Transactional
@@ -132,7 +145,7 @@ public class UserService {
     }
 
     private void sendAuthEmail(String email, String authKey) {
-        String subject = "제목";
+        String subject = "두뇌 풀 가동";
         String text = "회원 가입을 위한 인증번호는 "+ authKey + "입니다.<br/>";
 
         try{
@@ -155,12 +168,5 @@ public class UserService {
         String emailFindByCode = redisUtil.getData(emailAuthRequestDto.getAuthCode());
         return emailFindByCode.equals(emailAuthRequestDto.getEmail());
     }
-
-    // request를 받으면 user를 반환하는 함수
-    public User findUserByRequest(HttpServletRequest request){
-        Long userPk = jwtUtil.extractUserPkFromToken(request);
-        return userRepository.findByUserId(userPk).orElseThrow(()-> new RuntimeException("유저 없음"));
-    }
-
 }
 

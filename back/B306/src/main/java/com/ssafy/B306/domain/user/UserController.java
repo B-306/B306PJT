@@ -1,6 +1,5 @@
 package com.ssafy.B306.domain.user;
 
-import com.ssafy.B306.domain.security.JwtToken;
 import com.ssafy.B306.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -19,53 +16,26 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto userLoginRequest) {
-        Map<String, String> resultMap = new HashMap<>();
-        try{
-            resultMap = userService.login(userLoginRequest);
-            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(userService.login(userLoginRequest), HttpStatus.OK);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserRegisterResponseDto> signUp(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
-        try{
-            UserDto userDto = userService.signUp(userRegisterRequestDto);
-            return new ResponseEntity<>(new UserRegisterResponseDto(userDto.getUserName()), HttpStatus.OK);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<UserSignUpResponseDto> signUp(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
+        return new ResponseEntity<>(new UserSignUpResponseDto(
+                userService.signUp(userRegisterRequestDto)
+                           .getUserName()),
+                HttpStatus.OK);
     }
 
-    /*
-    이거 구현하려면 refresh token을 DB에 저장을 해야할듯한데
-    1. user table에 저장하는 방식
-    2. refresh token table을 만들어 저장 (user_id, refresh token, delete_date)
-     */
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-        try {
-            // 여기는 access token만 있음
-            JwtToken token = userService.refreshToken(request);
-            return new ResponseEntity<>(token, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return userService.refreshToken(request);
     }
 
     @PatchMapping("/modify")
     public ResponseEntity<?> modifyUser(@RequestBody UserModifyRequestDto userModifyRequestDto, HttpServletRequest request) {
-        try {
-            userService.modify(userModifyRequestDto, request);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.modify(userModifyRequestDto, request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/delete")

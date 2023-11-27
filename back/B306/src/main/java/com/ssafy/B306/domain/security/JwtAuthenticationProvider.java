@@ -1,5 +1,7 @@
 package com.ssafy.B306.domain.security;
 
+import com.ssafy.B306.domain.exception.CustomException;
+import com.ssafy.B306.domain.exception.ErrorCode;
 import com.ssafy.B306.domain.user.User;
 import com.ssafy.B306.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,13 +10,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -22,7 +22,6 @@ import java.util.List;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
-    // 이거 왜 final 붙으면 안되는지 아는 사람있나?
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -34,8 +33,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         // DB에 있는 유저 가져오기 => 근데 DTO로 받아야하나?
         // 그냥 값만 가져오면 Entity
         // 수정한 값을 변경하먄 DTO
+
         User findUser = userRepository.findByUserEmail(authentication.getName())
-                                        .orElseThrow(()-> new RuntimeException("유저 없어"));
+                                        .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         /*
         로그인이 안될 경우
