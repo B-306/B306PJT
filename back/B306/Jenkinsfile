@@ -48,6 +48,9 @@ pipeline {
                     sh '''
                     echo 'Deploy'
 
+                    docker stop springboot_bfo
+                    docker rm springboot_bfo
+
                     docker run -d -p 8083:8080 --name springboot_bfo docker-springboot-bfo:0.0.1
                     '''
                 }
