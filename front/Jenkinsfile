@@ -63,7 +63,10 @@ pipeline {
             steps {
                 dir('front'){
                     sh '''
-                    echo 'Deploy'                    
+                    echo 'Deploy'
+                    
+                    docker stop react
+                    docker rm react                    
 
                     docker run -d -p 3000:3000 --name react docker-react:0.0.1
                     '''
