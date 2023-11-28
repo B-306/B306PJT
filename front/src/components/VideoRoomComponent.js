@@ -62,7 +62,7 @@ const ResultCard = styled.div`
 
 var localUser = new UserModel();
 console.log('NODE_ENV 상태 : ' + process.env.NODE_ENV);
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9b306.q.ssafy.io/api2' : 'https://i9b306.q.ssafy.io/api2';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://k9b308.p.ssafy.io/api2' : 'https://k9b308.p.ssafy.io/api2';
 const openvidu_key = process.env.REACT_APP_OPENVIDU_KEY;
 
 class VideoRoomComponent extends Component {
@@ -364,7 +364,7 @@ class VideoRoomComponent extends Component {
 // Start Game
 
     async fnc (num) {
-        const response = await tokenHttp.get(`https://i9b306.q.ssafy.io/api1/quiz/` + num)
+        const response = await tokenHttp.get(`https://k9b308.p.ssafy.io/api1/quiz/` + num)
         return response.data;
     }
 
