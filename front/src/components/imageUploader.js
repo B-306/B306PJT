@@ -8,7 +8,7 @@ const uploadImageToServer = async (imageBlob) => {
   formData.append('type', 'image/png'); // 추가 필드: type 값f
   
   try {
-    const response = await tokenHttp.post('https://i9b306.q.ssafy.io/api1/putimage', formData, {
+    const response = await tokenHttp.post('https://k9b308.p.ssafy.io/api1/putimage', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': localStorage.getItem('accessToken'),

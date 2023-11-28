@@ -36,7 +36,7 @@ const GetQuiz = () => {
 
   React.useEffect(() => {
     tokenHttp
-      .get('https://i9b306.q.ssafy.io/api1/quizbook/get', {
+      .get('https://k9b308.p.ssafy.io/api1/quizbook/get', {
         headers: {
           accessToken: localStorage.getItem('accessToken'),
         },
@@ -52,7 +52,7 @@ const GetQuiz = () => {
 
   const handleMoveToVideoRoom = (quizBookId) => {
     tokenHttp
-      .get(`https://i9b306.q.ssafy.io/api1/quizbook/get/${quizBookId}`, {
+      .get(`https://k9b308.p.ssafy.io/api1/quizbook/get/${quizBookId}`, {
         headers: {
           accessToken: localStorage.getItem('accessToken'), // 여기에 액세스 토큰 값을 넣어주세요
         },

@@ -75,7 +75,7 @@ class Check extends Component {
         // checkImage.src = templateURL;
         let checkImageData;
         try {
-            const response = await axios.get('https://i9b306.q.ssafy.io/api1/getimage', {
+            const response = await axios.get('https://k9b308.p.ssafy.io/api1/getimage', {
                 params: {
                     imageUrl: templateURL
                 },

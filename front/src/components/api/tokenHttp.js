@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 import dayjs from 'dayjs';
 
 // 토큰이 필요한 인증에 사용
-const baseURL = 'https://i9b306.q.ssafy.io';
+const baseURL = 'https://k9b308.p.ssafy.io';
 
 const tokenHttp = axios.create({
   baseURL,
